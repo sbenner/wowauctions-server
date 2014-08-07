@@ -22,12 +22,6 @@
 	</bean>
 
 
-    <!--<mvc:annotation-driven>-->
-        <!--<mvc:message-converters>-->
-            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
-        <!--</mvc:message-converters>-->
-    <!--</mvc:annotation-driven>-->
-
    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes" value="application/json" />
         <!--<property name="objectMapper">-->
@@ -75,7 +69,6 @@
 
     <bean id="auctionsController" class="com.heim.wowauctions.controllers.AuctionsController">
 
-        <property name="auctionsDao" ref="auctionsDao" />
         <property name="auctionsTemplate" ref="auctionsTemplate" />
 	</bean>
 

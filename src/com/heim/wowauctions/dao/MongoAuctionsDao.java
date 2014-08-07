@@ -25,6 +25,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  * Date: 8/6/14
  * Time: 10:41 PM
  */
+
 public class MongoAuctionsDao extends MongoTemplate {
 
     private static String collectionName = "auctions";
