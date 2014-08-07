@@ -28,7 +28,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 public class MongoAuctionsDao extends MongoTemplate {
 
-    private static String collectionName = "auctions";
+
 
     @Autowired
     public MongoAuctionsDao(MongoDbFactory mongoDbFactory) {
