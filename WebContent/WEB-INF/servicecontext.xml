@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+
+    <!-- this will automatically replace placeholders with values from given properties file -->
+    <!--<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+        <!--<property name="locations" value="classpath:pi.properties" />-->
+    <!--</bean>-->
+
+    <!--<mongo:db-factory id="mongoDbFactory"-->
+                      <!--host="localhost"-->
+                      <!--port="27017"-->
+                      <!--dbname="wowauctions"-->
+                      <!--/>-->
+
+    <bean id="mongoFactoryBean" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+        <property name="host" value="127.0.0.1" />
+        <property name="port" value="27017"/>
+
+    </bean>
+
+    <bean id="mongoDbFactory"
+          class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+        <constructor-arg  ref="mongoFactoryBean" />
+        <constructor-arg  value="wowauctions" />
+    </bean>
+
+    <bean id="auctionsTemplate" class="com.heim.wowauctions.dao.MongoAuctionsDao">
+        <constructor-arg ref="mongoDbFactory"/>
+
+    </bean>
+
+    <bean id="auctionsDao" class="com.heim.wowauctions.dao.AuctionsDao"/>
+
+
+
+   	<!-- data source definition -->
+
+
+
+
+
+</beans>
