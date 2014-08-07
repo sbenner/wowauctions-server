@@ -35,7 +35,7 @@ public class ItemsSyncService extends TimerTask {
 
     public void run()
     {
-           logger.info("task started");
+           logger.info("started");
            try{
 
 

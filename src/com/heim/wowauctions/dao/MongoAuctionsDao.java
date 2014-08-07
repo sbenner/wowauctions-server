@@ -6,23 +6,18 @@ import com.heim.wowauctions.models.Item;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
-
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,102 +25,98 @@ import java.util.Map;
  * Date: 8/6/14
  * Time: 10:41 PM
  */
-public class MongoAuctionsDao extends MongoTemplate{
+public class MongoAuctionsDao extends MongoTemplate {
 
-    private static String collectionName="auctions";
+    private static String collectionName = "auctions";
 
     @Autowired
     public MongoAuctionsDao(MongoDbFactory mongoDbFactory) {
         super(mongoDbFactory);
     }
 
-    public  List<Auction> findAuctionsByItemId(long itemId){
+    public List<Auction> findAuctionsByItemId(long itemId) {
 
-        List<Auction>  qp = this.find(query(where("itemId").is(itemId)),Auction.class);
+        List<Auction> qp = this.find(query(where("itemId").is(itemId)), Auction.class);
         return qp;
     }
 
-    public void insertAllAuctions(List<Auction> auctions){
-       for(Auction auction: auctions){
-           this.insert(auction);
-       }
+    public void insertAllAuctions(List<Auction> auctions) {
+        for (Auction auction : auctions) {
+            this.insert(auction);
+        }
     }
 
-    public List<Auction> getRebornsAuctions(List<Long> ids,long timestamp){
+    public List<Auction> getRebornsAuctions(List<Long> ids, long timestamp) {
         Query q = new Query(where("item").in(ids).and("timestamp").is(timestamp));
 
-        return this.find(q,Auction.class);
+        return this.find(q, Auction.class);
     }
 
 
-    public  List<Item> findItemByItemId(long id){
+    public List<Item> findItemByItemId(long id) {
 
-        List<Item>  qp = this.find(query(where("id").is(id)),Item.class);
+        List<Item> qp = this.find(query(where("id").is(id)), Item.class);
         return qp;
     }
 
 
-    public  List<Item> findItemByName(String name){
-     Query q =  new  Query(Criteria.where("name").regex(name.toString(), "i"));
-        List<Item>  qp = this.find(q,Item.class);
+    public List<Item> findItemByName(String name) {
+        Query q = new Query(Criteria.where("name").regex(name.toString(), "i"));
+        List<Item> qp = this.find(q, Item.class);
         return qp;
     }
 
-    //todo we will build up a queue from this list
+    //todo we will build up a queue from this list of ids to retrieve from external web service
     @SuppressWarnings("Unchecked")
-    public  List<Long> findAllAuctionItemIds(long timestamp){
+    public List<Long> findAllAuctionItemIds(long timestamp) {
 
         List<Long> coll;
-        if(timestamp==0){
-            coll= this.getCollection("auction").distinct("item");
-        }
-        else
-        {   Map m = new HashMap();
+        if (timestamp == 0) {
+            coll = this.getCollection("auction").distinct("item");
+        } else {
+            Map m = new HashMap();
             m.put("timestamp", timestamp);
             DBObject q = new BasicDBObject(m);
-            coll= this.getCollection("auction").distinct("item",q);
+            coll = this.getCollection("auction").distinct("item", q);
         }
 
         return coll;
     }
 
-    public void insertItem(Item item){
+    public void insertItem(Item item) {
         this.insert(item);
     }
 
-    public void insertItems(List<Item> itemList){
-       for(Item item: itemList)
+    public void insertItems(List<Item> itemList) {
+        for (Item item : itemList)
             this.insert(item);
     }
 
 
-
-    public void insertAuctionsUrlData(AuctionUrl url){
+    public void insertAuctionsUrlData(AuctionUrl url) {
         this.insert(url);
     }
 
-    public void updateAuctionsUrl(AuctionUrl url){
+    public void updateAuctionsUrl(AuctionUrl url) {
         Query q = new Query();
-        this.updateFirst(q, Update.update("lastModified", url.getLastModified()).set("url",url.getUrl()),AuctionUrl.class);
+        this.updateFirst(q, Update.update("lastModified", url.getLastModified()).set("url", url.getUrl()), AuctionUrl.class);
     }
 
 
-
-    public AuctionUrl getAuctionsUrl(){
+    public AuctionUrl getAuctionsUrl() {
         Query query = new Query();
-//        query.limit(1);
-//        query.with(new Sort(Sort.Direction.DESC, "lastModified"));
         return this.findOne(query, AuctionUrl.class);
     }
-    public void removeAllFromAuctionUrls(){
+
+    public void removeAllFromAuctionUrls() {
         Query query1 = new Query();
-        this.remove(query1,AuctionUrl.class);
+        this.remove(query1, AuctionUrl.class);
 
     }
 
-    public void removeAllFromAuctions(){
+    public void removeAllFromAuctions() {
         Query query1 = new Query();
-        this.remove(query1,Auction.class);
+        this.remove(query1, Auction.class);
 
     }
 }

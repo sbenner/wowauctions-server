@@ -20,6 +20,8 @@ import java.util.List;
  * Time: 6:32 PM
  */
 public class AuctionUtils {
+
+
     public static AuctionUrl parseAuctionFile(String contents) {
        AuctionUrl auctionUrl = new AuctionUrl();
         JSONObject jsonObject = new JSONObject(contents);
@@ -33,7 +35,7 @@ public class AuctionUtils {
 
     public static List<Auction> buildAuctions(List<Auction> auctions,List<Item> rebornsList) {
         List<Auction> foundAuctions = new ArrayList<Auction>();
-       // List<Item> rebornsList = makeReborns();
+
         for (Item reborn : rebornsList) {
             for (Auction auction : auctions) {
 
@@ -41,21 +43,18 @@ public class AuctionUtils {
                     auction.setItemName(reborn.getName());
                     auction.setItemLevel(reborn.getItemLevel());
                     auction.setOwner(auction.getOwner()+"-"+auction.getOwnerRealm());
-
-
                     foundAuctions.add(auction);
                 }
             }
-
         }
 
         return foundAuctions;
     }
 
-
+   @Deprecated
     public static List<Item> makeReborns() {
         List<Item> reborns = new ArrayList<Item>();
-        File rebornsFile = new File("/Users/sergey/projects/auctions/reborns.json.bak");
+        File rebornsFile = new File("reborns.json");
         if (rebornsFile.exists()) {
             try {
                 String contents = FileUtils.readFileToString(rebornsFile);
@@ -82,9 +81,6 @@ public class AuctionUtils {
 
     public static List<Auction> buildAuctionsFromString(String contents,long timestamp) {
         List<Auction> auctions = new ArrayList<Auction>();
-//        File auctionsFile = new File("auctions.json");
-//        if (auctionsFile.exists()) {
-//            try {
 
         JSONObject jsonObject = new JSONObject(contents);
         JSONObject alliance = jsonObject.getJSONObject("alliance");

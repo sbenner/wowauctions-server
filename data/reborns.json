@@ -1,0 +1,168 @@
+/* 0 */
+{
+    "itemId" : NumberLong(94567),
+    "name" : "Plans: Thunder, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 1 */
+{
+    "itemId" : NumberLong(94568),
+    "name" : "Plans: Drakefist Hammer, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 2 */
+{
+    "itemId" : NumberLong(94569),
+    "name" : "Plans: Lunar Crescent, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 3 */
+{
+    "itemId" : NumberLong(94570),
+    "name" : "Plans: Planar Edge, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 4 */
+{
+    "itemId" : NumberLong(94571),
+    "name" : "Plans: Lionheart Blade, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 5 */
+{
+    "itemId" : NumberLong(94572),
+    "name" : "Plans: Fireguard, Reborn",
+    "itemLevel" : 90,
+    "quality" : 1
+}
+/* 6 */
+{
+    "itemId" : NumberLong(94575),
+    "name" : "The Planar Edge, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 7 */
+{
+    "itemId" : NumberLong(94576),
+    "name" : "Lunar Crescent, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 8 */
+{
+    "itemId" : NumberLong(94577),
+    "name" : "Black Planar Edge, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 9 */
+{
+    "itemId" : NumberLong(94578),
+    "name" : "Mooncleaver, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 10 */
+{
+    "itemId" : NumberLong(94579),
+    "name" : "Wicked Edge of the Planes, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
+/* 11 */
+{
+    "itemId" : NumberLong(94580),
+    "name" : "Bloodmoon, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
+/* 12 */
+{
+    "itemId" : NumberLong(94581),
+    "name" : "Drakefist Hammer, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 13 */
+{
+    "itemId" : NumberLong(94582),
+    "name" : "Thunder, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 14 */
+{
+    "itemId" : NumberLong(94583),
+    "name" : "Deep Thunder, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 15 */
+{
+    "itemId" : NumberLong(94584),
+    "name" : "Dragonmaw, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 16 */
+{
+    "itemId" : NumberLong(94585),
+    "name" : "Dragonstrike, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
+/* 17 */
+{
+    "itemId" : NumberLong(94586),
+    "name" : "Stormherald, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
+/* 18 */
+{
+    "itemId" : NumberLong(94587),
+    "name" : "Fireguard, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 19 */
+{
+    "itemId" : NumberLong(94588),
+    "name" : "Lionheart Blade, Reborn",
+    "itemLevel" : 463,
+    "quality" : 3
+}
+/* 20 */
+{
+    "itemId" : NumberLong(94589),
+    "name" : "Blazeguard, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 21 */
+{
+    "itemId" : NumberLong(94590),
+    "name" : "Lionheart Champion, Reborn",
+    "itemLevel" : 476,
+    "quality" : 4
+}
+/* 22 */
+{
+    "itemId" : NumberLong(94591),
+    "name" : "Blazefury, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
+/* 23 */
+{
+    "itemId" : NumberLong(94592),
+    "name" : "Lionheart Executioner, Reborn",
+    "itemLevel" : 502,
+    "quality" : 4
+}
