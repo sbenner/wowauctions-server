@@ -9,7 +9,12 @@ Contains REST api to find items by name.
 
 e.g.
  
-    http://localhost:8080/items?name=reborn 
+    http://localhost:8080/items?name=reborn
+
+or
+    http://localhost:8080/items?name=fel iron ore&exact=1
+
+for exact item name match
 
 The auctions are stored in mongodb for later statistics analysis. 
 E.g. to see dynamics of an item price change and its deviation.
