@@ -6,7 +6,13 @@
 	
 	<display-name>com.heim.wowauctions
     </display-name>
-	
+
+    <!--<context-param>-->
+        <!--<param-name>log4jConfigLocation</param-name>-->
+        <!--<param-value>/WEB-INF/classes/log4j.properties</param-value>-->
+
+    <!--</context-param>-->
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
@@ -18,12 +24,10 @@
 			/WEB-INF/rest-context.xml
 		</param-value>
 
+
 	</context-param>
 
-     <context-param>
-    <param-name>log4jConfigLocation</param-name>
-    <param-value>/WEB-INF/log4j.properties</param-value>
-  </context-param>
+
 
 	<!-- This listener will load other application context file in addition to springweb-servlet.xml -->
 	<listener>

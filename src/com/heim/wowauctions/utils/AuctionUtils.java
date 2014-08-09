@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.SynchronousQueue;
 
 
 /**
@@ -111,6 +113,31 @@ public class AuctionUtils {
 
         return auctions;
     }
+
+    public static Item buildItemFromString(String in){
+
+        JSONObject obj = new JSONObject(in);
+        Item item = new Item();
+        item.setId(obj.getLong("id"));
+        item.setName(obj.getString("name"));
+        item.setItemLevel(obj.getInt("itemLevel"));
+        item.setQuality(obj.getInt("quality"));
+
+        return item;
+    }
+
+
+    public static List<Long> createQueue(List<Long> existingItems,List<Long> auctionItems){
+        List<Long> newQueue = new ArrayList<Long>();
+
+        for(long auctionItem:auctionItems)
+              if(existingItems.indexOf(auctionItem)==-1){
+                       newQueue.add(auctionItem);
+                }
+
+       return newQueue;
+    }
+
 
     public static List<Auction> buildAuctions(long timestamp) {
         List<Auction> auctions = new ArrayList<Auction>();

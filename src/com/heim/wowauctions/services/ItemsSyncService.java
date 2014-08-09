@@ -2,17 +2,12 @@ package com.heim.wowauctions.services;
 
 
 import com.heim.wowauctions.dao.MongoAuctionsDao;
-import com.heim.wowauctions.models.Auction;
-import com.heim.wowauctions.models.AuctionUrl;
-import com.heim.wowauctions.models.Item;
 import com.heim.wowauctions.utils.AuctionUtils;
-import com.heim.wowauctions.utils.NetUtils;
 import org.apache.log4j.Logger;
-import org.springframework.data.mongodb.core.query.Query;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -27,19 +22,22 @@ import java.util.TimerTask;
 
 public class ItemsSyncService extends TimerTask {
 
-    protected static long		ONE_DAY	= 24 * 3600 * 1000L;
     private static final Logger logger	= Logger.getLogger(ItemsSyncService.class.getSimpleName());
-    private static String url = "http://us.battle.net/api/wow/auction/data/veknilash";
 
-    private MongoAuctionsDao auctionsTemplate;
+    private MongoAuctionsDao auctionsDao;
+    private ItemProcessor itemProcessor;
 
     public void run()
     {
            logger.info("started");
            try{
 
+              List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
+              List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
 
+              List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
 
+              getItemProcessor().execute(new ConcurrentLinkedQueue(queue));
 
           }catch(Exception e)
                {e.printStackTrace();}
@@ -50,12 +48,19 @@ public class ItemsSyncService extends TimerTask {
 
 
 
-
-    public MongoAuctionsDao getAuctionsTemplate() {
-        return auctionsTemplate;
+    public ItemProcessor getItemProcessor() {
+        return itemProcessor;
     }
 
-    public void setAuctionsTemplate(MongoAuctionsDao auctionsTemplate) {
-        this.auctionsTemplate = auctionsTemplate;
+    public void setItemProcessor(ItemProcessor itemProcessor) {
+        this.itemProcessor = itemProcessor;
+    }
+
+    public MongoAuctionsDao getAuctionsDao() {
+        return auctionsDao;
+    }
+
+    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
+        this.auctionsDao = auctionsDao;
     }
 }

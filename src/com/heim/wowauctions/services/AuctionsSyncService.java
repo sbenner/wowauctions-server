@@ -6,7 +6,9 @@ import com.heim.wowauctions.models.Auction;
 import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.utils.AuctionUtils;
 import com.heim.wowauctions.utils.NetUtils;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.TimerTask;
@@ -24,43 +26,35 @@ import java.util.TimerTask;
 public class AuctionsSyncService extends TimerTask {
 
     protected static long ONE_DAY = 24 * 3600 * 1000L;
-    private static final Logger logger = Logger.getLogger(AuctionsSyncService.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
     private static String url = "http://us.battle.net/api/wow/auction/data/veknilash";
     //   private TransitionManager manager;
 //    Date date = new Date( System.currentTimeMillis() - ONE_DAY );
 //    Properties props;
 //    SimpleDateFormat ts= new SimpleDateFormat("yyyy-MM-dd");
-    private MongoAuctionsDao auctionsTemplate;
+    private MongoAuctionsDao auctionsDao;
     //constructor
 
 
     public void run() {
-        logger.info("task started");
+        logger.debug("task started");
         try {
 
             String out =
                     NetUtils.getResourceFromUrl(url);
 
-            //not needed anymore cause it's loaded in the db already
-//               //
-//               if(auctionsTemplate.find(new Query(),Item.class).size()==0){
-//                List<Item> items = AuctionUtils.makeReborns();
-//                auctionsTemplate.insertItems(items);
-//
-//               }
-
-            AuctionUrl local = auctionsTemplate.getAuctionsUrl();
+            AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
 
             if (local == null ||
                     local.getLastModified() < remote.getLastModified() ||
-                    auctionsTemplate.findAll(Auction.class).size() == 0) {
+                    getAuctionsDao().findAll(Auction.class).size() == 0) {
 
                 String auctionsString = NetUtils.getResourceFromUrl(remote.getUrl());
                 List<Auction> auctions = AuctionUtils.buildAuctionsFromString(auctionsString, remote.getLastModified());
-                auctionsTemplate.insertAll(auctions);
-                auctionsTemplate.updateAuctionsUrl(remote);
+                getAuctionsDao().insertAll(auctions);
+                getAuctionsDao().updateAuctionsUrl(remote);
 
             }
 
@@ -73,11 +67,11 @@ public class AuctionsSyncService extends TimerTask {
     }
 
 
-    public MongoAuctionsDao getAuctionsTemplate() {
-        return auctionsTemplate;
+    public MongoAuctionsDao getAuctionsDao() {
+        return auctionsDao;
     }
 
-    public void setAuctionsTemplate(MongoAuctionsDao auctionsTemplate) {
-        this.auctionsTemplate = auctionsTemplate;
+    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
+        this.auctionsDao = auctionsDao;
     }
 }

@@ -29,9 +29,8 @@
         <constructor-arg value="wowauctions"/>
     </bean>
 
-    <bean id="auctionsTemplate" class="com.heim.wowauctions.dao.MongoAuctionsDao">
+    <bean id="mongoAuctionsDao" class="com.heim.wowauctions.dao.MongoAuctionsDao">
         <constructor-arg ref="mongoDbFactory"/>
-
     </bean>
 
 

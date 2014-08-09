@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,24 +29,24 @@ public class AuctionsController {
     Logger logger = Logger.getLogger(this.getClass().getName());
 
 
-    private MongoAuctionsDao auctionsTemplate;
+    private MongoAuctionsDao auctionsDao;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/reborn", produces = "application/json")
-    public
+    @RequestMapping(method = RequestMethod.GET, value = "/items{name}", produces = "application/json")    public
     @ResponseBody
-    void getTest(HttpServletResponse res) throws IOException {
+    void getTest(HttpServletResponse res, @RequestParam(value="name", required=false) String name) throws IOException {
 
-        AuctionUrl local = auctionsTemplate.getAuctionsUrl();
+        AuctionUrl local = getAuctionsDao().getAuctionsUrl();
 
-        List<Item> items = auctionsTemplate.find(new Query(), Item.class);
+        List<Item> items = getAuctionsDao().findItemByName(name);
+
         List<Long> itemIds = new ArrayList<Long>();
         for (Item item : items)
             itemIds.add(item.getId());
 
-        List<Auction> auctions = auctionsTemplate.getRebornsAuctions(itemIds, local.getLastModified());
+        List<Auction> auctions = getAuctionsDao().getRebornsAuctions(itemIds, local.getLastModified());
 
         ObjectWriter objectWriter = objectMapper.writerWithView(Auction.class);
 
@@ -58,11 +59,11 @@ public class AuctionsController {
     }
 
 
-    public MongoAuctionsDao getAuctionsTemplate() {
-        return auctionsTemplate;
+    public MongoAuctionsDao getAuctionsDao() {
+        return auctionsDao;
     }
 
-    public void setAuctionsTemplate(MongoAuctionsDao auctionsTemplate) {
-        this.auctionsTemplate = auctionsTemplate;
+    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
+        this.auctionsDao = auctionsDao;
     }
 }

@@ -62,6 +62,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
 
     public List<Item> findItemByName(String name) {
+
         Query q = new Query(Criteria.where("name").regex(name.toString(), "i"));
         List<Item> qp = this.find(q, Item.class);
         return qp;
@@ -82,6 +83,11 @@ public class MongoAuctionsDao extends MongoTemplate {
         }
 
         return coll;
+    }
+
+    public List<Long> getAllItemIDs(){
+        return this.getCollection("item").distinct("itemId");
+
     }
 
     public void insertItem(Item item) {

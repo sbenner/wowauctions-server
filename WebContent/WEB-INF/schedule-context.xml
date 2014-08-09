@@ -3,24 +3,39 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
      <import resource="servicecontext.xml"/>
-
+     <import resource="task-excutor.xml"/>
 
     <bean id="syncService" class="com.heim.wowauctions.services.AuctionsSyncService">
-        <property name="auctionsTemplate" ref="auctionsTemplate"/>
+        <property name="auctionsDao" ref="mongoAuctionsDao"/>
      </bean>
 
-    <bean id="actionTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+    <bean id="itemSyncService" class="com.heim.wowauctions.services.ItemsSyncService">
+        <property name="auctionsDao" ref="mongoAuctionsDao"/>
+        <property name="itemProcessor" ref="itemProcessor" />
+
+    </bean>
+
+    <bean id="auctionTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
         <property name="fixedRate" value="true" />
         <property name="period" value="7" />
         <property name="runnable" ref="syncService" />
         <property name="timeUnit" value="MINUTES"/>
     </bean>
 
+    <bean id="itemSyncTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+        <property name="fixedRate" value="true" />
+        <property name="period" value="5" />
+        <property name="runnable" ref="itemSyncService" />
+        <property name="timeUnit" value="MINUTES"/>
+    </bean>
+
+
 
     <bean id="timerFactory" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
         <property name="scheduledExecutorTasks">
             <list>
-                <ref bean="actionTimerTask" />
+                <ref bean="auctionTimerTask" />
+                <ref bean="itemSyncTimerTask" />
             </list>
         </property>
     </bean>

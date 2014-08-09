@@ -5,6 +5,7 @@ package com.heim.wowauctions.utils;
 import java.io.*;
 import java.net.MalformedURLException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 
@@ -82,7 +83,7 @@ public class NetUtils {
 
         public static String getResourceFromUrl(String url){
 
-        StringBuilder out= new StringBuilder();
+        String output=null;
 
         try {
 
@@ -98,19 +99,8 @@ public class NetUtils {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
             }
-            String output=null;
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader((response.getEntity().getContent())));
 
-     //       System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-                out.append(output);
-         //       System.out.println(output);
-            }
-
-       ///     System.out.println(out.length());
-            br.close();
-
+            output = IOUtils.toString(response.getEntity().getContent());
 
 
         } catch (ClientProtocolException e) {
@@ -122,9 +112,8 @@ public class NetUtils {
             e.printStackTrace();
         }
 
-    //    System.out.println(out.toString());
 
-    return out.toString();
+    return   output;
     }
 
 

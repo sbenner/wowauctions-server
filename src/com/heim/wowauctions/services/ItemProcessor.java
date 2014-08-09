@@ -1,0 +1,92 @@
+package com.heim.wowauctions.services;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: sbenner
+ * Date: 8/9/14
+ * Time: 10:32 PM
+ */
+import com.heim.wowauctions.dao.MongoAuctionsDao;
+import com.heim.wowauctions.models.Item;
+import com.heim.wowauctions.utils.AuctionUtils;
+import com.heim.wowauctions.utils.NetUtils;
+import org.apache.log4j.Logger;
+import org.springframework.core.task.TaskExecutor;
+
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class ItemProcessor {
+
+    Logger logger = Logger.getLogger(ItemProcessor.class);
+
+    private TaskExecutor taskExecutor;
+    private MongoAuctionsDao auctionsDao;
+
+    private Queue<Long> q;
+
+    public ItemProcessor(List<Long> itemList) {
+
+
+       logger.info("itemList input size "+itemList.size());
+
+    }
+
+    public void execute(Queue q)
+    {
+        while(!q.isEmpty())
+            taskExecutor.execute(new ItemProcessorTask((Long)q.poll(),getAuctionsDao()));
+    }
+
+
+    public ItemProcessor(TaskExecutor taskExecutor,MongoAuctionsDao auctionsDao) {
+        this.taskExecutor = taskExecutor;
+        setAuctionsDao(auctionsDao);
+
+    }
+    public MongoAuctionsDao getAuctionsDao() {
+        return auctionsDao;
+    }
+
+    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
+        this.auctionsDao = auctionsDao;
+    }
+
+
+
+    private class ItemProcessorTask implements Runnable {
+
+        private MongoAuctionsDao auctionsDao;
+        private long itemId;
+        private static final String itemUrl="http://us.battle.net/api/wow/item/";
+
+        public ItemProcessorTask(long itemId,MongoAuctionsDao auctionsDao) {
+            this.setItemId(itemId);
+            this.auctionsDao=auctionsDao;
+        }
+
+        public void run() {
+           logger.info("processing "+this.getItemId());
+            String url = this.itemUrl+this.getItemId();
+            String itemReply = NetUtils.getResourceFromUrl(url);
+            logger.info("got "+itemReply);
+            Item item = AuctionUtils.buildItemFromString(itemReply);
+
+            getAuctionsDao().save(item);
+            logger.info("saved ");
+
+        }
+
+        public long getItemId() {
+            return itemId;
+        }
+
+        public void setItemId(long itemId) {
+            this.itemId = itemId;
+        }
+    }
+
+
+
+}

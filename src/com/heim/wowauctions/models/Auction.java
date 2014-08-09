@@ -2,6 +2,8 @@ package com.heim.wowauctions.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import java.util.Date;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +14,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 
 public class Auction {
+    public String getDate() {
+        return new Date(this.timestamp).toString();
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public interface BaseView {}
 
 
@@ -35,6 +45,8 @@ public class Auction {
     @JsonView(BaseView.class)
     private long seed;
 
+
+    private Date date;
     private long timestamp;
 
 
@@ -102,6 +114,8 @@ public class Auction {
         this.timeLeft = timeLeft;
     }
 
+
+
     public int getRand() {
         return rand;
     }
@@ -119,12 +133,35 @@ public class Auction {
     }
 
     private String buildPrice(long price){
-        String newprice;
+        String newprice="";
+        try{
         String oldprice = Long.toString(price);
+
         int len = oldprice.length();
-        newprice = oldprice.substring(0, len-4) + "g ";
-        newprice += oldprice.substring(len-4, len-2) + "s ";
-        newprice += oldprice.substring(len-2,len) + "c";
+            if(len>4)
+            {   newprice = oldprice.substring(0, len-4) + "g ";
+                newprice += oldprice.substring(len-4, len-2) + "s ";
+                newprice += oldprice.substring(len-2,len) + "c";
+            }
+            if(len>2&&len<=4)
+            {
+               newprice += oldprice.substring(0, len-2) + "s ";
+               newprice += oldprice.substring(len-2,len) + "c";
+
+            }
+            if(len<=2)
+            newprice += oldprice.substring(0,len) + "c";
+
+
+
+
+
+
+
+        }catch (Exception e){
+            System.out.println(price);
+            e.printStackTrace();
+        }
 
         return newprice;
     }
