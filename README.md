@@ -17,8 +17,7 @@ E.g. to see dynamics of an item price change and its deviation.
 --------
 "wowauctions.auction" collection
 
-{
-   
+
     "1" : {
         "key" : {
             "auc" : 1,
@@ -35,12 +34,12 @@ E.g. to see dynamics of an item price change and its deviation.
         },
         "name" : "timestamp"
     }
-}
+
 
 ----------
 "wowauctions.item" collection:
 
-{
+
     "1" : {
         "v" : 1,
         "key" : {
@@ -49,4 +48,5 @@ E.g. to see dynamics of an item price change and its deviation.
         "unique" : true,
         "name" : "idx_itemId"
     }
-}
+    
+
