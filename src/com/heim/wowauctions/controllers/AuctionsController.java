@@ -25,15 +25,12 @@ import java.util.List;
 public class AuctionsController {
 
 
-    Logger logger = Logger.getLogger(this.getClass().getName());
-
-
     private MongoAuctionsDao auctionsDao;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json;charset=utf-8"
+    @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json"
 
     )
     public
