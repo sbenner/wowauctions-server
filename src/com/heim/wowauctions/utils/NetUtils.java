@@ -87,7 +87,6 @@ public class NetUtils {
 
         try {
 
-
             CloseableHttpClient httpClient = HttpClients.createDefault();
 
             HttpGet getRequest = new HttpGet(url);
@@ -100,7 +99,7 @@ public class NetUtils {
                         + response.getStatusLine().getStatusCode());
             }
 
-            output = IOUtils.toString(response.getEntity().getContent());
+            output = IOUtils.toString(response.getEntity().getContent(),"UTF-8");
 
 
         } catch (ClientProtocolException e) {
@@ -123,7 +122,7 @@ public class NetUtils {
                 url);
        try
         {
-        //StringEntity input = new StringEntity("{\"qty\":100,\"name\":\"iPad 4\"}");
+
 
         StringEntity input = new StringEntity("{qty:100,name:iPad 4}");
         input.setContentType("application/json");

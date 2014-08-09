@@ -33,7 +33,9 @@ public class AuctionsController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json;charset=utf-8"
+
+    )
     public
     @ResponseBody
     void getTest(HttpServletResponse res, @RequestParam(value = "name", required = false) String name,
@@ -42,6 +44,7 @@ public class AuctionsController {
         OutputStream outputStream;
         ObjectWriter objectWriter = objectMapper.writerWithView(Auction.class);
         outputStream = res.getOutputStream();
+        res.addHeader("Content-Type","application/json;charset=utf-8");
         if (name != null) {
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
