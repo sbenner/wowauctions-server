@@ -68,6 +68,14 @@ public class MongoAuctionsDao extends MongoTemplate {
         return qp;
     }
 
+
+    public List<Item> findItemByExactName(String name) {
+
+        Query q = new Query(Criteria.where("name").regex("^"+name.toString()+"$", "i"));
+        List<Item> qp = this.find(q, Item.class);
+        return qp;
+    }
+
     //todo we will build up a queue from this list of ids to retrieve from external web service
     @SuppressWarnings("Unchecked")
     public List<Long> findAllAuctionItemIds(long timestamp) {
