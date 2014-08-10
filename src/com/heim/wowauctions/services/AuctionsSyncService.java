@@ -6,9 +6,8 @@ import com.heim.wowauctions.models.Auction;
 import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.utils.AuctionUtils;
 import com.heim.wowauctions.utils.NetUtils;
+import org.apache.log4j.Logger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.TimerTask;
@@ -25,13 +24,13 @@ import java.util.TimerTask;
 
 public class AuctionsSyncService extends TimerTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
+    private static final Logger logger = Logger.getLogger(AuctionsSyncService.class);
     private static final String url = "http://us.battle.net/api/wow/auction/data/veknilash";
     private MongoAuctionsDao auctionsDao;
 
 
     public void run() {
-        logger.debug("task started");
+        logger.debug("started");
         try {
 
             String out =
