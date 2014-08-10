@@ -80,6 +80,7 @@ public class NetUtils {
             if (response.getStatusLine().getStatusCode() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
+
             }
 
             output = IOUtils.toString(response.getEntity().getContent(), "UTF-8");

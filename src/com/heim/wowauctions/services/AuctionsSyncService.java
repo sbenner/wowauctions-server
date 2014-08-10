@@ -25,15 +25,9 @@ import java.util.TimerTask;
 
 public class AuctionsSyncService extends TimerTask {
 
-    protected static long ONE_DAY = 24 * 3600 * 1000L;
     private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
-    private static String url = "http://us.battle.net/api/wow/auction/data/veknilash";
-    //   private TransitionManager manager;
-//    Date date = new Date( System.currentTimeMillis() - ONE_DAY );
-//    Properties props;
-//    SimpleDateFormat ts= new SimpleDateFormat("yyyy-MM-dd");
+    private static final String url = "http://us.battle.net/api/wow/auction/data/veknilash";
     private MongoAuctionsDao auctionsDao;
-    //constructor
 
 
     public void run() {
@@ -53,6 +47,8 @@ public class AuctionsSyncService extends TimerTask {
 
                 //get new auctions
                 String auctionsString = NetUtils.getResourceFromUrl(remote.getUrl());
+
+                if(auctionsString!=null){
                 List<Auction> auctions = AuctionUtils.buildAuctionsFromString(auctionsString, remote.getLastModified());
                 getAuctionsDao().insertAll(auctions);
 
@@ -63,9 +59,12 @@ public class AuctionsSyncService extends TimerTask {
 
 
                 if(local==null){
-                    getAuctionsDao().insertAuctionsUrlData(remote);
+                  getAuctionsDao().insertAuctionsUrlData(remote);
+                }else{
+                     getAuctionsDao().updateAuctionsUrl(remote);
                 }
-                getAuctionsDao().updateAuctionsUrl(remote);
+
+                }
 
             }
 
@@ -73,7 +72,6 @@ public class AuctionsSyncService extends TimerTask {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 

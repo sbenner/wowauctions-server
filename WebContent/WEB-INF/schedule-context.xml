@@ -17,7 +17,7 @@
 
     <bean id="auctionTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
         <property name="fixedRate" value="true" />
-        <property name="period" value="7" />
+        <property name="period" value="3" />
         <property name="runnable" ref="syncService" />
         <property name="timeUnit" value="MINUTES"/>
     </bean>
