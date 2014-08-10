@@ -48,7 +48,7 @@ public class MongoAuctionsDao extends MongoTemplate {
     }
 
     public List<Auction> getRebornsAuctions(List<Long> ids, long timestamp) {
-        Query q = new Query(where("item").in(ids).and("timestamp").is(timestamp));
+        Query q = new Query(where("itemId").in(ids).and("timestamp").is(timestamp));
 
         return this.find(q, Auction.class);
     }
@@ -82,12 +82,12 @@ public class MongoAuctionsDao extends MongoTemplate {
 
         List<Long> coll;
         if (timestamp == 0) {
-            coll = this.getCollection("auction").distinct("item");
+            coll = this.getCollection("auction").distinct("itemId");
         } else {
             Map m = new HashMap();
             m.put("timestamp", timestamp);
             DBObject q = new BasicDBObject(m);
-            coll = this.getCollection("auction").distinct("item", q);
+            coll = this.getCollection("auction").distinct("itemId", q);
         }
 
         return coll;

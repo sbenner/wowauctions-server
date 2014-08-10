@@ -41,9 +41,10 @@ public class AuctionUtils {
         for (Item reborn : rebornsList) {
             for (Auction auction : auctions) {
 
-                if (reborn.getId() == auction.getItem()  ) {
-                    auction.setItemName(reborn.getName());
-                    auction.setItemLevel(reborn.getItemLevel());
+                if (reborn.getId() == auction.getItemId()  ) {
+                      auction.setItem(reborn);
+//                    auction.setItemName(reborn.getName());
+//                    auction.setItemLevel(reborn.getItemLevel());
                     auction.setOwner(auction.getOwner()+"-"+auction.getOwnerRealm());
                     foundAuctions.add(auction);
                 }
@@ -92,14 +93,14 @@ public class AuctionUtils {
             JSONObject obj = (JSONObject) auctionsArray.get(i);
             Auction auction = new Auction();
             auction.setAuc(obj.getLong("auc"));
-            auction.setItem(obj.getLong("item"));
+            auction.setItemId(obj.getLong("item"));
             auction.setBid(obj.getLong("bid"));
             auction.setBuyout(obj.getLong("buyout"));
             auction.setOwner(obj.getString("owner"));
             auction.setOwnerRealm(obj.getString("ownerRealm"));
             auction.setQuantity(obj.getInt("quantity"));
             auction.setTimeLeft(obj.getString("timeLeft"));
-            auction.setItemName("");
+
 
             auction.setTimestamp(timestamp);
             auctions.add(auction);
@@ -153,7 +154,7 @@ public class AuctionUtils {
                     JSONObject obj = (JSONObject) auctionsArray.get(i);
                     Auction auction = new Auction();
                     auction.setAuc(obj.getLong("auc"));
-                    auction.setItem(obj.getLong("item"));
+                    auction.setItemId(obj.getLong("item"));
                     auction.setBid(obj.getLong("bid"));
                     auction.setBuyout(obj.getLong("buyout"));
                     auction.setOwner(obj.getString("owner"));

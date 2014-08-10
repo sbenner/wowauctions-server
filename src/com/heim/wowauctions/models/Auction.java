@@ -22,15 +22,34 @@ public class Auction {
         this.date = date;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+
     public interface BaseView {}
 
 
     @JsonView(BaseView.class)
     private long auc;
 
-    private long item;
-    private String itemName;
-    private long itemLevel;
+    private Item item;
+
+    @JsonView(BaseView.class)
+    private long itemId;
+
     private String owner;
 
     @JsonView(BaseView.class)
@@ -45,7 +64,6 @@ public class Auction {
     @JsonView(BaseView.class)
     private long seed;
 
-
     private Date date;
     private long timestamp;
 
@@ -58,13 +76,7 @@ public class Auction {
         this.auc = auc;
     }
 
-    public long getItem() {
-        return item;
-    }
 
-    public void setItem(Long item) {
-        this.item = item;
-    }
 
     public String getOwner() {
         return owner;
@@ -114,8 +126,6 @@ public class Auction {
         this.timeLeft = timeLeft;
     }
 
-
-
     public int getRand() {
         return rand;
     }
@@ -152,12 +162,6 @@ public class Auction {
             if(len<=2)
             newprice += oldprice.substring(0,len) + "c";
 
-
-
-
-
-
-
         }catch (Exception e){
             System.out.println(price);
             e.printStackTrace();
@@ -170,12 +174,9 @@ public class Auction {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-    //    {"buyout":19000,"ownerRealm":"Nazgrel","seed":1961897600,"auc":1007454001,"item":76097,"owner":"Tututeri","timeLeft":"VERY_LONG","quantity":1,"rand":0,"bid":17000}
-                 sb.append("{ auc: ").append(this.getAuc()).
+                sb.append("{ auc: ").append(this.getAuc()).
                 append(", owner: ").append(this.getOwner()).
                 append("-").append(this.getOwnerRealm()).
-                append(", itemName: ").append(this.getItemName()).
-                append(", itemLevel: ").append(this.getItemLevel()).
                 append(", bid: ").append(this.getBid()).
                 append(", buyout: ").append(this.getBuyout()).
                 append(", timeleft: ").append(this.getTimeLeft())
@@ -184,21 +185,6 @@ public class Auction {
         return sb.toString();
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public long getItemLevel() {
-        return itemLevel;
-    }
-
-    public void setItemLevel(long itemLevel) {
-        this.itemLevel = itemLevel;
-    }
 
     public long getTimestamp() {
         return timestamp;
