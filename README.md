@@ -56,3 +56,9 @@ E.g. to see dynamics of an item price change and its deviation.
     }
     
 
+----------
+"wowauctions.auctionsArchive":
+
+this index ensures that we have only unique auctions for statistics
+
+     db.auctionsArchive.ensureIndex({auc:1},{name:"auc_uniq",dropDups:true,unique:true,background:true})
