@@ -51,9 +51,20 @@ public class AuctionsSyncService extends TimerTask {
                     local.getLastModified() < remote.getLastModified() ||
                     getAuctionsDao().findAll(Auction.class).size() == 0) {
 
+                //get new auctions
                 String auctionsString = NetUtils.getResourceFromUrl(remote.getUrl());
                 List<Auction> auctions = AuctionUtils.buildAuctionsFromString(auctionsString, remote.getLastModified());
                 getAuctionsDao().insertAll(auctions);
+
+                //archive old
+                List<Auction> toArchive = getAuctionsDao().findAuctionsToArchive(remote.getLastModified());
+                getAuctionsDao().archiveAuctions(toArchive);
+                getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+
+
+                if(local==null){
+                    getAuctionsDao().insertAuctionsUrlData(remote);
+                }
                 getAuctionsDao().updateAuctionsUrl(remote);
 
             }

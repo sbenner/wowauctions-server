@@ -98,6 +98,25 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     }
 
+
+    public List<Auction> findAuctionsToArchive(long timestamp) {
+        return  this.find(query(where("timestamp").lt(timestamp)),Auction.class);
+    }
+
+
+    public void archiveAuctions(List<Auction> toArchiveList) {
+        for (Auction auction : toArchiveList)
+            this.insert(auction,"auctionsArchive");
+    }
+
+    public void removeArchivedAuctions(long timestamp)
+    {
+        Query query1 = new Query(where("timestamp").lt(timestamp));
+        this.remove(query1, Auction.class);
+    }
+
+
+
     public void insertItem(Item item) {
         this.insert(item);
     }
