@@ -79,7 +79,7 @@ public class AuctionsController {
 
         List<ArchivedAuction> auctions=null;
         if (id != null) {
-         auctions = getAuctionsDao().getItemStatistics(Long.valueOf(id).longValue());
+             auctions = getAuctionsDao().getItemStatistics(Long.parseLong(id));
         }
         objectWriter.writeValue(outputStream,auctions);
     }
