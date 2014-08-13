@@ -1,5 +1,6 @@
 package com.heim.wowauctions.dao;
 
+import com.heim.wowauctions.models.ArchivedAuction;
 import com.heim.wowauctions.models.Auction;
 import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.models.Item;
@@ -91,6 +92,17 @@ public class MongoAuctionsDao extends MongoTemplate {
         }
 
         return coll;
+    }
+
+
+    public List<ArchivedAuction> getItemStatistics(long itemId){
+//        Map m = new HashMap();
+//        m.put("itemId", itemId);
+//        DBObject q = new BasicDBObject(m);
+        Query q = new Query(where("itemId").is(itemId));
+
+        return this.find(q,ArchivedAuction.class,"auctionsArchive");
+
     }
 
     public List<Long> getAllItemIDs(){

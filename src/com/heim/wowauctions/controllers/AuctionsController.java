@@ -3,6 +3,7 @@ package com.heim.wowauctions.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.heim.wowauctions.dao.MongoAuctionsDao;
+import com.heim.wowauctions.models.ArchivedAuction;
 import com.heim.wowauctions.models.Auction;
 import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.models.Item;
@@ -24,18 +25,14 @@ import java.util.List;
 @Controller
 public class AuctionsController {
 
-
     private MongoAuctionsDao auctionsDao;
-
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json"
-
     )
     public
     @ResponseBody
-    void getTest(HttpServletResponse res, @RequestParam(value = "name", required = false) String name,
+    void getItem(HttpServletResponse res, @RequestParam(value = "name", required = false) String name,
                  @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
         OutputStream outputStream;
@@ -66,6 +63,28 @@ public class AuctionsController {
         }
 
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/itemchart", produces = "application/json"
+    )
+    public
+    @ResponseBody
+    void getItemChart(HttpServletResponse res, @RequestParam(value = "id", required = true) String id,
+                 @RequestParam(value = "period", required = false) Integer period,
+                 @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
+
+//        OutputStream outputStream;
+        ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
+        OutputStream    outputStream = res.getOutputStream();
+        res.addHeader("Content-Type","application/json;charset=utf-8");
+
+        List<ArchivedAuction> auctions=null;
+        if (id != null) {
+         auctions = getAuctionsDao().getItemStatistics(Long.valueOf(id).longValue());
+        }
+        objectWriter.writeValue(outputStream,auctions);
+    }
+
+
 
 
     public MongoAuctionsDao getAuctionsDao() {

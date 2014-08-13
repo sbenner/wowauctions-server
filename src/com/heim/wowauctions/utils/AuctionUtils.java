@@ -43,8 +43,6 @@ public class AuctionUtils {
 
                 if (reborn.getId() == auction.getItemId()  ) {
                       auction.setItem(reborn);
-//                    auction.setItemName(reborn.getName());
-//                    auction.setItemLevel(reborn.getItemLevel());
                     auction.setOwner(auction.getOwner()+"-"+auction.getOwnerRealm());
                     foundAuctions.add(auction);
                 }
@@ -107,10 +105,6 @@ public class AuctionUtils {
         }
 
 
-//            } catch (IOException e) {
-//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//            }
-//        }
 
         return auctions;
     }
