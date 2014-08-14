@@ -40,9 +40,16 @@ public class AuctionsController {
         outputStream = res.getOutputStream();
         res.addHeader("Content-Type","application/json;charset=utf-8");
         if (name != null&&
-                !name.trim().isEmpty()) {
+                !name.trim().isEmpty()&&
+                name.trim().length()>=1) {
             name=name.trim();
             name=name.replaceAll("[^\\w\\s]","");
+
+            if(name.trim().isEmpty()||
+                    name.trim().length()==0){
+                objectWriter.writeValue(outputStream, "");
+                return;
+            }
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
