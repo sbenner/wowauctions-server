@@ -39,9 +39,11 @@ public class AuctionsController {
         ObjectWriter objectWriter = objectMapper.writerWithView(Auction.class);
         outputStream = res.getOutputStream();
         res.addHeader("Content-Type","application/json;charset=utf-8");
-        if (name != null) {
+        if (name != null&&
+                !name.trim().isEmpty()) {
             name=name.trim();
             name=name.replaceAll("[^\\w\\s]","");
+
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
             if (!exact)

@@ -36,7 +36,7 @@ public class ItemProcessor {
     public void execute(Queue q)
     {
         while(!q.isEmpty())
-            taskExecutor.execute(new ItemProcessorTask((Long)q.poll(),getAuctionsDao()));
+            taskExecutor.execute(new ItemProcessorTask((Long)q.poll()));
     }
 
 
@@ -57,13 +57,13 @@ public class ItemProcessor {
 
     private class ItemProcessorTask implements Runnable {
 
-        private MongoAuctionsDao auctionsDao;
+
         private long itemId;
         private static final String itemUrl="http://us.battle.net/api/wow/item/";
 
-        public ItemProcessorTask(long itemId,MongoAuctionsDao auctionsDao) {
+        public ItemProcessorTask(long itemId) {
             this.setItemId(itemId);
-            this.auctionsDao=auctionsDao;
+
         }
 
         public void run() {
