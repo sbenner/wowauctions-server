@@ -8,7 +8,6 @@ import com.heim.wowauctions.models.Auction;
 import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.models.Item;
 import com.heim.wowauctions.utils.AuctionUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,18 +37,16 @@ public class AuctionsController {
         OutputStream outputStream;
         ObjectWriter objectWriter = objectMapper.writerWithView(Auction.class);
         outputStream = res.getOutputStream();
-        res.addHeader("Content-Type","application/json;charset=utf-8");
-        if (name != null&&
-                !name.trim().isEmpty()&&
-                name.trim().length()>=1) {
-            name=name.trim();
-            name=name.replaceAll("[^\\w\\s]","");
+        res.addHeader("Content-Type", "application/json;charset=utf-8");
+        if (name != null) {
+            name = name.trim();
+            name = name.replaceAll("[^\\w\\s]", "");
+        }
 
-            if(name.trim().isEmpty()||
-                    name.trim().length()==0){
+        if (name == null || name.trim().isEmpty() ||
+                name.trim().length() == 0) {
                 objectWriter.writeValue(outputStream, "");
-                return;
-            }
+        } else {
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
@@ -68,8 +65,6 @@ public class AuctionsController {
             if (outputStream != null)
                 objectWriter.writeValue(outputStream, auctions);
 
-        } else {
-            objectWriter.writeValue(outputStream, "");
         }
 
     }
@@ -79,25 +74,25 @@ public class AuctionsController {
     public
     @ResponseBody
     void getItemChart(HttpServletResponse res, @RequestParam(value = "id", required = true) String id,
-                 @RequestParam(value = "period", required = false) Integer period,
-                 @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
+                      @RequestParam(value = "period", required = false) Integer period,
+                      @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
         ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
-        OutputStream    outputStream = res.getOutputStream();
-        res.addHeader("Content-Type","application/json;charset=utf-8");
-        try{Long.parseLong(id);}catch (NumberFormatException e){
-            objectWriter.writeValue(outputStream,"");
+        OutputStream outputStream = res.getOutputStream();
+        res.addHeader("Content-Type", "application/json;charset=utf-8");
+        try {
+            Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            objectWriter.writeValue(outputStream, "");
         }
 
 
-        List<ArchivedAuction> auctions=null;
+        List<ArchivedAuction> auctions = null;
         if (id != null) {
-             auctions = getAuctionsDao().getItemStatistics(Long.parseLong(id));
+            auctions = getAuctionsDao().getItemStatistics(Long.parseLong(id));
         }
-        objectWriter.writeValue(outputStream,auctions);
+        objectWriter.writeValue(outputStream, auctions);
     }
-
-
 
 
     public MongoAuctionsDao getAuctionsDao() {
