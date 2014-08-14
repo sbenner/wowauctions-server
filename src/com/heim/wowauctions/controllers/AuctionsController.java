@@ -40,7 +40,8 @@ public class AuctionsController {
         outputStream = res.getOutputStream();
         res.addHeader("Content-Type","application/json;charset=utf-8");
         if (name != null) {
-
+            name=name.trim();
+            name=name.replaceAll("[^\\w\\s]","");
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
             if (!exact)
@@ -72,10 +73,13 @@ public class AuctionsController {
                  @RequestParam(value = "period", required = false) Integer period,
                  @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
-//        OutputStream outputStream;
         ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
         OutputStream    outputStream = res.getOutputStream();
         res.addHeader("Content-Type","application/json;charset=utf-8");
+        try{Long.parseLong(id);}catch (NumberFormatException e){
+            objectWriter.writeValue(outputStream,"");
+        }
+
 
         List<ArchivedAuction> auctions=null;
         if (id != null) {
