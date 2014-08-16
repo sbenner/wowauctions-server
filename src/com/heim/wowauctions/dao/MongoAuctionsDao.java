@@ -63,13 +63,6 @@ public class MongoAuctionsDao extends MongoTemplate{
     //todo: build aucitions with timestamp and ownerRealm if we go beyond 3 realms
 
 
-    public Page<Item> findItemByNameRegex(String name,Pageable pageable) {
-
-        return itemRepository.findByNameRegex(name, pageable);
-
-    }
-
-
     public List<Item> findItemByName(String name) {
         return itemRepository.findItemsByNameRegex(name);
     }
