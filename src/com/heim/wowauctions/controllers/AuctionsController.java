@@ -38,7 +38,7 @@ public class AuctionsController {
     @ResponseBody
     void getItem(HttpServletResponse res, @RequestParam(value = "name", required = false) String name,
                  @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                 @RequestParam(value = "size", required = false, defaultValue = "5") Integer pageSize,
+                 @RequestParam(value = "size", required = false, defaultValue = "20") Integer pageSize,
                  @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
         OutputStream outputStream;
