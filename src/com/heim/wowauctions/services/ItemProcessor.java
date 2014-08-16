@@ -24,7 +24,6 @@ public class ItemProcessor {
     private TaskExecutor taskExecutor;
     private MongoAuctionsDao auctionsDao;
 
-    private Queue<Long> q;
 
     public ItemProcessor(List<Long> itemList) {
 
@@ -52,7 +51,6 @@ public class ItemProcessor {
     public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
         this.auctionsDao = auctionsDao;
     }
-
 
 
     private class ItemProcessorTask implements Runnable {

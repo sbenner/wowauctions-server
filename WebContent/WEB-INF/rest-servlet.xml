@@ -2,12 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 
-	<context:component-scan base-package="com.heim.wowauctions" />
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.heim.wowauctions" />
+    <import resource="servicecontext.xml"/>
+
 	<!-- To enable @RequestMapping process on type level and method level -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -64,10 +67,9 @@
 	</bean>
 	
 	<!--bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" /-->
-    <import resource="servicecontext.xml"/>
 
-    <bean id="auctionsController" class="com.heim.wowauctions.controllers.AuctionsController">
 
+     <bean id="auctionsController" class="com.heim.wowauctions.controllers.AuctionsController">
         <property name="auctionsDao" ref="mongoAuctionsDao" />
 	</bean>
 

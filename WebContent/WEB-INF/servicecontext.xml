@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-     ">
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/data/mongo
+       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 
     <!-- this will automatically replace placeholders with values from given properties file -->
@@ -16,6 +19,8 @@
     <!--dbname="wowauctions"-->
     <!--/>-->
     <!-- data source definition -->
+
+
 
     <bean id="mongoFactoryBean" class="org.springframework.data.mongodb.core.MongoFactoryBean">
         <property name="host" value="127.0.0.1"/>
@@ -31,7 +36,14 @@
 
     <bean id="mongoAuctionsDao" class="com.heim.wowauctions.dao.MongoAuctionsDao">
         <constructor-arg ref="mongoDbFactory"/>
+
     </bean>
+
+
+    <mongo:repositories base-package="com.heim.wowauctions.repositories"
+                        mongo-template-ref="mongoAuctionsDao" />
+
+
 
 
 </beans>

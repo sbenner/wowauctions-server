@@ -21,7 +21,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/rest-context.xml
+			/WEB-INF/schedule-context.xml
 		</param-value>
 
 

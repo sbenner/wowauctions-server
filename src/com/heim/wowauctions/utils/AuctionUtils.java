@@ -6,13 +6,15 @@ import com.heim.wowauctions.models.Item;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.SynchronousQueue;
 
 
 /**
@@ -25,7 +27,7 @@ public class AuctionUtils {
 
 
     public static AuctionUrl parseAuctionFile(String contents) {
-       AuctionUrl auctionUrl = new AuctionUrl();
+        AuctionUrl auctionUrl = new AuctionUrl();
         JSONObject jsonObject = new JSONObject(contents);
         JSONArray files = jsonObject.getJSONArray("files");
         auctionUrl.setLastModified(((JSONObject) files.get(0)).getLong("lastModified"));
@@ -35,24 +37,94 @@ public class AuctionUtils {
         return auctionUrl;
     }
 
-    public static List<Auction> buildAuctions(List<Auction> auctions,List<Item> rebornsList) {
+    public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
+
         List<Auction> foundAuctions = new ArrayList<Auction>();
 
         for (Item reborn : rebornsList) {
-            for (Auction auction : auctions) {
 
-                if (reborn.getId() == auction.getItemId()  ) {
-                      auction.setItem(reborn);
-                    auction.setOwner(auction.getOwner()+"-"+auction.getOwnerRealm());
+            for (Auction auction : auctions.getContent()) {
+                if (reborn.getId() == auction.getItemId()) {
+                    auction.setItem(reborn);
+                    auction.setOwner(auction.getOwner() + "-" + auction.getOwnerRealm());
                     foundAuctions.add(auction);
                 }
+
             }
         }
 
-        return foundAuctions;
+        return new PageImpl<Auction>(foundAuctions, pageable, auctions.getTotalElements());
     }
 
-   @Deprecated
+
+    public static long getTimestamp(boolean firstLast) {
+
+        GregorianCalendar cal =
+                (GregorianCalendar) GregorianCalendar.getInstance();
+        cal.set(cal.HOUR, 0);
+        cal.set(cal.MINUTE, 0);
+        cal.set(cal.SECOND, 0);
+
+        int day = firstLast ? cal.getMinimum(GregorianCalendar.DAY_OF_MONTH) : cal.getMaximum(GregorianCalendar.DAY_OF_MONTH);
+        cal.set(cal.DAY_OF_MONTH, day);
+        return cal.getTimeInMillis();
+    }
+
+
+    public static List<Auction> buildAuctionsFromString(String contents, long timestamp) {
+        List<Auction> auctions = new ArrayList<Auction>();
+
+        JSONObject jsonObject = new JSONObject(contents);
+        JSONObject alliance = jsonObject.getJSONObject("alliance");
+        JSONArray auctionsArray = alliance.getJSONArray("auctions");
+
+        for (int i = 0; i < auctionsArray.length(); i++) {
+            JSONObject obj = (JSONObject) auctionsArray.get(i);
+            Auction auction = new Auction();
+            auction.setAuc(obj.getLong("auc"));
+            auction.setItemId(obj.getLong("item"));
+            auction.setBid(obj.getLong("bid"));
+            auction.setBuyout(obj.getLong("buyout"));
+            auction.setOwner(obj.getString("owner"));
+            auction.setOwnerRealm(obj.getString("ownerRealm"));
+            auction.setQuantity(obj.getInt("quantity"));
+            auction.setTimeLeft(obj.getString("timeLeft"));
+
+
+            auction.setTimestamp(timestamp);
+            auctions.add(auction);
+        }
+
+
+        return auctions;
+    }
+
+    public static Item buildItemFromString(String in) {
+
+        JSONObject obj = new JSONObject(in);
+        Item item = new Item();
+        item.setId(obj.getLong("id"));
+        item.setName(obj.getString("name"));
+        item.setItemLevel(obj.getInt("itemLevel"));
+        item.setQuality(obj.getInt("quality"));
+
+        return item;
+    }
+
+
+    public static List<Long> createQueue(List<Long> existingItems, List<Long> auctionItems) {
+        List<Long> newQueue = new ArrayList<Long>();
+
+        for (long auctionItem : auctionItems)
+            if (existingItems.indexOf(auctionItem) == -1) {
+                newQueue.add(auctionItem);
+            }
+
+        return newQueue;
+    }
+
+
+    @Deprecated
     public static List<Item> makeReborns() {
         List<Item> reborns = new ArrayList<Item>();
         File rebornsFile = new File("reborns.json");
@@ -79,61 +151,7 @@ public class AuctionUtils {
         return reborns;
     }
 
-
-    public static List<Auction> buildAuctionsFromString(String contents,long timestamp) {
-        List<Auction> auctions = new ArrayList<Auction>();
-
-        JSONObject jsonObject = new JSONObject(contents);
-        JSONObject alliance = jsonObject.getJSONObject("alliance");
-        JSONArray auctionsArray = alliance.getJSONArray("auctions");
-
-        for (int i = 0; i < auctionsArray.length(); i++) {
-            JSONObject obj = (JSONObject) auctionsArray.get(i);
-            Auction auction = new Auction();
-            auction.setAuc(obj.getLong("auc"));
-            auction.setItemId(obj.getLong("item"));
-            auction.setBid(obj.getLong("bid"));
-            auction.setBuyout(obj.getLong("buyout"));
-            auction.setOwner(obj.getString("owner"));
-            auction.setOwnerRealm(obj.getString("ownerRealm"));
-            auction.setQuantity(obj.getInt("quantity"));
-            auction.setTimeLeft(obj.getString("timeLeft"));
-
-
-            auction.setTimestamp(timestamp);
-            auctions.add(auction);
-        }
-
-
-
-        return auctions;
-    }
-
-    public static Item buildItemFromString(String in){
-
-        JSONObject obj = new JSONObject(in);
-        Item item = new Item();
-        item.setId(obj.getLong("id"));
-        item.setName(obj.getString("name"));
-        item.setItemLevel(obj.getInt("itemLevel"));
-        item.setQuality(obj.getInt("quality"));
-
-        return item;
-    }
-
-
-    public static List<Long> createQueue(List<Long> existingItems,List<Long> auctionItems){
-        List<Long> newQueue = new ArrayList<Long>();
-
-        for(long auctionItem:auctionItems)
-              if(existingItems.indexOf(auctionItem)==-1){
-                       newQueue.add(auctionItem);
-                }
-
-       return newQueue;
-    }
-
-
+    @Deprecated
     public static List<Auction> buildAuctions(long timestamp) {
         List<Auction> auctions = new ArrayList<Auction>();
         File auctionsFile = new File("auctions.json");
