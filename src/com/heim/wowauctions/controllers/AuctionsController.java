@@ -5,12 +5,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.heim.wowauctions.dao.MongoAuctionsDao;
 import com.heim.wowauctions.models.ArchivedAuction;
 import com.heim.wowauctions.models.Auction;
-import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.models.Item;
 import com.heim.wowauctions.utils.AuctionUtils;
-
-
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -59,7 +55,7 @@ public class AuctionsController {
             objectWriter.writeValue(outputStream, "");
         } else {
 
-          //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
+            //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
             if (!exact)
                 items = getAuctionsDao().findItemByName(name);
@@ -73,12 +69,12 @@ public class AuctionsController {
             Sort sort = new Sort(Sort.Direction.DESC, "buyout");
 
             PageRequest pageRequest;
-            if(page==0)
+            if (page == 0)
                 pageRequest = new PageRequest(0, pageSize, sort);
             else
-                pageRequest = new PageRequest(page,pageSize,sort);
+                pageRequest = new PageRequest(page, pageSize, sort);
 
-            Page<Auction> auctions = getAuctionsDao().getAuctionsByItemIDs(itemIds,pageRequest);
+            Page<Auction> auctions = getAuctionsDao().getAuctionsByItemIDs(itemIds, pageRequest);
 
             auctions = AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
 
@@ -111,17 +107,15 @@ public class AuctionsController {
             auctions = getAuctionsDao().getItemStatistics(Long.parseLong(id));
         }
 
-        Map<Long,Long> map = new HashMap<Long, Long>();
-                    for(ArchivedAuction auction: auctions){
-                        if(auction.getBuyout()!=0)
-                            map.put(auction.getBuyout()/auction.getQuantity(),auction.getTimestamp());
-                    }
+        Map<Long, Long> map = new HashMap<Long, Long>();
+        for (ArchivedAuction auction : auctions) {
+            if (auction.getBuyout() != 0)
+                map.put(auction.getBuyout() / auction.getQuantity(), auction.getTimestamp());
+        }
 
 
         objectWriter.writeValue(outputStream, map.entrySet().toArray());
     }
-
-
 
 
     public MongoAuctionsDao getAuctionsDao() {

@@ -15,13 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import sun.misc.Regexp;
-
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +34,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  */
 
 @Component
-public class MongoAuctionsDao extends MongoTemplate{
+public class MongoAuctionsDao extends MongoTemplate {
 
     @Autowired
     ItemRepository itemRepository;
@@ -55,9 +51,8 @@ public class MongoAuctionsDao extends MongoTemplate{
     }
 
 
-
     public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {
-         return auctionRepository.findByItemIdIn(ids,pageable);
+        return auctionRepository.findByItemIdIn(ids, pageable);
     }
 
     //todo: build aucitions with timestamp and ownerRealm if we go beyond 3 realms
@@ -90,37 +85,36 @@ public class MongoAuctionsDao extends MongoTemplate{
     }
 
 
-    public List<ArchivedAuction> getItemStatisticsByTimestamp(long itemId){
+    public List<ArchivedAuction> getItemStatisticsByTimestamp(long itemId) {
 
-        return  archivedAuctionRepository.findByTimestampBetween(AuctionUtils.getTimestamp(true),AuctionUtils.getTimestamp(false),itemId);
-
-    }
-
-
-    public List<ArchivedAuction> getItemStatistics(long itemId){
-
-        return  archivedAuctionRepository.findByItemId(itemId);
+        return archivedAuctionRepository.findByTimestampBetween(AuctionUtils.getTimestamp(true), AuctionUtils.getTimestamp(false), itemId);
 
     }
 
-    public List<Long> getAllItemIDs(){
+
+    public List<ArchivedAuction> getItemStatistics(long itemId) {
+
+        return archivedAuctionRepository.findByItemId(itemId);
+
+    }
+
+    public List<Long> getAllItemIDs() {
         return this.getCollection("item").distinct("itemId");
 
     }
 
 
     public List<Auction> findAuctionsToArchive(long timestamp) {
-        return  this.find(query(where("timestamp").lt(timestamp)),Auction.class);
+        return this.find(query(where("timestamp").lt(timestamp)), Auction.class);
     }
 
 
     public void archiveAuctions(List<Auction> toArchiveList) {
         for (Auction auction : toArchiveList)
-            this.insert(auction,"auctionsArchive");
+            this.insert(auction, "auctionsArchive");
     }
 
-    public void removeArchivedAuctions(long timestamp)
-    {
+    public void removeArchivedAuctions(long timestamp) {
         Query query1 = new Query(where("timestamp").lt(timestamp));
         this.remove(query1, Auction.class);
     }

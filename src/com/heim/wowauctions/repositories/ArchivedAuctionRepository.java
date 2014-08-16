@@ -4,7 +4,6 @@ import com.heim.wowauctions.models.ArchivedAuction;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

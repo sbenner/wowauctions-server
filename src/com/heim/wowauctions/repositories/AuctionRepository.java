@@ -1,6 +1,5 @@
 package com.heim.wowauctions.repositories;
 
-import com.heim.wowauctions.models.ArchivedAuction;
 import com.heim.wowauctions.models.Auction;
 
 import org.springframework.data.domain.Page;

@@ -3,8 +3,6 @@ package com.heim.wowauctions.models;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 
 /**
  * Created with IntelliJ IDEA.
