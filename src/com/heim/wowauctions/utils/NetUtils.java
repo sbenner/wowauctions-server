@@ -1,6 +1,7 @@
 package com.heim.wowauctions.utils;
 
 
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -9,9 +10,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.util.*;
 
 
 /**
@@ -65,6 +71,37 @@ public class NetUtils {
 
 
     }
+
+
+
+    public static Map<String,Integer> getServers()
+    {
+        Map<String,Integer> serverList = new HashMap<String,Integer>();
+
+        Document doc = null;
+        try {
+            doc = Jsoup.connect("http://www.wowprogress.com/realms/rank/us").get();
+
+            Elements usServers = doc.select("#realm_list_table").select("tr");
+
+            for(Element e : usServers)
+            {
+                if(!e.select("td").isEmpty()){
+
+                String realm = e.select("a.realm").text().toLowerCase();
+                int population = Integer.valueOf(e.select("span[class=num]").text());
+
+                serverList.put(realm, population);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return serverList;
+    }
+
+
+
 
     public static String getResourceFromUrl(String url) {
 

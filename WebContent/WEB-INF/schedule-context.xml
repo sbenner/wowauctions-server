@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:annotation-config />
+    <context:component-scan base-package="com.heim.wowauctions" />
      <import resource="servicecontext.xml"/>
      <import resource="task-excutor.xml"/>
 
-    <bean id="syncService" class="com.heim.wowauctions.services.AuctionsSyncService">
+    <bean id="auctionsSyncService" class="com.heim.wowauctions.services.AuctionsSyncService">
         <property name="auctionsDao" ref="mongoAuctionsDao"/>
      </bean>
+
+    <bean id="masterServerSyncService" class="com.heim.wowauctions.services.PopulationMasterSyncService">
+        <property name="auctionsDao" ref="mongoAuctionsDao"/>
+    </bean>
 
     <bean id="itemSyncService" class="com.heim.wowauctions.services.ItemsSyncService">
         <property name="auctionsDao" ref="mongoAuctionsDao"/>
         <property name="itemProcessor" ref="itemProcessor" />
-
     </bean>
 
     <bean id="auctionTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
         <property name="fixedRate" value="true" />
         <property name="period" value="3" />
-        <property name="runnable" ref="syncService" />
+        <property name="runnable" ref="auctionsSyncService" />
+        <property name="timeUnit" value="MINUTES"/>
+    </bean>
+
+    <bean id="masterServerSyncTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+        <property name="fixedRate" value="true" />
+        <property name="period" value="3" />
+        <property name="runnable" ref="masterServerSyncService" />
         <property name="timeUnit" value="MINUTES"/>
     </bean>
 
@@ -36,6 +49,7 @@
             <list>
                 <ref bean="auctionTimerTask" />
                 <ref bean="itemSyncTimerTask" />
+                <!--<ref bean="masterServerSyncTimerTask" />-->
             </list>
         </property>
     </bean>

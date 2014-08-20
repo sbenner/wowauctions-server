@@ -1,12 +1,7 @@
 package com.heim.wowauctions.dao;
 
-import com.heim.wowauctions.models.ArchivedAuction;
-import com.heim.wowauctions.models.Auction;
-import com.heim.wowauctions.models.AuctionUrl;
-import com.heim.wowauctions.models.Item;
-import com.heim.wowauctions.repositories.ArchivedAuctionRepository;
-import com.heim.wowauctions.repositories.AuctionRepository;
-import com.heim.wowauctions.repositories.ItemRepository;
+import com.heim.wowauctions.models.*;
+import com.heim.wowauctions.repositories.*;
 import com.heim.wowauctions.utils.AuctionUtils;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -15,10 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +36,9 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 public class MongoAuctionsDao extends MongoTemplate {
 
     @Autowired
+    RealmRepository realmRepository;
+
+    @Autowired
     ItemRepository itemRepository;
 
     @Autowired
@@ -44,6 +46,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     @Autowired
     ArchivedAuctionRepository archivedAuctionRepository;
+
 
     @Autowired
     public MongoAuctionsDao(MongoDbFactory mongoDbFactory) {
@@ -85,6 +88,22 @@ public class MongoAuctionsDao extends MongoTemplate {
     }
 
 
+
+    public List<Realm> getAllRealms(){
+
+        return (ArrayList<Realm>)realmRepository.findAll();
+
+    }
+
+
+    public void updateRealm(Realm realm) {
+        Query q = new Query(where("slug").is(realm.getSlug()));
+        Update u =  Update.update("population",realm.getPopulation());
+
+        this.updateFirst(q, u, Realm.class);
+    }
+
+
     public List<ArchivedAuction> getItemStatisticsByTimestamp(long itemId) {
 
         return archivedAuctionRepository.findByTimestampBetween(AuctionUtils.getTimestamp(true), AuctionUtils.getTimestamp(false), itemId);
@@ -100,6 +119,30 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     public List<Long> getAllItemIDs() {
         return this.getCollection("item").distinct("itemId");
+
+    }
+
+    public List<Realm> aggregateRealms(){
+
+        TypedAggregation agg = Aggregation.newAggregation(Realm.class,
+                Aggregation.group("connected").
+                        max("population").as("population").
+                        max("connected").as("connected").
+                        max("slug").as("slug")
+        );
+        AggregationResults<Realm> results =  this.aggregate(agg,Realm.class);
+
+         List<Realm> returnedList = findNotConnectedRealms();
+         returnedList.addAll(results.getMappedResults());
+
+        return returnedList;
+    }
+
+    private List<Realm> findNotConnectedRealms(){
+
+        Query q = new Query(where("connected").exists(false));
+
+        return this.find(q,Realm.class);
 
     }
 
