@@ -12,7 +12,7 @@
         <property name="auctionsDao" ref="mongoAuctionsDao"/>
      </bean>
 
-    <bean id="masterServerSyncService" class="com.heim.wowauctions.services.PopulationMasterSyncService">
+    <bean id="masterServerSyncService" class="com.heim.wowauctions.services.AuctionMasterServerSyncService">
         <property name="auctionsDao" ref="mongoAuctionsDao"/>
     </bean>
 
@@ -41,7 +41,6 @@
         <property name="runnable" ref="itemSyncService" />
         <property name="timeUnit" value="MINUTES"/>
     </bean>
-
 
 
     <bean id="timerFactory" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
