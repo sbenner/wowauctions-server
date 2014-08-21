@@ -18,7 +18,7 @@
 
     <bean id="itemSyncService" class="com.heim.wowauctions.services.ItemsSyncService">
         <property name="auctionsDao" ref="mongoAuctionsDao"/>
-        <property name="itemProcessor" ref="itemProcessor" />
+        <property name="itemProcessor" ref="itemProcessor"/>
     </bean>
 
     <bean id="auctionTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
@@ -37,7 +37,7 @@
 
     <bean id="itemSyncTimerTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
         <property name="fixedRate" value="true" />
-        <property name="period" value="5" />
+        <property name="period" value="2" />
         <property name="runnable" ref="itemSyncService" />
         <property name="timeUnit" value="MINUTES"/>
     </bean>

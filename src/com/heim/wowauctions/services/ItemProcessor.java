@@ -13,9 +13,8 @@ import com.heim.wowauctions.utils.NetUtils;
 import org.apache.log4j.Logger;
 import org.springframework.core.task.TaskExecutor;
 
-import java.util.List;
+
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ItemProcessor {
 
@@ -25,14 +24,7 @@ public class ItemProcessor {
     private MongoAuctionsDao auctionsDao;
 
 
-    public ItemProcessor(List<Long> itemList) {
-
-
-       logger.info("itemList input size "+itemList.size());
-
-    }
-
-    public void execute(Queue q)
+    public void processQueue(Queue q)
     {
         while(!q.isEmpty())
             taskExecutor.execute(new ItemProcessorTask((Long)q.poll()));
@@ -65,7 +57,7 @@ public class ItemProcessor {
         }
 
         public void run() {
-           logger.info("processing "+this.getItemId());
+            logger.info("processing "+this.getItemId());
             String url = this.itemUrl+this.getItemId();
             String itemReply = NetUtils.getResourceFromUrl(url);
             logger.info("got "+itemReply);
@@ -88,3 +80,5 @@ public class ItemProcessor {
 
 
 }
+
+

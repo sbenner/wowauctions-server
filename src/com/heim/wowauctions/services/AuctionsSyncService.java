@@ -7,9 +7,11 @@ import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.utils.AuctionUtils;
 import com.heim.wowauctions.utils.NetUtils;
 import org.apache.log4j.Logger;
+import org.springframework.core.task.TaskExecutor;
 
 
 import java.util.List;
+import java.util.Queue;
 import java.util.TimerTask;
 
 
@@ -35,6 +37,7 @@ public class AuctionsSyncService extends TimerTask {
 
             String out =
                     NetUtils.getResourceFromUrl(url);
+
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);

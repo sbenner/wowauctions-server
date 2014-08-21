@@ -21,9 +21,9 @@ import java.util.TimerTask;
  */
 
 
-public class PopulationMasterSyncService extends TimerTask {
+public class AuctionMasterServerSyncService extends TimerTask {
 
-    private static final Logger logger = Logger.getLogger(PopulationMasterSyncService.class);
+    private static final Logger logger = Logger.getLogger(AuctionMasterServerSyncService.class);
 
     private MongoAuctionsDao auctionsDao;
 

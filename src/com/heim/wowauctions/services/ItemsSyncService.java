@@ -34,19 +34,14 @@ public class ItemsSyncService extends TimerTask {
 
               List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
               List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
-
               List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
-
-              getItemProcessor().execute(new ConcurrentLinkedQueue(queue));
+              getItemProcessor().processQueue(new ConcurrentLinkedQueue(queue));
 
           }catch(Exception e)
                {e.printStackTrace();}
 
 
     }
-
-
-
 
     public ItemProcessor getItemProcessor() {
         return itemProcessor;
