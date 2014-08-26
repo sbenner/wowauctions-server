@@ -7,8 +7,10 @@ package com.heim.wowauctions.utils;
  * Time: 1:42 AM
  */
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.net.URLCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequest;
 
@@ -102,15 +104,23 @@ public class SignatureHelper {
 
             }
         }
-
+        URLCodec code = new URLCodec();
         if (request instanceof HttpServletRequest) {
-            headersAndParams.put("query", ((HttpServletRequest) request).getQueryString());
+            try {
+                headersAndParams.put("query", code.decode(((HttpServletRequest) request).getQueryString()));
+            } catch (DecoderException e1) {
+                e1.printStackTrace();
+            }
             return createSortedUrl(
                     ((HttpServletRequest) request).getContextPath() + ((HttpServletRequest) request).getServletPath() + ((HttpServletRequest) request).getPathInfo(),
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
-            headersAndParams.put("query", ((ClientHttpRequest) request).getURI().getQuery());
+            try {
+                headersAndParams.put("query", code.decode(((ClientHttpRequest) request).getURI().getQuery()));
+            } catch (DecoderException e1) {
+                e1.printStackTrace();
+            }
             return createSortedUrl(
                     ((ClientHttpRequest) request).getURI().getPath(),
                     headersAndParams);
