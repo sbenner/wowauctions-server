@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -25,6 +23,16 @@ import java.util.List;
  */
 public class AuctionUtils {
 
+//
+//    public static class BuyoutCompare implements Comparator<Auction> {
+//
+//        public int compare(Auction one, Auction two){
+//
+//            return one.getLongBuyout().compareTo(two.getBuyout());
+//
+//        }
+//
+//    }
 
     public static AuctionUrl parseAuctionFile(String contents) {
         AuctionUrl auctionUrl = new AuctionUrl();
@@ -52,9 +60,38 @@ public class AuctionUtils {
 
             }
         }
-
+        Collections.sort(foundAuctions);
         return new PageImpl<Auction>(foundAuctions, pageable, auctions.getTotalElements());
     }
+
+    public static String buildPrice(long price){
+        String newprice="";
+        try{
+            String oldprice = Long.toString(price);
+
+            int len = oldprice.length();
+            if(len>4)
+            {   newprice = oldprice.substring(0, len-4) + "g ";
+                newprice += oldprice.substring(len-4, len-2) + "s ";
+                newprice += oldprice.substring(len-2,len) + "c";
+            }
+            if(len>2&&len<=4)
+            {
+                newprice += oldprice.substring(0, len-2) + "s ";
+                newprice += oldprice.substring(len-2,len) + "c";
+
+            }
+            if(len<=2)
+                newprice += oldprice.substring(0,len) + "c";
+
+        }catch (Exception e){
+            System.out.println(price);
+            e.printStackTrace();
+        }
+
+        return newprice;
+    }
+
 
 
     public static long getTimestamp(boolean firstLast) {

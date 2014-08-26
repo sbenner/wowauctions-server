@@ -1,6 +1,7 @@
 package com.heim.wowauctions.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.heim.wowauctions.utils.AuctionUtils;
 
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  */
 
 
-public class Auction {
+public class Auction implements Comparable<Auction> {
     public String getDate() {
         return new Date(this.timestamp).toString();
     }
@@ -39,6 +40,8 @@ public class Auction {
     }
 
 
+
+
     public interface BaseView {}
 
 
@@ -58,11 +61,15 @@ public class Auction {
     private long bid;
     private long buyout;
     private int quantity;
+
     private String timeLeft;
     @JsonView(BaseView.class)
     private int rand;
     @JsonView(BaseView.class)
     private long seed;
+
+
+
 
     private Date date;
     private long timestamp;
@@ -95,7 +102,7 @@ public class Auction {
     }
 
     public String getBid() {
-        return buildPrice(this.bid);
+        return AuctionUtils.buildPrice(this.bid);
     }
 
     public void setBid(Long bid) {
@@ -103,7 +110,11 @@ public class Auction {
     }
 
     public String getBuyout() {
-        return buildPrice(this.buyout);
+        return AuctionUtils.buildPrice(this.buyout);
+    }
+
+    public long getLongBuyout(){
+        return this.buyout;
     }
 
     public void setBuyout(Long buyout) {
@@ -142,33 +153,6 @@ public class Auction {
         this.seed = seed;
     }
 
-    private String buildPrice(long price){
-        String newprice="";
-        try{
-        String oldprice = Long.toString(price);
-
-        int len = oldprice.length();
-            if(len>4)
-            {   newprice = oldprice.substring(0, len-4) + "g ";
-                newprice += oldprice.substring(len-4, len-2) + "s ";
-                newprice += oldprice.substring(len-2,len) + "c";
-            }
-            if(len>2&&len<=4)
-            {
-               newprice += oldprice.substring(0, len-2) + "s ";
-               newprice += oldprice.substring(len-2,len) + "c";
-
-            }
-            if(len<=2)
-            newprice += oldprice.substring(0,len) + "c";
-
-        }catch (Exception e){
-            System.out.println(price);
-            e.printStackTrace();
-        }
-
-        return newprice;
-    }
 
 
 
@@ -193,4 +177,18 @@ public class Auction {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    public int compareTo(Auction compareAiction) {
+
+        long compareQuantity = compareAiction.getLongBuyout();
+
+        //ascending order
+        //return this.quantity - compareQuantity;
+
+        //descending order
+        return (int)(compareQuantity - this.buyout);
+
+    }
+
+
 }

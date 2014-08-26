@@ -16,7 +16,7 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-	
+
 	<!-- The context params that read by ContextLoaderListener  -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -38,11 +38,19 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-
-	<servlet-mapping>
+    <servlet-mapping>
 		<servlet-name>rest</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-	
+
+    <filter>
+        <filter-name>signatureFilter</filter-name>
+        <filter-class>com.heim.wowauctions.filter.RestSignatureFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>signatureFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

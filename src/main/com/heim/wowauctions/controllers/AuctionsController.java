@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -77,6 +74,8 @@ public class AuctionsController {
             Page<Auction> auctions = getAuctionsDao().getAuctionsByItemIDs(itemIds, pageRequest);
 
             auctions = AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
+
+
 
             if (outputStream != null)
                 objectWriter.writeValue(outputStream, auctions);

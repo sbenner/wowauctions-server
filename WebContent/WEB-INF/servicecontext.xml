@@ -8,10 +8,9 @@
        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 
-    <!-- this will automatically replace placeholders with values from given properties file -->
-    <!--<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
-    <!--<property name="locations" value="classpath:app.properties" />-->
-    <!--</bean>-->
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations" value="classpath:app.properties" />
+    </bean>
 
     <!--<mongo:db-factory id="mongoDbFactory"-->
     <!--host="localhost"-->
@@ -20,6 +19,10 @@
     <!--/>-->
     <!-- data source definition -->
 
+
+    <bean id="signatureHelper" class="com.heim.wowauctions.utils.SignatureHelper">
+        <property name="publicKey" value="${public.key}"/>
+    </bean>
 
 
     <bean id="mongoFactoryBean" class="org.springframework.data.mongodb.core.MongoFactoryBean">
