@@ -23,16 +23,6 @@ import java.util.*;
  */
 public class AuctionUtils {
 
-//
-//    public static class BuyoutCompare implements Comparator<Auction> {
-//
-//        public int compare(Auction one, Auction two){
-//
-//            return one.getLongBuyout().compareTo(two.getBuyout());
-//
-//        }
-//
-//    }
 
     public static AuctionUrl parseAuctionFile(String contents) {
         AuctionUrl auctionUrl = new AuctionUrl();
@@ -52,6 +42,7 @@ public class AuctionUtils {
         for (Item reborn : rebornsList) {
 
             for (Auction auction : auctions.getContent()) {
+                auction.setPpi();
                 if (reborn.getId() == auction.getItemId()) {
                     auction.setItem(reborn);
                     auction.setOwner(auction.getOwner() + "-" + auction.getOwnerRealm());
@@ -210,6 +201,7 @@ public class AuctionUtils {
                     auction.setOwnerRealm(obj.getString("ownerRealm"));
                     auction.setQuantity(obj.getInt("quantity"));
                     auction.setTimeLeft(obj.getString("timeLeft"));
+
                     auction.setTimestamp(timestamp);
                     auctions.add(auction);
                 }

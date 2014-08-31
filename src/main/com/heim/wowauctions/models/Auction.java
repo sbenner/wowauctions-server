@@ -39,7 +39,13 @@ public class Auction implements Comparable<Auction> {
         this.itemId = itemId;
     }
 
+    public String getPpi() {
+        return AuctionUtils.buildPrice((long)(this.ppi*10000));
+    }
 
+    public void setPpi() {
+        this.ppi =  (double)this.buyout/10000/this.quantity;
+    }
 
 
     public interface BaseView {}
@@ -68,6 +74,7 @@ public class Auction implements Comparable<Auction> {
     @JsonView(BaseView.class)
     private long seed;
 
+    private double ppi;
 
 
 
@@ -178,15 +185,15 @@ public class Auction implements Comparable<Auction> {
         this.timestamp = timestamp;
     }
 
-    public int compareTo(Auction compareAiction) {
+    public int compareTo(Auction compareAuction) {
 
-        long compareQuantity = compareAiction.getLongBuyout();
-
+        double compare  = compareAuction.ppi;
         //ascending order
         //return this.quantity - compareQuantity;
+        return (int)(this.ppi - compare);
 
         //descending order
-        return (int)(compareQuantity - this.buyout);
+        //return (int)(compare - this.ppi);
 
     }
 
