@@ -6,17 +6,15 @@ package com.heim.wowauctions.filter;
  * Date: 8/25/14
  * Time: 1:42 AM
  */
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+
+import com.heim.wowauctions.utils.SignatureHelper;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.heim.wowauctions.utils.SignatureHelper;
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
 
 public class RestSignatureFilter extends OncePerRequestFilter {
@@ -44,14 +42,10 @@ public class RestSignatureFilter extends OncePerRequestFilter {
             return;
         }
 
-
-
-
         if(signature==null||apiKey==null){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
             return;
         }
-
 
         try {
             if (!SignatureHelper.validateSignature(url, signature)) {

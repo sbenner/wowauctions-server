@@ -1,4 +1,4 @@
-wowauctions
+wowauctions-server
 ===========
 
 wow auctions api/services
