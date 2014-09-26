@@ -175,6 +175,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     public AuctionUrl getAuctionsUrl() {
         Query query = new Query();
+
         return this.findOne(query, AuctionUrl.class);
     }
 }

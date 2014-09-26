@@ -7,6 +7,7 @@ import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.utils.AuctionUtils;
 import com.heim.wowauctions.utils.NetUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 
@@ -28,6 +29,8 @@ public class AuctionsSyncService extends TimerTask {
 
     private static final Logger logger = Logger.getLogger(AuctionsSyncService.class);
     private static final String url = "http://us.battle.net/api/wow/auction/data/veknilash";
+
+
     private MongoAuctionsDao auctionsDao;
 
 
