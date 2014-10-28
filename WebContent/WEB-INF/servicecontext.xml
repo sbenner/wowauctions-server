@@ -8,8 +8,9 @@
        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 
-    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations" value="classpath:app.properties" />
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:app.properties"/>
     </bean>
 
     <!--<mongo:db-factory id="mongoDbFactory"-->
@@ -29,6 +30,7 @@
         <property name="host" value="127.0.0.1"/>
         <property name="port" value="27017"/>
 
+
     </bean>
 
     <bean id="mongoDbFactory"
@@ -44,9 +46,7 @@
 
 
     <mongo:repositories base-package="com.heim.wowauctions.repositories"
-                        mongo-template-ref="mongoAuctionsDao" />
-
-
+                        mongo-template-ref="mongoAuctionsDao"/>
 
 
 </beans>

@@ -32,6 +32,7 @@ public class RestSignatureFilter extends OncePerRequestFilter {
         long timestamp = 0;
         try{
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
+
             if(!SignatureHelper.validateTimestamp(timestamp)){
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
                 return;
