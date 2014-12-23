@@ -19,27 +19,24 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 
-
 public class ItemsSyncService extends TimerTask {
 
-    private static final Logger logger	= Logger.getLogger(ItemsSyncService.class.getSimpleName());
-
+    private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
     private MongoAuctionsDao auctionsDao;
     private ItemProcessor itemProcessor;
 
-    public void run()
-    {
-           logger.info("started");
-           try{
+    public void run() {
+        logger.info("started");
+        try {
 
-              List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
-              List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
-              List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
-              getItemProcessor().processQueue(new ConcurrentLinkedQueue(queue));
+            List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
+            List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
+            List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
+            getItemProcessor().processQueue(new ConcurrentLinkedQueue(queue));
 
-          }catch(Exception e)
-               {e.printStackTrace();}
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

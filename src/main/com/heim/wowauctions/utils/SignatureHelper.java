@@ -11,7 +11,6 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.net.URLCodec;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,10 +73,10 @@ public class SignatureHelper {
         }
     }
 
-    public static boolean validateTimestamp(long timestamp){
-       long currentTime = System.currentTimeMillis();
-        if(timestamp>currentTime+60000||
-           timestamp<currentTime-60000){
+    public static boolean validateTimestamp(long timestamp) {
+        long currentTime = System.currentTimeMillis();
+        if (timestamp > currentTime + 60000 ||
+                timestamp < currentTime - 60000) {
             return false;
         }
         return true;

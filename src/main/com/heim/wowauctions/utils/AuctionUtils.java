@@ -5,6 +5,7 @@ import com.heim.wowauctions.models.AuctionUrl;
 import com.heim.wowauctions.models.Item;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -127,10 +128,11 @@ public class AuctionUtils {
         return auctions;
     }
 
-    public static Item buildItemFromString(String in) {
+    public static Item buildItemFromString(String in) throws JSONException{
 
         JSONObject obj = new JSONObject(in);
         Item item = new Item();
+
         item.setId(obj.getLong("id"));
         item.setName(obj.getString("name"));
         item.setItemLevel(obj.getInt("itemLevel"));
