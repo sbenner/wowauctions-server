@@ -104,8 +104,8 @@ public class AuctionUtils {
         List<Auction> auctions = new ArrayList<Auction>();
 
         JSONObject jsonObject = new JSONObject(contents);
-        JSONObject alliance = jsonObject.getJSONObject("auctions");
-        JSONArray auctionsArray = alliance.getJSONArray("auctions");
+     //   JSONObject alliance = jsonObject.getJSONObject("auctions");
+        JSONArray auctionsArray = jsonObject.getJSONArray("auctions");
 
         for (int i = 0; i < auctionsArray.length(); i++) {
             JSONObject obj = (JSONObject) auctionsArray.get(i);

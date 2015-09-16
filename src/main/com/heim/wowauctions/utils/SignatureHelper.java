@@ -130,7 +130,8 @@ public class SignatureHelper {
 
     public static String createSortedUrl(String url, TreeMap<String, String> headersAndParams) {
         // build the url with headers and parms sorted
-        String params = headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
+        String params =
+                headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
 
         StringBuilder sb = new StringBuilder();
 
