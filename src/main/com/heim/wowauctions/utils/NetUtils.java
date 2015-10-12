@@ -5,6 +5,7 @@ package com.heim.wowauctions.utils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -108,10 +109,19 @@ public class NetUtils {
         String output = null;
 
         try {
+            RequestConfig defaultRequestConfig = RequestConfig.custom()
+                    .setSocketTimeout(5000)
+                    .setConnectTimeout(5000)
+                    .setConnectionRequestTimeout(5000)
+                    .setStaleConnectionCheckEnabled(true)
+                    .build();
 
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(defaultRequestConfig)
+                    .build();
 
             HttpGet getRequest = new HttpGet(url);
+
             HttpResponse response = httpClient.execute(getRequest);
 
             if (response.getStatusLine().getStatusCode() != 200) {
