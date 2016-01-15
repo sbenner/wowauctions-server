@@ -153,6 +153,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
 
     public void archiveAuctions(List<Auction> toArchiveList) {
+
         for (Auction auction : toArchiveList)
             this.insert(auction, "auctionsArchive");
     }

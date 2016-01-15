@@ -21,10 +21,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/schedule-context.xml
+			classpath*:schedule-context.xml
 		</param-value>
-
-
 	</context-param>
 
 	<!-- This listener will load other application context file in addition to springweb-servlet.xml -->

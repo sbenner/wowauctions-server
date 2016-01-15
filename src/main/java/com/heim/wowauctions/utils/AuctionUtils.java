@@ -36,6 +36,9 @@ public class AuctionUtils {
         return auctionUrl;
     }
 
+
+
+
     public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
 
         List<Auction> foundAuctions = new ArrayList<Auction>();

@@ -14,7 +14,6 @@
     </properties>
 
 
-
     <groupId>auctions</groupId>
     <artifactId>auctions</artifactId>
     <version>1.0</version>
@@ -30,21 +29,21 @@
 
     <dependencies>
         <!--<dependency>-->
-            <!--<groupId>junit</groupId>-->
-            <!--<artifactId>junit</artifactId>-->
-            <!--<version>4.11</version>-->
+        <!--<groupId>junit</groupId>-->
+        <!--<artifactId>junit</artifactId>-->
+        <!--<version>4.11</version>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-test</artifactId>-->
-            <!--<version>${org.springframework-version}</version>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-test</artifactId>-->
+        <!--<version>${org.springframework-version}</version>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-            <!--<groupId>javax.ws.rs</groupId>-->
-            <!--<artifactId>jsr311-api</artifactId>-->
-            <!--<version>1.1.1</version>-->
+        <!--<groupId>javax.ws.rs</groupId>-->
+        <!--<artifactId>jsr311-api</artifactId>-->
+        <!--<version>1.1.1</version>-->
         <!--</dependency>-->
 
 
@@ -79,16 +78,15 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
             <version>1.5.2.RELEASE</version>
             <exclusions>
-            <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-            </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -125,16 +123,16 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.security</groupId>-->
-            <!--<artifactId>spring-security-web</artifactId>-->
-            <!--<version>3.2.5.RELEASE</version>-->
+        <!--<groupId>org.springframework.security</groupId>-->
+        <!--<artifactId>spring-security-web</artifactId>-->
+        <!--<version>3.2.5.RELEASE</version>-->
         <!--</dependency>-->
 
 
         <!--<dependency>-->
-            <!--<groupId>javax.servlet</groupId>-->
-            <!--<artifactId>servlet-api</artifactId>-->
-            <!--<version>2.5</version>-->
+        <!--<groupId>javax.servlet</groupId>-->
+        <!--<artifactId>servlet-api</artifactId>-->
+        <!--<version>2.5</version>-->
         <!--</dependency>-->
 
 
@@ -170,16 +168,16 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-jdbc</artifactId>-->
-            <!--<version>${org.springframework-version}</version>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-jdbc</artifactId>-->
+        <!--<version>${org.springframework-version}</version>-->
         <!--</dependency>-->
 
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-tx</artifactId>-->
-            <!--<version>${org.springframework-version}</version>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-tx</artifactId>-->
+        <!--<version>${org.springframework-version}</version>-->
         <!--</dependency>-->
 
         <dependency>
@@ -211,29 +209,21 @@
     </dependencies>
 
 
-<build>
-    <directory>target</directory>
-    <outputDirectory>target/classes</outputDirectory>
-    <finalName>${project.artifactId}-${project.version}</finalName>
-    <sourceDirectory>src/main</sourceDirectory>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
 
-    <plugins>
-
- <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.4</version>
-     <executions>
-         <execution>
-             <phase>compile</phase>
-         </execution>
-     </executions>
-        <configuration>
-          <webappDirectory>${project.basedir}/WebContent</webappDirectory>
-        </configuration>
- </plugin>
-
-
- </plugins>
-  </build>
+        </plugins>
+    </build>
 </project>

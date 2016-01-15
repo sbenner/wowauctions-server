@@ -20,6 +20,13 @@
     <!--/>-->
     <!-- data source definition -->
 
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--<ref bean="jsonConverter" />-->
+            <!--</list>-->
+        <!--</property>-->
+    </bean>
 
     <bean id="signatureHelper" class="com.heim.wowauctions.utils.SignatureHelper">
         <property name="publicKey" value="${public.key}"/>
