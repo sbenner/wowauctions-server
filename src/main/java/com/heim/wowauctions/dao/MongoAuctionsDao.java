@@ -32,7 +32,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  * Time: 10:41 PM
  */
 
-@Component
+
 public class MongoAuctionsDao extends MongoTemplate {
 
     @Autowired

@@ -63,6 +63,9 @@ public class AuctionsController {
             for (Item item : items)
                 itemIds.add(item.getId());
 
+
+
+
             Sort sort = new Sort(Sort.Direction.ASC, "buyout");
 
             PageRequest pageRequest;

@@ -4,10 +4,14 @@ package com.heim.wowauctions.services;
 import com.heim.wowauctions.dao.MongoAuctionsDao;
 import com.heim.wowauctions.utils.AuctionUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Semaphore;
 
 
 /**
@@ -23,7 +27,10 @@ public class ItemsSyncService extends TimerTask {
 
     private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
     private MongoAuctionsDao auctionsDao;
-    private ItemProcessor itemProcessor;
+
+    private Semaphore semaphore = new Semaphore(5);
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     public void run() {
         logger.info("started");
@@ -32,7 +39,13 @@ public class ItemsSyncService extends TimerTask {
             List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
             List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
             List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
-            getItemProcessor().processQueue(new ConcurrentLinkedQueue(queue));
+            Queue<Long> q  =new ConcurrentLinkedQueue(queue);
+            while (!q.isEmpty()) {
+                semaphore.acquire();
+                taskExecutor.execute(new ItemProcessorTask(this,q.poll()));
+            }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,13 +53,10 @@ public class ItemsSyncService extends TimerTask {
 
     }
 
-    public ItemProcessor getItemProcessor() {
-        return itemProcessor;
+    public void releaseSemaphore(){
+        this.semaphore.release();
     }
 
-    public void setItemProcessor(ItemProcessor itemProcessor) {
-        this.itemProcessor = itemProcessor;
-    }
 
     public MongoAuctionsDao getAuctionsDao() {
         return auctionsDao;

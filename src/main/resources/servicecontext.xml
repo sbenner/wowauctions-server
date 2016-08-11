@@ -48,7 +48,6 @@
 
     <bean id="mongoAuctionsDao" class="com.heim.wowauctions.dao.MongoAuctionsDao">
         <constructor-arg ref="mongoDbFactory"/>
-
     </bean>
 
 

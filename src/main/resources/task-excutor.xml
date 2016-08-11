@@ -10,9 +10,5 @@
     <!--<property name="queueCapacity" value="10" />-->
 </bean>
 
-<bean id="itemProcessor" class="com.heim.wowauctions.services.ItemProcessor">
-    <constructor-arg ref="taskExecutor" />
-    <constructor-arg ref="mongoAuctionsDao" />
-</bean>
 
  </beans>
