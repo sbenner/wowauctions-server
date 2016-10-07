@@ -49,9 +49,13 @@ public class MongoAuctionsDao extends MongoTemplate {
 
 
     @Autowired
+    MongoDbFactory mongoDbFactory;
+
+    @Autowired
     public MongoAuctionsDao(MongoDbFactory mongoDbFactory) {
-        super(mongoDbFactory);
+            super(mongoDbFactory);
     }
+
 
 
     public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {

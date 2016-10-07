@@ -7,6 +7,7 @@ import com.heim.wowauctions.service.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.service.persistence.models.Auction;
 import com.heim.wowauctions.service.persistence.models.Item;
 import com.heim.wowauctions.service.utils.AuctionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,7 +26,10 @@ import java.util.*;
 @Controller
 public class AuctionsController {
 
+    @Autowired
     private MongoAuctionsDao auctionsDao;
+
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -55,9 +59,9 @@ public class AuctionsController {
             //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
             if (!exact)
-                items = getAuctionsDao().findItemByName(name);
+                items = auctionsDao.findItemByName(name);
             else
-                items = getAuctionsDao().findItemByExactName(name);
+                items = auctionsDao.findItemByExactName(name);
 
             List<Long> itemIds = new ArrayList<Long>();
             for (Item item : items)
@@ -72,7 +76,7 @@ public class AuctionsController {
             else
                 pageRequest = new PageRequest(page, pageSize, sort);
 
-            Page<Auction> auctions = getAuctionsDao().getAuctionsByItemIDs(itemIds, pageRequest);
+            Page<Auction> auctions = auctionsDao.getAuctionsByItemIDs(itemIds, pageRequest);
 
             auctions = AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
 
@@ -104,7 +108,7 @@ public class AuctionsController {
 
         List<ArchivedAuction> auctions = null;
         if (id != null) {
-            auctions = getAuctionsDao().getItemStatistics(Long.parseLong(id));
+            auctions = auctionsDao.getItemStatistics(Long.parseLong(id));
         }
 
         Map<Long, Long> map = new HashMap<Long, Long>();
@@ -118,13 +122,6 @@ public class AuctionsController {
     }
 
 
-    public MongoAuctionsDao getAuctionsDao() {
-        return auctionsDao;
-    }
-
-    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
-        this.auctionsDao = auctionsDao;
-    }
 
 
 }
