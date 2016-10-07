@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <import resource="classpath*:servicecontext.xml"/>
+
+
+	<!-- To enable @RequestMapping process on type level and method level -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!--<ref bean="marshallingConverter" />-->
+				<!--<ref bean="atomConverter"  />-->
+				<ref bean="jsonConverter" />
+			</list>
+		</property>
+	</bean>
+
+
+   <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+        <!--<property name="objectMapper">-->
+                    <!--&lt;!&ndash;<bean class="com.fasterxml.jackson.databind.ObjectMapper">&ndash;&gt;-->
+        <!--&lt;!&ndash;<bean class="com.heim.wowauctions.service.utils.AuctionsObjectMapper">&ndash;&gt;-->
+                <!--<property name="serializationInclusion" value="NON_NULL"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+
+	</bean>
+
+
+    <!-- Client -->
+
+
+
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+		    <map>
+		        <entry key="xml" value="application/xml"/>
+                <entry key="json" value="application/json"/>
+		        <entry key="html" value="text/html"/>
+		    </map>
+		</property>
+		<property name="viewResolvers">
+		    <list>
+		        <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+		        <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+					<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+					<property name="prefix" value="/WEB-INF/jsp/"/>
+					<property name="suffix" value=".jsp"/>
+				</bean>
+		    </list>
+		</property>
+	</bean>
+	
+
+
+</beans>

@@ -4,48 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <properties>
-        <java-version>1.6</java-version>
+        <java-version>1.7</java-version>
         <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
-
-        <!--<org.aspectj-version>1.8.1</org.aspectj-version>-->
         <org.slf4j-version>1.7.7</org.slf4j-version>
-
-
     </properties>
 
 
-    <groupId>auctions</groupId>
-    <artifactId>auctions</artifactId>
+    <groupId>com.heim.wowauctions</groupId>
+    <artifactId>wowauctions</artifactId>
     <version>1.0</version>
-
-    <repositories>
-        <repository>
-            <id>java.net2</id>
-            <name>Repository hosting the jee6 artifacts</name>
-            <url>http://download.java.net/maven/2</url>
-        </repository>
-    </repositories>
-
+    <packaging>pom</packaging>
 
     <dependencies>
-        <!--<dependency>-->
-        <!--<groupId>junit</groupId>-->
-        <!--<artifactId>junit</artifactId>-->
-        <!--<version>4.11</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.springframework</groupId>-->
-        <!--<artifactId>spring-test</artifactId>-->
-        <!--<version>${org.springframework-version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>javax.ws.rs</groupId>-->
-        <!--<artifactId>jsr311-api</artifactId>-->
-        <!--<version>1.1.1</version>-->
-        <!--</dependency>-->
-
 
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -122,21 +92,7 @@
             </exclusions>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.security</groupId>-->
-        <!--<artifactId>spring-security-web</artifactId>-->
-        <!--<version>3.2.5.RELEASE</version>-->
-        <!--</dependency>-->
-
-
-        <!--<dependency>-->
-        <!--<groupId>javax.servlet</groupId>-->
-        <!--<artifactId>servlet-api</artifactId>-->
-        <!--<version>2.5</version>-->
-        <!--</dependency>-->
-
-
-        <dependency>
+           <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${org.springframework-version}</version>
@@ -167,19 +123,6 @@
             <version>${org.springframework-version}</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.springframework</groupId>-->
-        <!--<artifactId>spring-jdbc</artifactId>-->
-        <!--<version>${org.springframework-version}</version>-->
-        <!--</dependency>-->
-
-
-        <!--<dependency>-->
-        <!--<groupId>org.springframework</groupId>-->
-        <!--<artifactId>spring-tx</artifactId>-->
-        <!--<version>${org.springframework-version}</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -208,22 +151,24 @@
 
     </dependencies>
 
-
+    <modules>
+        <module>wowservices</module>
+        <module>wowweb</module>
+    </modules>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
                 <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/resources</directory>
-                        </resource>
-                    </webResources>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
