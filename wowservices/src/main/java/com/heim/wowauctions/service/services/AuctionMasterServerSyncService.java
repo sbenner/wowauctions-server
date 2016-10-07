@@ -1,11 +1,11 @@
 package com.heim.wowauctions.service.services;
 
 
-import com.heim.wowauctions.service.persistence.dao.*;
-
+import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.service.persistence.models.Realm;
-import com.heim.wowauctions.service.utils.NetUtils;
+import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,30 +25,29 @@ import java.util.TimerTask;
 public class AuctionMasterServerSyncService extends TimerTask {
 
     private static final Logger logger = Logger.getLogger(AuctionMasterServerSyncService.class);
-
+    @Autowired
+    HttpReqHandler httpReqHandler;
+    @Autowired
     private MongoAuctionsDao auctionsDao;
-
 
     public void run() {
         logger.debug("started");
         try {
 
-            Map<String, Integer> realmsMap = NetUtils.getServers();
+            Map<String, Integer> realmsMap = httpReqHandler.getServers();
             List<Realm> realmsList = getAuctionsDao().getAllRealms();
 
-            for(Realm realm : realmsList){
-                      if(realmsMap.get(realm.getName().toLowerCase())==null)
-                      {
-                          System.out.println("Oh Snap!!!!"+realm.getName());
-                      }
-                      else{
-                      realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
-                      getAuctionsDao().updateRealm(realm);
-                      }
+            for (Realm realm : realmsList) {
+                if (realmsMap.get(realm.getName().toLowerCase()) == null) {
+                    System.out.println("Oh Snap!!!!" + realm.getName());
+                } else {
+                    realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
+                    getAuctionsDao().updateRealm(realm);
+                }
             }
 
             List<Realm> aggregatedRealms = getAuctionsDao().aggregateRealms();
-               //how work on this realm list q to download auctions
+            //how work on this realm list q to download auctions
             //todo: rebuild our downloader to download from all realms.
 
         } catch (Exception e) {
@@ -56,7 +55,6 @@ public class AuctionMasterServerSyncService extends TimerTask {
         }
 
     }
-
 
     public MongoAuctionsDao getAuctionsDao() {
         return auctionsDao;

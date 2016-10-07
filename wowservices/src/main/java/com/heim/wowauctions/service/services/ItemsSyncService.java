@@ -3,6 +3,7 @@ package com.heim.wowauctions.service.services;
 
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.service.utils.AuctionUtils;
+import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -28,9 +29,15 @@ import java.util.concurrent.Semaphore;
 public class ItemsSyncService extends TimerTask {
 
     private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
+
+    @Autowired
     private MongoAuctionsDao auctionsDao;
 
     private Semaphore semaphore = new Semaphore(5);
+
+    @Autowired
+    private HttpReqHandler httpReqHandler;
+
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -60,12 +67,19 @@ public class ItemsSyncService extends TimerTask {
         this.semaphore.release();
     }
 
-
     public MongoAuctionsDao getAuctionsDao() {
         return auctionsDao;
     }
 
     public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
         this.auctionsDao = auctionsDao;
+    }
+
+    public HttpReqHandler getHttpReqHandler() {
+        return httpReqHandler;
+    }
+
+    public void setHttpReqHandler(HttpReqHandler httpReqHandler) {
+        this.httpReqHandler = httpReqHandler;
     }
 }

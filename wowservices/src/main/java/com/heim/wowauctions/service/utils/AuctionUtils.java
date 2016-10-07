@@ -93,9 +93,9 @@ public class AuctionUtils {
 
         GregorianCalendar cal =
                 (GregorianCalendar) GregorianCalendar.getInstance();
-        cal.set(cal.HOUR, 0);
-        cal.set(cal.MINUTE, 0);
-        cal.set(cal.SECOND, 0);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
 
         int day = firstLast ? cal.getMinimum(GregorianCalendar.DAY_OF_MONTH) : cal.getMaximum(GregorianCalendar.DAY_OF_MONTH);
         cal.set(cal.DAY_OF_MONTH, day);
