@@ -4,6 +4,7 @@ import com.heim.wowauctions.service.persistence.models.Auction;
 import com.heim.wowauctions.service.persistence.models.AuctionUrl;
 import com.heim.wowauctions.service.persistence.models.Item;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +25,7 @@ import java.util.*;
  */
 public class AuctionUtils {
 
+    private static final Logger logger = Logger.getLogger(AuctionUtils.class);
 
     public static AuctionUrl parseAuctionFile(String contents) {
         AuctionUrl auctionUrl = new AuctionUrl();
@@ -177,7 +179,8 @@ public class AuctionUtils {
 
 
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+              logger.error(e.getMessage(),e);
+
             }
         }
 
@@ -213,7 +216,7 @@ public class AuctionUtils {
 
 
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                logger.error(e.getMessage(),e);
             }
         }
 

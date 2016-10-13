@@ -55,10 +55,8 @@ public class ItemsSyncService extends TimerTask {
                 taskExecutor.execute(new ItemProcessorRunner(this,q.poll()));
             }
 
-
-
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error(e.getMessage(),e);
         }
 
     }
