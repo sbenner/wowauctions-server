@@ -105,7 +105,7 @@ public class HttpReqHandler {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
         return serverList;
     }
