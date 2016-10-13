@@ -65,12 +65,8 @@ public class HttpReqHandler {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
-        Map<String,String> urlVariable = new HashMap<String, String>();
-        urlVariable.put("apikey", apikey);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey",apikey);
-
-
 
         return
                restTemplate.
