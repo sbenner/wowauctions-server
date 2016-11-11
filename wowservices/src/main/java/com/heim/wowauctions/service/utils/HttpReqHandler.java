@@ -11,12 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,7 +26,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,7 +40,13 @@ public class HttpReqHandler {
     private static String token;
     @Autowired
     RestTemplate restTemplate;
-
+    ResponseExtractor<String> responseExtractor = new ResponseExtractor<String>() {
+        @Override
+        public String extractData(ClientHttpResponse arg0)
+                throws IOException {
+            return arg0.getStatusText();
+        }
+    };
     @Value("${apikey}")
     private String apikey;
 
@@ -48,45 +54,8 @@ public class HttpReqHandler {
         return fileName.substring(fileName.indexOf("-") + 1, fileName.indexOf("."));
     }
 
-    ResponseExtractor<String> responseExtractor = new ResponseExtractor<String>(){
-        @Override
-        public String extractData(ClientHttpResponse arg0)
-                throws IOException {
-            return arg0.getStatusText();
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public String getData(String url)  {
-        //restTemplate.setRequestFactory(ClientHttpRequestFactorySelector.getRequestFactory());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey",apikey);
-
-        return
-               restTemplate.
-                exchange(builder.build().encode().toUri(),
-                        HttpMethod.GET,
-                        requestEntity,
-                        String.class).getBody();
-
-
-    }
-
-    @Bean
-    public HttpComponentsClientHttpRequestFactory requestFactory() {
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        return new HttpComponentsClientHttpRequestFactory(httpClient);
-    }
-
-    public static Map<String,Integer> getServers()
-    {
-        Map<String,Integer> serverList = new HashMap<String,Integer>();
+    public static Map<String, Integer> getServers() {
+        Map<String, Integer> serverList = new HashMap<String, Integer>();
 
         Document doc = null;
         try {
@@ -94,9 +63,8 @@ public class HttpReqHandler {
 
             Elements usServers = doc.select("#realm_list_table").select("tr");
 
-            for(Element e : usServers)
-            {
-                if(!e.select("td").isEmpty()){
+            for (Element e : usServers) {
+                if (!e.select("td").isEmpty()) {
 
                     String realm = e.select("a.realm").text().toLowerCase();
                     int population = Integer.valueOf(e.select("span[class=num]").text());
@@ -105,11 +73,41 @@ public class HttpReqHandler {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
         return serverList;
     }
 
+    @SuppressWarnings("unchecked")
+    public String getData(String url) {
+        //restTemplate.setRequestFactory(ClientHttpRequestFactorySelector.getRequestFactory());
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey", apikey);
+
+            return
+                    restTemplate.
+                            exchange(builder.build().encode().toUri(),
+                                    HttpMethod.GET,
+                                    requestEntity,
+                                    String.class).getBody();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+
+    }
+
+    @Bean
+    public HttpComponentsClientHttpRequestFactory requestFactory() {
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        return new HttpComponentsClientHttpRequestFactory(httpClient);
+    }
 
 
 }

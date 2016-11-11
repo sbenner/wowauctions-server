@@ -1,6 +1,7 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.service.SyncServiceContext;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
 
@@ -31,6 +34,10 @@ public class ItemsSyncService extends TimerTask {
     private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
 
     @Autowired
+    SyncServiceContext context;
+
+
+    @Autowired
     private MongoAuctionsDao auctionsDao;
 
     private Semaphore semaphore = new Semaphore(5);
@@ -46,14 +53,22 @@ public class ItemsSyncService extends TimerTask {
         logger.info("started");
         try {
 
-            List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
-            List<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
-            List<Long> queue = AuctionUtils.createQueue(existingItemIds, allAuctionItemIds);
-            Queue<Long> q  =new ConcurrentLinkedQueue(queue);
-            while (!q.isEmpty()) {
-                semaphore.acquire();
-                taskExecutor.execute(new ItemProcessorRunner(this,q.poll()));
+            if(context.getQueue().isEmpty()){
+                List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
+                Set<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
+                context.setQueue(AuctionUtils.createQueue(existingItemIds, allAuctionItemIds));
+                allAuctionItemIds.clear();
+                existingItemIds.clear();
+            }else{
+                logger.info("Queue is not empty we dont add any items!");
             }
+
+            while (!context.getQueue().isEmpty()) {
+                logger.info("q size: "+context.getQueue().size());
+                semaphore.acquire();
+                taskExecutor.execute(new ItemProcessorWorker(this,context.getQueue().poll()));
+            }
+
 
         } catch (Exception e) {
            logger.error(e.getMessage(),e);

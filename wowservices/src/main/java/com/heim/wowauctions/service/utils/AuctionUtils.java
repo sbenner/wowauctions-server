@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 /**
@@ -38,9 +40,6 @@ public class AuctionUtils {
         return auctionUrl;
     }
 
-
-
-
     public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
 
         List<Auction> foundAuctions = new ArrayList<Auction>();
@@ -61,35 +60,32 @@ public class AuctionUtils {
         return new PageImpl<Auction>(foundAuctions, pageable, auctions.getTotalElements());
     }
 
-    public static String buildPrice(long price){
-        String newprice="";
-        try{
+    public static String buildPrice(long price) {
+        String newprice = "";
+        try {
             String oldprice = Long.toString(price);
 
             int len = oldprice.length();
-            if(len>4)
-            {   newprice = oldprice.substring(0, len-4) + "g ";
-                newprice += oldprice.substring(len-4, len-2) + "s ";
-                newprice += oldprice.substring(len-2,len) + "c";
+            if (len > 4) {
+                newprice = oldprice.substring(0, len - 4) + "g ";
+                newprice += oldprice.substring(len - 4, len - 2) + "s ";
+                newprice += oldprice.substring(len - 2, len) + "c";
             }
-            if(len>2&&len<=4)
-            {
-                newprice += oldprice.substring(0, len-2) + "s ";
-                newprice += oldprice.substring(len-2,len) + "c";
+            if (len > 2 && len <= 4) {
+                newprice += oldprice.substring(0, len - 2) + "s ";
+                newprice += oldprice.substring(len - 2, len) + "c";
 
             }
-            if(len<=2)
-                newprice += oldprice.substring(0,len) + "c";
+            if (len <= 2)
+                newprice += oldprice.substring(0, len) + "c";
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(price);
             e.printStackTrace();
         }
 
         return newprice;
     }
-
-
 
     public static long getTimestamp(boolean firstLast) {
 
@@ -104,12 +100,11 @@ public class AuctionUtils {
         return cal.getTimeInMillis();
     }
 
-
     public static List<Auction> buildAuctionsFromString(String contents, long timestamp) {
         List<Auction> auctions = new ArrayList<Auction>();
 
         JSONObject jsonObject = new JSONObject(contents);
-     //   JSONObject alliance = jsonObject.getJSONObject("auctions");
+        //   JSONObject alliance = jsonObject.getJSONObject("auctions");
         JSONArray auctionsArray = jsonObject.getJSONArray("auctions");
 
         for (int i = 0; i < auctionsArray.length(); i++) {
@@ -133,7 +128,7 @@ public class AuctionUtils {
         return auctions;
     }
 
-    public static Item buildItemFromString(String in) throws JSONException{
+    public static Item buildItemFromString(String in) throws JSONException {
 
         JSONObject obj = new JSONObject(in);
         Item item = new Item();
@@ -146,18 +141,17 @@ public class AuctionUtils {
         return item;
     }
 
+    public static BlockingQueue<Long> createQueue(Set<Long> existingItems, List<Long> auctionItems) {
+        BlockingQueue<Long> newQueue = new LinkedBlockingQueue<Long>();
 
-    public static List<Long> createQueue(List<Long> existingItems, List<Long> auctionItems) {
-        List<Long> newQueue = new ArrayList<Long>();
-
-        for (long auctionItem : auctionItems)
-            if (existingItems.indexOf(auctionItem) == -1) {
+        for (long auctionItem : auctionItems) {
+            if (!existingItems.contains(auctionItem)) {
                 newQueue.add(auctionItem);
             }
+        }
 
         return newQueue;
     }
-
 
     @Deprecated
     public static List<Item> makeReborns() {
@@ -179,7 +173,7 @@ public class AuctionUtils {
 
 
             } catch (IOException e) {
-              logger.error(e.getMessage(),e);
+                logger.error(e.getMessage(), e);
 
             }
         }
@@ -216,7 +210,7 @@ public class AuctionUtils {
 
 
             } catch (IOException e) {
-                logger.error(e.getMessage(),e);
+                logger.error(e.getMessage(), e);
             }
         }
 

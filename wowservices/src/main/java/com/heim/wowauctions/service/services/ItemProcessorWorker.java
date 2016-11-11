@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,9 +20,9 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class ItemProcessorRunner implements Runnable {
+public class ItemProcessorWorker implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(ItemProcessorRunner.class);
+    private static final Logger logger = Logger.getLogger(ItemProcessorWorker.class);
     private static final String itemUrl = "https://us.api.battle.net/wow/item/";
     private long itemId;
     private ItemsSyncService service;
@@ -27,10 +30,10 @@ public class ItemProcessorRunner implements Runnable {
     private MongoAuctionsDao mongoAuctionsDao;
 
 
-    public ItemProcessorRunner() {
+    public ItemProcessorWorker() {
     }
 
-    public ItemProcessorRunner(ItemsSyncService service, long itemId) {
+    public ItemProcessorWorker(ItemsSyncService service, long itemId) {
         setService(service);
         setMongoAuctionsDao(service.getAuctionsDao());
         setHttpReqHandler(service.getHttpReqHandler());
@@ -43,27 +46,30 @@ public class ItemProcessorRunner implements Runnable {
     }
 
     private void processItem() {
-        logger.info("processing " + getItemId());
+        long threadId = Thread.currentThread().getId();
+        logger.info("Thread #"+ threadId+" is processing item #" + getItemId());
         String url = itemUrl + getItemId();
 
         String itemReply = getHttpReqHandler().getData(url);
 
         logger.info("got " + itemReply);
         String context = null;
-        if (itemReply.contains("availableContexts")) {
+        if (!StringUtils.isEmpty(itemReply)&&itemReply.contains("availableContexts")) {
             JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
             context = jsonArray.getString(0);
             if (context != null && !context.isEmpty()) {
                 itemReply = getHttpReqHandler().getData(url + "/" + context);
             }
+            Item item = AuctionUtils.buildItemFromString(itemReply);
+            if (item != null) {
+                getMongoAuctionsDao().save(item);
+                logger.info("Thread #"+ threadId+"  saved item #"+item.getId());
+            }
+        }else {
+            logger.info("Thread #"+ threadId+" is finished - NO REPLY");
         }
 
-        Item item = null;
-        item = AuctionUtils.buildItemFromString(itemReply);
-        if (item != null) {
-            getMongoAuctionsDao().save(item);
-            logger.info("saved ");
-        }
+
     }
 
     public long getItemId() {

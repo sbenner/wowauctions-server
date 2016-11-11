@@ -17,10 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -76,7 +73,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     //todo we will build up a queue from this list of ids to retrieve from external web service
     @SuppressWarnings("Unchecked")
-    public List findAllAuctionItemIds(long timestamp) {
+    public List<Long> findAllAuctionItemIds(long timestamp) {
 
         List coll;
         if (timestamp == 0) {
@@ -121,8 +118,10 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     }
 
-    public List<Long> getAllItemIDs() {
-        return this.getCollection("item").distinct("itemId");
+    public Set<Long> getAllItemIDs() {
+        Set<Long> existingItemsSet = new HashSet<Long>();
+        existingItemsSet.addAll(this.getCollection("item").distinct("itemId"));
+        return existingItemsSet;
 
     }
 
