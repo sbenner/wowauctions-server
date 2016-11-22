@@ -45,7 +45,6 @@ public class AuctionsController {
         OutputStream outputStream;
         ObjectWriter objectWriter = objectMapper.writerWithView(Auction.class);
         outputStream = res.getOutputStream();
-        res.addHeader("Content-Type", "application/json;charset=utf-8");
         if (name != null) {
             name = name.trim();
             name = name.replaceAll("[^a-zA-Z0-9 ']", "");
@@ -116,7 +115,6 @@ public class AuctionsController {
             if (auction.getBuyout() != 0)
                 map.put(auction.getBuyout() / auction.getQuantity(), auction.getTimestamp());
         }
-
 
         objectWriter.writeValue(outputStream, map.entrySet().toArray());
     }

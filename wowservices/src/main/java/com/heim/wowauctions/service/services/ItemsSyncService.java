@@ -7,7 +7,9 @@ import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,14 +42,22 @@ public class ItemsSyncService extends TimerTask {
     @Autowired
     private MongoAuctionsDao auctionsDao;
 
-    private Semaphore semaphore = new Semaphore(5);
+    private Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
 
     @Autowired
     private HttpReqHandler httpReqHandler;
 
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
+        return taskExecutor;
+    }
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    TaskExecutor taskExecutor;
+
 
     public void run() {
         logger.info("started");
