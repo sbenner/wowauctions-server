@@ -112,9 +112,14 @@ public class MongoAuctionsDao extends MongoTemplate {
     }
 
 
-    public List<ArchivedAuction> getItemStatistics(long itemId) {
-
-        return archivedAuctionRepository.findByItemId(itemId);
+    public Map<Long, Long> getItemStatistics(long itemId) {
+        List<ArchivedAuction> auctions = archivedAuctionRepository.findByItemId(itemId);
+        Map<Long, Long> map = new HashMap<Long, Long>();
+        for (ArchivedAuction auction : auctions) {
+            if (auction.getBuyout() != 0)
+                map.put(auction.getBuyout() / auction.getQuantity(), auction.getTimestamp());
+        }
+        return map;
 
     }
 

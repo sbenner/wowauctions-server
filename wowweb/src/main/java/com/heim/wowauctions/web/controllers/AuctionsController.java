@@ -20,24 +20,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
 public class AuctionsController {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MongoAuctionsDao auctionsDao;
-
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json"
     )
     public
     @ResponseBody
-    void getItem(HttpServletResponse res, @RequestParam(value = "name", required = false) String name,
+    void getItem(HttpServletResponse res,
+                 @RequestParam(value = "name", required = false) String name,
                  @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                  @RequestParam(value = "size", required = false, defaultValue = "20") Integer pageSize,
                  @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
@@ -80,7 +80,6 @@ public class AuctionsController {
             auctions = AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
 
 
-
             if (outputStream != null)
                 objectWriter.writeValue(outputStream, auctions);
 
@@ -102,24 +101,22 @@ public class AuctionsController {
         try {
             Long.parseLong(id);
         } catch (NumberFormatException e) {
-            objectWriter.writeValue(outputStream, "");
+           res.setStatus(500);
         }
 
-        List<ArchivedAuction> auctions = null;
         if (id != null) {
-            auctions = auctionsDao.getItemStatistics(Long.parseLong(id));
+            Map<Long, Long> auctions = auctionsDao.getItemStatistics(Long.parseLong(id));
+            if (auctions != null && auctions.size() > 0) {
+                objectWriter.writeValue(outputStream, auctions.entrySet().toArray());
+            } else {
+                res.setStatus(404);
+            }
+        } else {
+            res.setStatus(403);
         }
 
-        Map<Long, Long> map = new HashMap<Long, Long>();
-        for (ArchivedAuction auction : auctions) {
-            if (auction.getBuyout() != 0)
-                map.put(auction.getBuyout() / auction.getQuantity(), auction.getTimestamp());
-        }
 
-        objectWriter.writeValue(outputStream, map.entrySet().toArray());
     }
-
-
 
 
 }
