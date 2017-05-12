@@ -147,6 +147,8 @@ public class SignatureHelper {
         return sb.toString();
     }
 
+
+    //test and generator
     public static void main(String[] args) throws Exception {
 
         // Generate a 1024-bit Digital Signature Algorithm (DSA) key pair

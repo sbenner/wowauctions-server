@@ -30,9 +30,6 @@ public class ItemProcessorWorker implements Runnable {
     private MongoAuctionsDao mongoAuctionsDao;
 
 
-    public ItemProcessorWorker() {
-    }
-
     public ItemProcessorWorker(ItemsSyncService service, long itemId) {
         setService(service);
         setMongoAuctionsDao(service.getAuctionsDao());
@@ -72,11 +69,11 @@ public class ItemProcessorWorker implements Runnable {
 
     }
 
-    public long getItemId() {
+    private long getItemId() {
         return itemId;
     }
 
-    public void setItemId(long itemId) {
+    private void setItemId(long itemId) {
         this.itemId = itemId;
     }
 
@@ -88,19 +85,19 @@ public class ItemProcessorWorker implements Runnable {
         this.service = service;
     }
 
-    public HttpReqHandler getHttpReqHandler() {
+    private HttpReqHandler getHttpReqHandler() {
         return httpReqHandler;
     }
 
-    public void setHttpReqHandler(HttpReqHandler httpReqHandler) {
+    private void setHttpReqHandler(HttpReqHandler httpReqHandler) {
         this.httpReqHandler = httpReqHandler;
     }
 
-    public MongoAuctionsDao getMongoAuctionsDao() {
+    private MongoAuctionsDao getMongoAuctionsDao() {
         return mongoAuctionsDao;
     }
 
-    public void setMongoAuctionsDao(MongoAuctionsDao mongoAuctionsDao) {
+    private void setMongoAuctionsDao(MongoAuctionsDao mongoAuctionsDao) {
         this.mongoAuctionsDao = mongoAuctionsDao;
     }
 }

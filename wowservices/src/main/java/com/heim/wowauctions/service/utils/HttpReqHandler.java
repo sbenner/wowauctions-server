@@ -15,14 +15,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,22 +35,13 @@ import java.util.Map;
 @Component
 public class HttpReqHandler {
     private static final Logger logger = LoggerFactory.getLogger(HttpReqHandler.class);
-    private static String token;
+
     @Autowired
     RestTemplate restTemplate;
-    ResponseExtractor<String> responseExtractor = new ResponseExtractor<String>() {
-        @Override
-        public String extractData(ClientHttpResponse arg0)
-                throws IOException {
-            return arg0.getStatusText();
-        }
-    };
+
+
     @Value("${apikey}")
     private String apikey;
-
-    private static String parseId(String fileName) {
-        return fileName.substring(fileName.indexOf("-") + 1, fileName.indexOf("."));
-    }
 
     public static Map<String, Integer> getServers() {
         Map<String, Integer> serverList = new HashMap<String, Integer>();
@@ -80,7 +69,7 @@ public class HttpReqHandler {
 
     @SuppressWarnings("unchecked")
     public String getData(String url) {
-        //restTemplate.setRequestFactory(ClientHttpRequestFactorySelector.getRequestFactory());
+
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -107,6 +96,10 @@ public class HttpReqHandler {
     public HttpComponentsClientHttpRequestFactory requestFactory() {
         HttpClient httpClient = HttpClientBuilder.create().build();
         return new HttpComponentsClientHttpRequestFactory(httpClient);
+    }
+
+    private static String parseId(String fileName) {
+        return fileName.substring(fileName.indexOf("-") + 1, fileName.indexOf("."));
     }
 
 

@@ -173,7 +173,8 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     public void updateAuctionsUrl(AuctionUrl url) {
         Query q = new Query();
-        this.updateFirst(q, Update.update("lastModified", url.getLastModified()).set("url", url.getUrl()), AuctionUrl.class);
+        this.updateFirst(q, Update.update("lastModified", url.getLastModified())
+                .set("url", url.getUrl()), AuctionUrl.class);
     }
 
 

@@ -80,8 +80,7 @@ public class AuctionUtils {
                 newprice += oldprice.substring(0, len) + "c";
 
         } catch (Exception e) {
-            System.out.println(price);
-            e.printStackTrace();
+          logger.error(e.getMessage(),e);
         }
 
         return newprice;
@@ -180,42 +179,7 @@ public class AuctionUtils {
 
         return reborns;
     }
-
-    @Deprecated
-    public static List<Auction> buildAuctions(long timestamp) {
-        List<Auction> auctions = new ArrayList<Auction>();
-        File auctionsFile = new File("auctions.json");
-        if (auctionsFile.exists()) {
-            try {
-                String contents = FileUtils.readFileToString(auctionsFile);
-                JSONObject jsonObject = new JSONObject(contents);
-                JSONObject alliance = jsonObject.getJSONObject("alliance");
-                JSONArray auctionsArray = alliance.getJSONArray("auctions");
-
-                for (int i = 0; i < auctionsArray.length(); i++) {
-                    JSONObject obj = (JSONObject) auctionsArray.get(i);
-                    Auction auction = new Auction();
-                    auction.setAuc(obj.getLong("auc"));
-                    auction.setItemId(obj.getLong("item"));
-                    auction.setBid(obj.getLong("bid"));
-                    auction.setBuyout(obj.getLong("buyout"));
-                    auction.setOwner(obj.getString("owner"));
-                    auction.setOwnerRealm(obj.getString("ownerRealm"));
-                    auction.setQuantity(obj.getInt("quantity"));
-                    auction.setTimeLeft(obj.getString("timeLeft"));
-
-                    auction.setTimestamp(timestamp);
-                    auctions.add(auction);
-                }
-
-
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-
-        return auctions;
-    }
+ 
 
 
 }
