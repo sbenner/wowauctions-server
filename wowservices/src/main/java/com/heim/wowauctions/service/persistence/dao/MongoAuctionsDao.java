@@ -5,6 +5,7 @@ import com.heim.wowauctions.service.persistence.repositories.*;
 import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,18 +49,16 @@ public class MongoAuctionsDao extends MongoTemplate {
     @Autowired
     MongoDbFactory mongoDbFactory;
 
-    @Autowired
-    public MongoAuctionsDao(MongoDbFactory mongoDbFactory) {
-            super(mongoDbFactory);
+    public MongoAuctionsDao(Mongo mongo, String databaseName) {
+        super(mongo, databaseName);
     }
-
 
 
     public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {
         return auctionRepository.findByItemIdIn(ids, pageable);
     }
 
-    //todo: build aucitions with timestamp and ownerRealm if we go beyond 3 realms
+    //todo: build auctions with timestamp and ownerRealm if we go beyond 3 realms
 
 
     public List<Item> findItemByName(String name) {

@@ -1,4 +1,4 @@
-package com.heim.wowauctions.web.controllers;
+package com.heim.wowauctions.service.rest.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -91,28 +93,28 @@ public class AuctionsController {
     )
     public
     @ResponseBody
-    void getItemChart(HttpServletResponse res, @RequestParam(value = "id", required = true) String id,
-                      @RequestParam(value = "period", required = false) Integer period,
-                      @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
+    ResponseEntity getItemChart(HttpServletResponse res, @RequestParam(value = "id", required = true) String id,
+                                @RequestParam(value = "period", required = false) Integer period,
+                                @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
-        ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
-        OutputStream outputStream = res.getOutputStream();
+      //  ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
+       // OutputStream outputStream = res.getOutputStream();
         res.addHeader("Content-Type", "application/json;charset=utf-8");
         try {
             Long.parseLong(id);
         } catch (NumberFormatException e) {
-           res.setStatus(500);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (id != null) {
             Map<Long, Long> auctions = auctionsDao.getItemStatistics(Long.parseLong(id));
             if (auctions != null && auctions.size() > 0) {
-                objectWriter.writeValue(outputStream, auctions.entrySet().toArray());
+                return new ResponseEntity(auctions, HttpStatus.OK);
             } else {
-                res.setStatus(404);
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
         } else {
-            res.setStatus(403);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
 

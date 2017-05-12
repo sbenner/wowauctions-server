@@ -11,7 +11,7 @@
 
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations" value="classpath:app.properties"/>
+        <property name="locations" value="classpath:application.properties"/>
     </bean>
 
      <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
@@ -22,24 +22,24 @@
     </bean>
 
 
-    <bean id="mongoFactoryBean" class="org.springframework.data.mongodb.core.MongoFactoryBean">
-        <property name="host" value="127.0.0.1"/>
-        <property name="port" value="27017"/>
-    </bean>
+    <!--<bean id="mongoFactoryBean" class="org.springframework.data.mongodb.core.MongoFactoryBean">-->
+        <!--<property name="host" value="127.0.0.1"/>-->
+        <!--<property name="port" value="27017"/>-->
+    <!--</bean>-->
 
-    <bean id="mongoDbFactory"
-          class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
-        <constructor-arg ref="mongoFactoryBean"/>
-        <constructor-arg value="wowauctions"/>
-    </bean>
+    <!--<bean id="mongoDbFactory"-->
+          <!--class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">-->
+        <!--<constructor-arg ref="mongoFactoryBean"/>-->
+        <!--<constructor-arg value="wowauctions"/>-->
+    <!--</bean>-->
 
-    <bean id="mongoAuctionsDao" class="com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao">
-        <constructor-arg ref="mongoDbFactory"/>
-    </bean>
+    <!--<bean id="mongoAuctionsDao" class="com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao">-->
+        <!--<constructor-arg ref="mongoDbFactory"/>-->
+    <!--</bean>-->
 
 
-    <mongo:repositories base-package="com.heim.wowauctions.service.persistence.repositories"
-                        mongo-template-ref="mongoAuctionsDao"/>
+    <!--<mongo:repositories base-package="com.heim.wowauctions.service.persistence.repositories"-->
+                        <!--mongo-template-ref="mongoAuctionsDao"/>-->
 
 
 </beans>

@@ -1,4 +1,4 @@
-package com.heim.wowauctions.web.filter;
+package com.heim.wowauctions.service.rest.filter;
 
 /**
  * Created with IntelliJ IDEA.

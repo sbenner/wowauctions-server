@@ -1,7 +1,5 @@
 package com.heim.wowauctions.service.utils;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,16 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -92,11 +87,6 @@ public class HttpReqHandler {
 
     }
 
-    @Bean
-    public HttpComponentsClientHttpRequestFactory requestFactory() {
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        return new HttpComponentsClientHttpRequestFactory(httpClient);
-    }
 
     private static String parseId(String fileName) {
         return fileName.substring(fileName.indexOf("-") + 1, fileName.indexOf("."));
