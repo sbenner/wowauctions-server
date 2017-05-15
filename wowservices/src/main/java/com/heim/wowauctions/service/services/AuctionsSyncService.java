@@ -25,9 +25,7 @@ import java.util.TimerTask;
  */
 
 @Component
-@EnableScheduling
-@Scheduled(fixedRate = )
-public class AuctionsSyncService extends TimerTask {
+public class AuctionsSyncService {
 
     private static final Logger logger = Logger.getLogger(AuctionsSyncService.class);
     private static final String url = "https://us.api.battle.net/wow/auction/data/veknilash";
@@ -41,13 +39,13 @@ public class AuctionsSyncService extends TimerTask {
         this.httpReqHandler = httpReqHandler;
     }
 
-    public void run() {
+    @Scheduled(fixedRate = 180000)
+    public void retrieveAuctions() {
         logger.debug("started");
         try {
 
             String out =
                     httpReqHandler.getData(url);
-
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
@@ -91,7 +89,4 @@ public class AuctionsSyncService extends TimerTask {
         return auctionsDao;
     }
 
-    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
-        this.auctionsDao = auctionsDao;
-    }
 }

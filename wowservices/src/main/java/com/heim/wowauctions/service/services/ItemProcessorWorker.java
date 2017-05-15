@@ -20,12 +20,10 @@ import org.springframework.util.StringUtils;
 public class ItemProcessorWorker implements Runnable {
 
     private static final Logger logger = Logger.getLogger(ItemProcessorWorker.class);
-    private static final String itemUrl = "https://us.api.battle.net/wow/item/";
     private long itemId;
     private ItemsSyncService service;
     private HttpReqHandler httpReqHandler;
     private MongoAuctionsDao mongoAuctionsDao;
-
 
     public ItemProcessorWorker(ItemsSyncService service, long itemId) {
         setService(service);
@@ -42,7 +40,7 @@ public class ItemProcessorWorker implements Runnable {
     private void processItem() {
         long threadId = Thread.currentThread().getId();
         logger.info("Thread #" + threadId + " is processing item #" + getItemId());
-        String url = itemUrl + getItemId();
+        String url = getHttpReqHandler().getItemsUrl(getItemId());
 
         String itemReply = getHttpReqHandler().getData(url);
 

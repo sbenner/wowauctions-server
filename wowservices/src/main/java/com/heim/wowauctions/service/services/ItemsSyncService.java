@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ import java.util.concurrent.Semaphore;
 
 
 @Component
-public class ItemsSyncService extends TimerTask {
+public class ItemsSyncService  {
 
     private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
 
@@ -38,7 +39,8 @@ public class ItemsSyncService extends TimerTask {
     TaskExecutor taskExecutor;
     @Autowired
     private MongoAuctionsDao auctionsDao;
-    private Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
+
+    private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
     @Autowired
     private HttpReqHandler httpReqHandler;
 
@@ -50,7 +52,8 @@ public class ItemsSyncService extends TimerTask {
         return taskExecutor;
     }
 
-    public void run() {
+    @Scheduled(fixedRate = 120000)
+    public void processItemsQueue() {
         logger.info("started");
         try {
 

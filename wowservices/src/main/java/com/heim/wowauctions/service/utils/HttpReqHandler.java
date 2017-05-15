@@ -30,11 +30,10 @@ import java.util.Map;
 @Component
 public class HttpReqHandler {
     private static final Logger logger = LoggerFactory.getLogger(HttpReqHandler.class);
-
+    @Value("${wow.items.url}")
+    String itemsUrl;
     @Autowired
-    RestTemplate restTemplate;
-
-
+    private RestTemplate restTemplate;
     @Value("${apikey}")
     private String apikey;
 
@@ -60,6 +59,10 @@ public class HttpReqHandler {
             logger.error(e.getMessage(), e);
         }
         return serverList;
+    }
+
+    public String getItemsUrl(long itemId) {
+        return  itemsUrl + "/" + itemId;
     }
 
     @SuppressWarnings("unchecked")

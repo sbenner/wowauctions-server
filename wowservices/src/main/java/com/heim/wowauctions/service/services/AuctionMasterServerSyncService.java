@@ -6,6 +6,7 @@ import com.heim.wowauctions.service.persistence.models.Realm;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,8 +22,9 @@ import java.util.TimerTask;
  * Purpose : sync xmls with db
  */
 
-@Component
-public class AuctionMasterServerSyncService extends TimerTask {
+//we keep disabled it for now
+//@Component
+public class AuctionMasterServerSyncService {
 
     private static final Logger logger = Logger.getLogger(AuctionMasterServerSyncService.class);
     @Autowired
@@ -30,7 +32,8 @@ public class AuctionMasterServerSyncService extends TimerTask {
     @Autowired
     private MongoAuctionsDao auctionsDao;
 
-    public void run() {
+  //  @Scheduled(fixedRate = 3600000)
+    public void retrieveServerAuction() {
         logger.debug("started");
         try {
 
@@ -46,7 +49,7 @@ public class AuctionMasterServerSyncService extends TimerTask {
                 }
             }
 
-            List<Realm> aggregatedRealms = getAuctionsDao().aggregateRealms();
+           // List<Realm> aggregatedRealms = getAuctionsDao().aggregateRealms();
             //how work on this realm list q to download auctions
             //todo: rebuild our downloader to download from all realms.
 

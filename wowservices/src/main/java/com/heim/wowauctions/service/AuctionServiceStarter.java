@@ -13,6 +13,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
@@ -20,6 +21,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @ServletComponentScan
+@EnableScheduling
 @ComponentScan("com.heim.wowauctions.service")
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class})
 @EnableCaching
