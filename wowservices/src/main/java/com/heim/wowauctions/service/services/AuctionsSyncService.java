@@ -8,6 +8,8 @@ import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,14 +25,21 @@ import java.util.TimerTask;
  */
 
 @Component
+@EnableScheduling
+@Scheduled(fixedRate = )
 public class AuctionsSyncService extends TimerTask {
 
     private static final Logger logger = Logger.getLogger(AuctionsSyncService.class);
     private static final String url = "https://us.api.battle.net/wow/auction/data/veknilash";
+
+    private final MongoAuctionsDao auctionsDao;
+    private final HttpReqHandler httpReqHandler;
+
     @Autowired
-    private MongoAuctionsDao auctionsDao;
-    @Autowired
-    private HttpReqHandler httpReqHandler;
+    public AuctionsSyncService(MongoAuctionsDao auctionsDao, HttpReqHandler httpReqHandler) {
+        this.auctionsDao = auctionsDao;
+        this.httpReqHandler = httpReqHandler;
+    }
 
     public void run() {
         logger.debug("started");

@@ -11,7 +11,9 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.net.URLCodec;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.*;
@@ -19,8 +21,10 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
-
+@Component
 public class SignatureHelper {
+
+
 
     public static final String API_KEY = "RS00001";
 
@@ -31,6 +35,7 @@ public class SignatureHelper {
 
     private static final String ALGORITHM = "DSA";
 
+    @Value("${public.key}")
     private static String publicKey;
 
     public static <T> String createSignature(T request, String privateKey) throws Exception {
@@ -158,11 +163,11 @@ public class SignatureHelper {
 
     }
 
-    public static String getPublicKey() {
+    private static String getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
+    private void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
     }
 
