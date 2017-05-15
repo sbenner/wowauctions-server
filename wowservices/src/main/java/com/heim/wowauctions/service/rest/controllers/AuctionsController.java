@@ -3,7 +3,6 @@ package com.heim.wowauctions.service.rest.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.service.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.service.persistence.models.Auction;
 import com.heim.wowauctions.service.persistence.models.Item;
 import com.heim.wowauctions.service.utils.AuctionUtils;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,8 +31,9 @@ import java.util.Map;
 public class AuctionsController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
-    private MongoAuctionsDao auctionsDao;
+    private MongoAuctionsDao mongoTemplate;
 
     @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json"
     )
@@ -60,9 +61,9 @@ public class AuctionsController {
             //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             List<Item> items;
             if (!exact)
-                items = auctionsDao.findItemByName(name);
+                items = mongoTemplate.findItemByName(name);
             else
-                items = auctionsDao.findItemByExactName(name);
+                items = mongoTemplate.findItemByExactName(name);
 
             List<Long> itemIds = new ArrayList<Long>();
             for (Item item : items)
@@ -77,7 +78,7 @@ public class AuctionsController {
             else
                 pageRequest = new PageRequest(page, pageSize, sort);
 
-            Page<Auction> auctions = auctionsDao.getAuctionsByItemIDs(itemIds, pageRequest);
+            Page<Auction> auctions = mongoTemplate.getAuctionsByItemIDs(itemIds, pageRequest);
 
             auctions = AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
 
@@ -97,8 +98,8 @@ public class AuctionsController {
                                 @RequestParam(value = "period", required = false) Integer period,
                                 @RequestParam(value = "exact", required = false) boolean exact) throws IOException {
 
-      //  ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
-       // OutputStream outputStream = res.getOutputStream();
+        //  ObjectWriter objectWriter = objectMapper.writerWithView(ArchivedAuction.class);
+        // OutputStream outputStream = res.getOutputStream();
         res.addHeader("Content-Type", "application/json;charset=utf-8");
         try {
             Long.parseLong(id);
@@ -107,7 +108,7 @@ public class AuctionsController {
         }
 
         if (id != null) {
-            Map<Long, Long> auctions = auctionsDao.getItemStatistics(Long.parseLong(id));
+            Map<Long, Long> auctions = mongoTemplate.getItemStatistics(Long.parseLong(id));
             if (auctions != null && auctions.size() > 0) {
                 return new ResponseEntity(auctions, HttpStatus.OK);
             } else {

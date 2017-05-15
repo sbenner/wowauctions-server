@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 6:30 PM
  */
 
-@Component
+
 public class ItemProcessorWorker implements Runnable {
 
     private static final Logger logger = Logger.getLogger(ItemProcessorWorker.class);

@@ -7,6 +7,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -30,24 +32,25 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  * Time: 10:41 PM
  */
 
-@Component
 public class MongoAuctionsDao extends MongoTemplate {
 
     @Autowired
+    private
     RealmRepository realmRepository;
 
     @Autowired
+    private
     ItemRepository itemRepository;
 
     @Autowired
+    private
     AuctionRepository auctionRepository;
 
     @Autowired
+    private
     ArchivedAuctionRepository archivedAuctionRepository;
 
 
-    @Autowired
-    MongoDbFactory mongoDbFactory;
 
     public MongoAuctionsDao(Mongo mongo, String databaseName) {
         super(mongo, databaseName);
