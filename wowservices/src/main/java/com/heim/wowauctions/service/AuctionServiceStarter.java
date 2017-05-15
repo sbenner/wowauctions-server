@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,6 +19,7 @@ import java.util.Properties;
 
 
 @SpringBootApplication
+@ServletComponentScan
 @ComponentScan("com.heim.wowauctions.service")
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class})
 @EnableCaching
@@ -32,6 +34,7 @@ public class AuctionServiceStarter {
         Class cls = AuctionServiceStarter.class;
         SpringApplication app = new SpringApplication(new Object[]{cls});
         app.setDefaultProperties(getDefaultProperties(cls));
+
         app.run(args);
 
     }

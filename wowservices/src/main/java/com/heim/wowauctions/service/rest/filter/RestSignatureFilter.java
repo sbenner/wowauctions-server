@@ -12,11 +12,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+@WebFilter
 public class RestSignatureFilter extends OncePerRequestFilter {
 
 
@@ -34,17 +36,17 @@ public class RestSignatureFilter extends OncePerRequestFilter {
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
 
             if (!SignatureHelper.validateTimestamp(timestamp)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid timestamp.");
                 return;
             }
 
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid timestamp.");
             return;
         }
 
         if (signature == null || apiKey == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad invalid signature or apikey.");
             return;
         }
 
@@ -54,7 +56,7 @@ public class RestSignatureFilter extends OncePerRequestFilter {
                 return;
             }
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 
