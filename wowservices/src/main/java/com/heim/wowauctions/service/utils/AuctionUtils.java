@@ -80,7 +80,7 @@ public class AuctionUtils {
                 newprice += oldprice.substring(0, len) + "c";
 
         } catch (Exception e) {
-          logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
 
         return newprice;
@@ -179,7 +179,6 @@ public class AuctionUtils {
 
         return reborns;
     }
- 
 
 
 }

@@ -30,20 +30,20 @@ public class RestSignatureFilter extends OncePerRequestFilter {
         String apiKey = request.getHeader(SignatureHelper.APIKEY_HEADER);
 
         long timestamp = 0;
-        try{
+        try {
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
 
-            if(!SignatureHelper.validateTimestamp(timestamp)){
+            if (!SignatureHelper.validateTimestamp(timestamp)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
                 return;
             }
 
-        }   catch(Exception e){
+        } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
             return;
         }
 
-        if(signature==null||apiKey==null){
+        if (signature == null || apiKey == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
             return;
         }

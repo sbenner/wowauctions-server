@@ -6,6 +6,7 @@ package com.heim.wowauctions.service.persistence.models;
  * Date: 8/20/14
  * Time: 7:36 PM
  */
+
 import org.bson.types.ObjectId;
 
 
@@ -19,7 +20,7 @@ public class Realm {
     private String battlegroup;
     private String locale;
     private String timezone;
-  //  private boolean isConnectionMaster;
+    //  private boolean isConnectionMaster;
     private ObjectId connected;
 
     public String getType() {

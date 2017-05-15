@@ -1,7 +1,6 @@
 package com.heim.wowauctions.service.persistence.repositories;
 
 import com.heim.wowauctions.service.persistence.models.Auction;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -19,8 +18,8 @@ import java.util.List;
 public interface AuctionRepository extends PagingAndSortingRepository<Auction, Long> {
 
     Page<Auction> findByItemId(Long itemId, Pageable pageable);
-    Page<Auction> findByItemIdIn(List<Long> itemIDsList, Pageable pageable);
 
+    Page<Auction> findByItemIdIn(List<Long> itemIDsList, Pageable pageable);
 
 
 }

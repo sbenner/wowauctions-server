@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
@@ -24,22 +23,10 @@ import java.util.Properties;
 @EnableCaching
 public class AuctionServiceStarter {
 
-    @Value("${spring.data.mongodb.database}")
-    private String database;
-
-    @Bean
-    String database(){
-        return database;
-    }
-
     @Autowired
     Mongo mongo;
-
-    @Bean
-    MongoAuctionsDao mongoTemplate(){
-        return new MongoAuctionsDao(mongo,database);
-    }
-
+    @Value("${spring.data.mongodb.database}")
+    private String database;
 
     public static void main(String[] args) {
         Class cls = AuctionServiceStarter.class;
@@ -47,6 +34,16 @@ public class AuctionServiceStarter {
         app.setDefaultProperties(getDefaultProperties(cls));
         app.run(args);
 
+    }
+
+    @Bean
+    String database() {
+        return database;
+    }
+
+    @Bean
+    MongoAuctionsDao mongoTemplate() {
+        return new MongoAuctionsDao(mongo, database);
     }
 
     @Bean

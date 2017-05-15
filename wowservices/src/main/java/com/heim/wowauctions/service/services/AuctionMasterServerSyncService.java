@@ -39,7 +39,7 @@ public class AuctionMasterServerSyncService extends TimerTask {
 
             for (Realm realm : realmsList) {
                 if (realmsMap.get(realm.getName().toLowerCase()) == null) {
-                   logger.info(" realm "+realm.getName());
+                    logger.info(" realm " + realm.getName());
                 } else {
                     realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
                     getAuctionsDao().updateRealm(realm);
@@ -51,7 +51,7 @@ public class AuctionMasterServerSyncService extends TimerTask {
             //todo: rebuild our downloader to download from all realms.
 
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
 
         }
 

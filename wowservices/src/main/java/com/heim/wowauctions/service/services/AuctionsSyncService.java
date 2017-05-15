@@ -73,7 +73,7 @@ public class AuctionsSyncService extends TimerTask {
 
 
         } catch (Exception e) {
-           logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
 
     }

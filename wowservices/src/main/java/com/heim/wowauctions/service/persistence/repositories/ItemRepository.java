@@ -20,6 +20,7 @@ import java.util.List;
 public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
 
     Page<Item> findByName(String name, Pageable pageable);
+
     Page<Item> findByNameLike(String name, Pageable pageable);
 
     @Query(value = "{'name': {$regex : ?0, $options: 'i'}}")

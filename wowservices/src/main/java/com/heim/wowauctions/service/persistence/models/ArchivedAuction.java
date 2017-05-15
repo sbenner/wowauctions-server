@@ -11,8 +11,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Time: 11:47 PM
  */
 
-@Document(collection="auctionsArchive")
+@Document(collection = "auctionsArchive")
 public class ArchivedAuction {
+
+    @JsonView(BaseView.class)
+    private long auc;
+    private long itemId;
+    private String owner;
+    private String ownerRealm;
+    private long bid;
+    private long buyout;
+    private int quantity;
+    private String timeLeft;
+    @JsonView(BaseView.class)
+    private int rand;
+    @JsonView(BaseView.class)
+    private long seed;
+    private long timestamp;
 
     public long getItemId() {
         return itemId;
@@ -21,33 +36,6 @@ public class ArchivedAuction {
     public void setItemId(long itemId) {
         this.itemId = itemId;
     }
-
-
-    public interface BaseView {}
-
-
-    @JsonView(BaseView.class)
-    private long auc;
-
-    private long itemId;
-
-    private String owner;
-
-
-    private String ownerRealm;
-
-    private long bid;
-    private long buyout;
-    private int quantity;
-    private String timeLeft;
-
-    @JsonView(BaseView.class)
-    private int rand;
-    @JsonView(BaseView.class)
-    private long seed;
-
-    private long timestamp;
-
 
     public long getAuc() {
         return auc;
@@ -121,10 +109,9 @@ public class ArchivedAuction {
         this.seed = seed;
     }
 
-
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-                sb.append("{ auc: ").append(this.getAuc()).
+        sb.append("{ auc: ").append(this.getAuc()).
                 append(", owner: ").append(this.getOwner()).
                 append("-").append(this.getOwnerRealm()).
                 append(", bid: ").append(this.getBid()).
@@ -135,12 +122,14 @@ public class ArchivedAuction {
         return sb.toString();
     }
 
-
     public long getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public interface BaseView {
     }
 }

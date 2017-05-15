@@ -7,10 +7,7 @@ import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,14 +41,14 @@ public class ItemProcessorWorker implements Runnable {
 
     private void processItem() {
         long threadId = Thread.currentThread().getId();
-        logger.info("Thread #"+ threadId+" is processing item #" + getItemId());
+        logger.info("Thread #" + threadId + " is processing item #" + getItemId());
         String url = itemUrl + getItemId();
 
         String itemReply = getHttpReqHandler().getData(url);
 
         logger.info("got " + itemReply);
         String context = null;
-        if (!StringUtils.isEmpty(itemReply)&&itemReply.contains("availableContexts")) {
+        if (!StringUtils.isEmpty(itemReply) && itemReply.contains("availableContexts")) {
             JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
             context = jsonArray.getString(0);
             if (context != null && !context.isEmpty()) {
@@ -60,10 +57,10 @@ public class ItemProcessorWorker implements Runnable {
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
                 getMongoAuctionsDao().save(item);
-                logger.info("Thread #"+ threadId+"  saved item #"+item.getId());
+                logger.info("Thread #" + threadId + "  saved item #" + item.getId());
             }
-        }else {
-            logger.info("Thread #"+ threadId+" is finished - NO REPLY");
+        } else {
+            logger.info("Thread #" + threadId + " is finished - NO REPLY");
         }
 
 

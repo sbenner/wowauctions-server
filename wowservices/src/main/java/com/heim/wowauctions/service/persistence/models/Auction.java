@@ -15,6 +15,26 @@ import java.util.Date;
 
 
 public class Auction implements Comparable<Auction> {
+    @JsonView(BaseView.class)
+    private long auc;
+    private Item item;
+    @JsonView(BaseView.class)
+    private long itemId;
+    private String owner;
+    @JsonView(BaseView.class)
+    private String ownerRealm;
+    private long bid;
+    private long buyout;
+    private int quantity;
+    private String timeLeft;
+    @JsonView(BaseView.class)
+    private int rand;
+    @JsonView(BaseView.class)
+    private long seed;
+    private double ppi;
+    private Date date;
+    private long timestamp;
+
     public String getDate() {
         return new Date(this.timestamp).toString();
     }
@@ -40,47 +60,12 @@ public class Auction implements Comparable<Auction> {
     }
 
     public String getPpi() {
-        return AuctionUtils.buildPrice((long)(this.ppi*10000));
+        return AuctionUtils.buildPrice((long) (this.ppi * 10000));
     }
 
     public void setPpi() {
-        this.ppi =  (double)this.buyout/10000/this.quantity;
+        this.ppi = (double) this.buyout / 10000 / this.quantity;
     }
-
-
-    public interface BaseView {}
-
-
-    @JsonView(BaseView.class)
-    private long auc;
-
-    private Item item;
-
-    @JsonView(BaseView.class)
-    private long itemId;
-
-    private String owner;
-
-    @JsonView(BaseView.class)
-    private String ownerRealm;
-
-    private long bid;
-    private long buyout;
-    private int quantity;
-
-    private String timeLeft;
-    @JsonView(BaseView.class)
-    private int rand;
-    @JsonView(BaseView.class)
-    private long seed;
-
-    private double ppi;
-
-
-
-    private Date date;
-    private long timestamp;
-
 
     public long getAuc() {
         return auc;
@@ -89,8 +74,6 @@ public class Auction implements Comparable<Auction> {
     public void setAuc(Long auc) {
         this.auc = auc;
     }
-
-
 
     public String getOwner() {
         return owner;
@@ -120,12 +103,12 @@ public class Auction implements Comparable<Auction> {
         return AuctionUtils.buildPrice(this.buyout);
     }
 
-    public long getLongBuyout(){
-        return this.buyout;
-    }
-
     public void setBuyout(Long buyout) {
         this.buyout = buyout;
+    }
+
+    public long getLongBuyout() {
+        return this.buyout;
     }
 
     public int getQuantity() {
@@ -160,12 +143,9 @@ public class Auction implements Comparable<Auction> {
         this.seed = seed;
     }
 
-
-
-
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-                sb.append("{ auc: ").append(this.getAuc()).
+        sb.append("{ auc: ").append(this.getAuc()).
                 append(", owner: ").append(this.getOwner()).
                 append("-").append(this.getOwnerRealm()).
                 append(", bid: ").append(this.getBid()).
@@ -175,7 +155,6 @@ public class Auction implements Comparable<Auction> {
 
         return sb.toString();
     }
-
 
     public long getTimestamp() {
         return timestamp;
@@ -187,14 +166,17 @@ public class Auction implements Comparable<Auction> {
 
     public int compareTo(Auction compareAuction) {
 
-        double compare  = compareAuction.ppi;
+        double compare = compareAuction.ppi;
         //ascending order
         //return this.quantity - compareQuantity;
-        return (int)(this.ppi - compare);
+        return (int) (this.ppi - compare);
 
         //descending order
         //return (int)(compare - this.ppi);
 
+    }
+
+    public interface BaseView {
     }
 
 

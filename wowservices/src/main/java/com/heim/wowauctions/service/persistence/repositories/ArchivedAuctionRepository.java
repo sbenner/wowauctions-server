@@ -1,7 +1,6 @@
 package com.heim.wowauctions.service.persistence.repositories;
 
 import com.heim.wowauctions.service.persistence.models.ArchivedAuction;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -22,6 +21,6 @@ public interface ArchivedAuctionRepository extends PagingAndSortingRepository<Ar
 
     List<ArchivedAuction> findByItemId(Long itemId);
 
-    List<ArchivedAuction> findByTimestampBetween(long from,long to,long itemId);
+    List<ArchivedAuction> findByTimestampBetween(long from, long to, long itemId);
 
 }

@@ -7,7 +7,7 @@ package com.heim.wowauctions.service.persistence.models;
  * Date: 8/4/14
  * Time: 11:42 PM
  */
-public class AuctionUrl{
+public class AuctionUrl {
     private Long lastModified;
     private String url;
 

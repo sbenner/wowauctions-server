@@ -48,13 +48,6 @@ public class SignatureHelper {
         return Base64.encodeBase64String(sig.sign());
     }
 
-    private static PublicKey decodePublicKey(String publicKey) throws Exception {
-        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
-
-        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.decodeBase64(StringUtils.getBytesUtf8(publicKey)));
-        return keyFactory.generatePublic(publicKeySpec);
-    }
-
     public static boolean validateSignature(String url, String signatureString) throws Exception {
 
         String publicKey = getPublicKey();
@@ -81,7 +74,6 @@ public class SignatureHelper {
         }
         return true;
     }
-
 
     public static <T> String createSortedUrl(T request) {
 
@@ -147,7 +139,6 @@ public class SignatureHelper {
         return sb.toString();
     }
 
-
     //test and generator
     public static void main(String[] args) throws Exception {
 
@@ -173,5 +164,12 @@ public class SignatureHelper {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    private static PublicKey decodePublicKey(String publicKey) throws Exception {
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+
+        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.decodeBase64(StringUtils.getBytesUtf8(publicKey)));
+        return keyFactory.generatePublic(publicKeySpec);
     }
 }
