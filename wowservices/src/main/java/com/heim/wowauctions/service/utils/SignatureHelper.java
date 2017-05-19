@@ -11,6 +11,8 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.net.URLCodec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.stereotype.Component;
@@ -21,13 +23,13 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
+
 @Component
 public class SignatureHelper {
 
 
-
     public static final String API_KEY = "RS00001";
-
+    private static final Logger logger = LoggerFactory.getLogger(SignatureHelper.class);
     public static final String APIKEY_HEADER = "apikey";
     public static final String TIMESTAMP_HEADER = "timestamp";
     public static final String SIGNATURE_HEADER = "signature";
@@ -55,8 +57,11 @@ public class SignatureHelper {
 
     public static boolean validateSignature(String url, String signatureString) throws Exception {
 
-        String publicKey = getPublicKey();
-        if (publicKey == null) return false;
+        //  String publicKey = getPublicKey();
+        if (publicKey == null) {
+            logger.error("public key is NULL!!!!");
+            return false;
+        }
 
         Signature signature = Signature.getInstance(ALGORITHM);
         signature.initVerify(decodePublicKey(publicKey));
@@ -67,6 +72,7 @@ public class SignatureHelper {
             return signature.verify(Base64.decodeBase64(signatureString));
 
         } catch (SignatureException e) {
+            logger.error(e.getMessage(),e);
             return false;
         }
     }
