@@ -93,6 +93,9 @@ public class MongoAuctionsDao extends MongoTemplate {
         return coll;
     }
 
+    public long getAuctionsCount(){
+        return auctionRepository.count();
+    }
 
     public List<Realm> getAllRealms() {
 

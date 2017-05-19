@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 
 /**
  * Created by
@@ -52,7 +54,13 @@ public class AuctionsSyncService {
 
             if (local == null ||
                     local.getLastModified() < remote.getLastModified() ||
-                    getAuctionsDao().findAll(Auction.class).size() == 0) {
+                    getAuctionsDao().getAuctionsCount() == 0) {
+
+                logger.info(format("local.getLastModified() %s", local.getLastModified()));
+
+                logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
+                logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
+                logger.info(format("getAuctionsDao().getAuctionsCount() %s", getAuctionsDao().getAuctionsCount()));
 
                 //get new auctions
                 String auctionsString = httpReqHandler.getData(remote.getUrl());
