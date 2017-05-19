@@ -51,6 +51,8 @@ public class AuctionsSyncService {
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
+            logger.info("local "+local.toString());
+            logger.info("remote "+remote.toString());
 
             if (local == null ||
                     local.getLastModified() < remote.getLastModified() ||

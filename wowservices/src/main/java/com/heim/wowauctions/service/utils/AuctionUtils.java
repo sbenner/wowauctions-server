@@ -30,6 +30,7 @@ public class AuctionUtils {
     private static final Logger logger = Logger.getLogger(AuctionUtils.class);
 
     public static AuctionUrl parseAuctionFile(String contents) {
+        logger.info("remote url: "+contents);
         AuctionUrl auctionUrl = new AuctionUrl();
         JSONObject jsonObject = new JSONObject(contents);
         JSONArray files = jsonObject.getJSONArray("files");

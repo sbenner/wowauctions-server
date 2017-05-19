@@ -26,4 +26,10 @@ public class AuctionUrl {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
+    @Override
+    public String toString() {
+        return "lastModified: "+getLastModified()+" url: "+getUrl();
+    }
 }
