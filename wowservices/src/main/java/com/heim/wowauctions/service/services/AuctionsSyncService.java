@@ -54,7 +54,7 @@ public class AuctionsSyncService {
             logger.info("local "+local.toString());
             logger.info("remote "+remote.toString());
 
-            if (local == null ||
+            if (local.getLastModified() == null ||
                     local.getLastModified() < remote.getLastModified() ||
                     getAuctionsDao().getAuctionsCount() == 0) {
 
@@ -68,7 +68,8 @@ public class AuctionsSyncService {
                 String auctionsString = httpReqHandler.getData(remote.getUrl());
 
                 if (auctionsString != null) {
-                    List<Auction> auctions = AuctionUtils.buildAuctionsFromString(auctionsString, remote.getLastModified());
+                    List<Auction> auctions = AuctionUtils.
+                            buildAuctionsFromString(auctionsString, remote.getLastModified());
                     getAuctionsDao().insertAll(auctions);
 
                     //archive old

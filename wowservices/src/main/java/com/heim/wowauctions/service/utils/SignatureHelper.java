@@ -54,6 +54,8 @@ public class SignatureHelper {
 
     public static boolean validateSignature(String url, String signatureString,String publicKey) throws Exception {
 
+        logger.info("url to verify: "+url);
+        logger.info("signatureString to verify: "+signatureString);
         //  String publicKey = getPublicKey();
         if (publicKey == null) {
             logger.error("public key is NULL!!!!");
