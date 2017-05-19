@@ -8,6 +8,8 @@ package com.heim.wowauctions.service.rest.filter;
  */
 
 import com.heim.wowauctions.service.utils.SignatureHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,6 +22,7 @@ import java.io.IOException;
 
 @WebFilter
 public class RestSignatureFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(RestSignatureFilter.class);
 
 
     @Override
@@ -36,22 +39,26 @@ public class RestSignatureFilter extends OncePerRequestFilter {
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
 
             if (!SignatureHelper.validateTimestamp(timestamp)) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid timestamp.");
+                logger.error("BAD REQUEST invalid timestamp");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid timestamp.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            logger.error("BAD REQUEST invalid timestamp");
             return;
         }
 
         if (signature == null || apiKey == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad invalid signature or apikey.");
+            logger.error("BAD REQUEST invalid signature or apikey");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
         try {
             if (!SignatureHelper.validateSignature(url, signature)) {
+                logger.error("UNAUTHORIZED invalid signature failed validation");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "REST signature failed validation.");
                 return;
             }

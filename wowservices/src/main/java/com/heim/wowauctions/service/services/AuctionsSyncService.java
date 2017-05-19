@@ -6,14 +6,13 @@ import com.heim.wowauctions.service.persistence.models.Auction;
 import com.heim.wowauctions.service.persistence.models.AuctionUrl;
 import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.TimerTask;
 
 
 /**
@@ -27,7 +26,7 @@ import java.util.TimerTask;
 @Component
 public class AuctionsSyncService {
 
-    private static final Logger logger = Logger.getLogger(AuctionsSyncService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
     private static final String url = "https://us.api.battle.net/wow/auction/data/veknilash";
 
     private final MongoAuctionsDao auctionsDao;

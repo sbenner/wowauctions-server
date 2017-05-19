@@ -4,9 +4,10 @@ import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.service.persistence.models.Item;
 import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
@@ -19,7 +20,7 @@ import org.springframework.util.StringUtils;
 
 public class ItemProcessorWorker implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(ItemProcessorWorker.class);
+    private static final Logger logger = LoggerFactory.getLogger(ItemProcessorWorker.class);
     private long itemId;
     private ItemsSyncService service;
     private HttpReqHandler httpReqHandler;

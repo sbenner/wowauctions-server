@@ -5,7 +5,8 @@ import com.heim.wowauctions.service.SyncServiceContext;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.heim.wowauctions.service.utils.HttpReqHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 
@@ -29,18 +29,16 @@ import java.util.concurrent.Semaphore;
 
 
 @Component
-public class ItemsSyncService  {
+public class ItemsSyncService {
 
-    private static final Logger logger = Logger.getLogger(ItemsSyncService.class.getSimpleName());
-
+    private static final Logger logger = LoggerFactory.getLogger(ItemsSyncService.class.getSimpleName());
+    private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
     @Autowired
     SyncServiceContext context;
     @Autowired
     TaskExecutor taskExecutor;
     @Autowired
     private MongoAuctionsDao auctionsDao;
-
-    private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
     @Autowired
     private HttpReqHandler httpReqHandler;
 
