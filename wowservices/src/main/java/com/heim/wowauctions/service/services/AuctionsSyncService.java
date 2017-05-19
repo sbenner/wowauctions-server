@@ -41,7 +41,7 @@ public class AuctionsSyncService {
     }
 
     @Scheduled(fixedRate = 180000)
-    public void retrieveAuctions() {
+    public synchronized void retrieveAuctions() {
         logger.debug("started");
         try {
 
@@ -71,11 +71,11 @@ public class AuctionsSyncService {
 
                     //archive old
                     List<Auction> toArchive = getAuctionsDao().findAuctionsToArchive(remote.getLastModified());
-                    getAuctionsDao().archiveAuctions(toArchive);
-                    getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+                    if(getAuctionsDao().archiveAuctions(toArchive)) {
+                        getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+                    }
 
-
-                    if (local == null) {
+                    if (local.getUrl() == null) {
                         getAuctionsDao().insertAuctionsUrlData(remote);
                     } else {
                         getAuctionsDao().updateAuctionsUrl(remote);

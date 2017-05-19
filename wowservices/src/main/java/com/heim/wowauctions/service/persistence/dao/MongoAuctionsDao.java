@@ -167,15 +167,14 @@ public class MongoAuctionsDao extends MongoTemplate {
     }
 
 
-    public void archiveAuctions(List<Auction> toArchiveList) {
-
-        for (Auction auction : toArchiveList) {
+    public boolean archiveAuctions(List<Auction> toArchiveList) {
             try {
-                this.insert(auction, "auctionsArchive");
+                this.insert(toArchiveList,"auctionsArchive");
+                return true;
             }catch (Exception e){
                     logger.error(e.getMessage(),e);
             }
-        }
+            return false;
     }
 
     public void removeArchivedAuctions(long timestamp) {
