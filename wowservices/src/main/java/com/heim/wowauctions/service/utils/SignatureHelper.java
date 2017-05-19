@@ -33,12 +33,12 @@ public class SignatureHelper {
     public static final String APIKEY_HEADER = "apikey";
     public static final String TIMESTAMP_HEADER = "timestamp";
     public static final String SIGNATURE_HEADER = "signature";
-    public static final List<String> SIGNATURE_KEYWORDS = Arrays.asList(APIKEY_HEADER, TIMESTAMP_HEADER);
+    private static final List<String> SIGNATURE_KEYWORDS = Arrays.asList(APIKEY_HEADER, TIMESTAMP_HEADER);
 
     private static final String ALGORITHM = "DSA";
 
     @Value("${public.key}")
-    private static String publicKey;
+    static String publicKey;
 
     public static <T> String createSignature(T request, String privateKey) throws Exception {
 
@@ -150,24 +150,24 @@ public class SignatureHelper {
         return sb.toString();
     }
 
-    //test and generator
-    public static void main(String[] args) throws Exception {
-
-        // Generate a 1024-bit Digital Signature Algorithm (DSA) key pair
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
-        keyGen.initialize(1024);
-        KeyPair keypair = keyGen.genKeyPair();
-        PrivateKey privateKey = keypair.getPrivate();
-        PublicKey publicKey = keypair.getPublic();
-
-        // Get the bytes of the public and private keys (these go in the database with API Key)
-        byte[] privateKeyEncoded = privateKey.getEncoded();
-        byte[] publicKeyEncoded = publicKey.getEncoded();
-
-        System.out.println("Private Key: " + Base64.encodeBase64String(privateKeyEncoded));
-        System.out.println("Public Key: " + Base64.encodeBase64String(publicKeyEncoded));
-
-    }
+//    //test and generator
+//    public static void main(String[] args) throws Exception {
+//
+//        // Generate a 1024-bit Digital Signature Algorithm (DSA) key pair
+//        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
+//        keyGen.initialize(1024);
+//        KeyPair keypair = keyGen.genKeyPair();
+//        PrivateKey privateKey = keypair.getPrivate();
+//        PublicKey publicKey = keypair.getPublic();
+//
+//        // Get the bytes of the public and private keys (these go in the database with API Key)
+//        byte[] privateKeyEncoded = privateKey.getEncoded();
+//        byte[] publicKeyEncoded = publicKey.getEncoded();
+//
+//        System.out.println("Private Key: " + Base64.encodeBase64String(privateKeyEncoded));
+//        System.out.println("Public Key: " + Base64.encodeBase64String(publicKeyEncoded));
+//
+//    }
 
     private static String getPublicKey() {
         return publicKey;

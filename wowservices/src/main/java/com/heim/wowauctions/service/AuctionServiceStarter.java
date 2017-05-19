@@ -22,7 +22,7 @@ import java.util.Properties;
 @SpringBootApplication
 @ServletComponentScan
 @EnableScheduling
-@ComponentScan("com.heim.wowauctions.service")
+@ComponentScan(basePackages = {"com.heim.wowauctions.service"})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class})
 @EnableCaching
 public class AuctionServiceStarter {
