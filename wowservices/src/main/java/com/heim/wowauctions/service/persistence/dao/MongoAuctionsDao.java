@@ -9,6 +9,8 @@ import com.heim.wowauctions.service.utils.AuctionUtils;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,9 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  */
 
 public class MongoAuctionsDao extends MongoTemplate {
+
+    private static final Logger logger = LoggerFactory.getLogger(MongoAuctionsDao.class);
+
 
     @Autowired
     private
@@ -161,8 +166,13 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     public void archiveAuctions(List<Auction> toArchiveList) {
 
-        for (Auction auction : toArchiveList)
-            this.insert(auction, "auctionsArchive");
+        for (Auction auction : toArchiveList) {
+            try {
+                this.insert(auction, "auctionsArchive");
+            }catch (Exception e){
+                    logger.error(e.getMessage(),e);
+            }
+        }
     }
 
     public void removeArchivedAuctions(long timestamp) {

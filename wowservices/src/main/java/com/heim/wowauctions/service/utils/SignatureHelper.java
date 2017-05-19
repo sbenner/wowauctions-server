@@ -37,9 +37,6 @@ public class SignatureHelper {
 
     private static final String ALGORITHM = "DSA";
 
-    @Value("${public.key}")
-    static String publicKey;
-
     public static <T> String createSignature(T request, String privateKey) throws Exception {
 
 
@@ -55,7 +52,7 @@ public class SignatureHelper {
         return Base64.encodeBase64String(sig.sign());
     }
 
-    public static boolean validateSignature(String url, String signatureString) throws Exception {
+    public static boolean validateSignature(String url, String signatureString,String publicKey) throws Exception {
 
         //  String publicKey = getPublicKey();
         if (publicKey == null) {
@@ -169,13 +166,6 @@ public class SignatureHelper {
 //
 //    }
 
-    private static String getPublicKey() {
-        return publicKey;
-    }
-
-    private void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
 
     private static PublicKey decodePublicKey(String publicKey) throws Exception {
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);

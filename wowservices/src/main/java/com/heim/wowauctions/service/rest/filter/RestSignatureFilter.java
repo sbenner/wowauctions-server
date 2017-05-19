@@ -10,6 +10,8 @@ package com.heim.wowauctions.service.rest.filter;
 import com.heim.wowauctions.service.utils.SignatureHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,6 +26,8 @@ import java.io.IOException;
 public class RestSignatureFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(RestSignatureFilter.class);
 
+    @Value("${public.key}")
+    String publicKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -57,9 +61,9 @@ public class RestSignatureFilter extends OncePerRequestFilter {
         }
 
         try {
-            if (!SignatureHelper.validateSignature(url, signature)) {
+            if (!SignatureHelper.validateSignature(url, signature,publicKey)) {
                 logger.error("UNAUTHORIZED invalid signature failed validation");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "REST signature failed validation.");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         } catch (Exception e) {
