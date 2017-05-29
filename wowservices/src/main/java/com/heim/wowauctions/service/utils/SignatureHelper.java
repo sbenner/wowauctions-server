@@ -23,6 +23,7 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class SignatureHelper {
@@ -134,6 +135,8 @@ public class SignatureHelper {
         // build the url with headers and parms sorted
         String params =
                 headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
+
+        AtomicInteger
 
         StringBuilder sb = new StringBuilder();
 

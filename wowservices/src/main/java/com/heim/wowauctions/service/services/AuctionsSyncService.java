@@ -9,10 +9,14 @@ import com.heim.wowauctions.service.utils.HttpReqHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 import static java.lang.String.format;
 
@@ -31,13 +35,20 @@ public class AuctionsSyncService {
     private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
     private static final String url = "https://us.api.battle.net/wow/auction/data/veknilash";
 
+    private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
+
+
     private final MongoAuctionsDao auctionsDao;
     private final HttpReqHandler httpReqHandler;
+    private final TaskExecutor taskExecutor;
+
+
 
     @Autowired
-    public AuctionsSyncService(MongoAuctionsDao auctionsDao, HttpReqHandler httpReqHandler) {
+    public AuctionsSyncService(MongoAuctionsDao auctionsDao, HttpReqHandler httpReqHandler, TaskExecutor taskExecutor) {
         this.auctionsDao = auctionsDao;
         this.httpReqHandler = httpReqHandler;
+        this.taskExecutor = taskExecutor;
     }
 
     @Scheduled(fixedRate = 180000)
@@ -70,13 +81,21 @@ public class AuctionsSyncService {
                 if (auctionsString != null) {
                     List<Auction> auctions = AuctionUtils.
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
+
                     getAuctionsDao().insertAll(auctions);
 
-                    //archive old
-                    List<Auction> toArchive = getAuctionsDao().findAuctionsToArchive(remote.getLastModified());
-                    if(getAuctionsDao().archiveAuctions(toArchive)) {
-                        getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+
+                    BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
+                    queueToArchive.addAll(getAuctionsDao().findAuctionsToArchive(remote.getLastModified()));
+
+                    while (!queueToArchive.isEmpty()) {
+                        logger.info("q size: " + queueToArchive.size());
+                        semaphore.acquire();
+                        taskExecutor.execute(new ArchiveSaver(this, queueToArchive.poll()));
                     }
+
+                    getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+
 
                     if (local.getUrl() == null) {
                         getAuctionsDao().insertAuctionsUrlData(remote);

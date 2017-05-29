@@ -42,13 +42,8 @@ public class ItemsSyncService {
     @Autowired
     private HttpReqHandler httpReqHandler;
 
-    @Bean
-    public TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
-        return taskExecutor;
-    }
+
+
 
     @Scheduled(fixedRate = 120000)
     public void processItemsQueue() {
