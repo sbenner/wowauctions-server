@@ -36,6 +36,7 @@ public class ArchiveSaver implements Runnable {
 
     private void processItem() {
         mongoAuctionsDao.archiveAuctions(getAuction());
+        getService().getSemaphore().release();
     }
 
     private MongoAuctionsDao getMongoAuctionsDao() {

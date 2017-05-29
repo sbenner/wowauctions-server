@@ -89,7 +89,7 @@ public class AuctionsSyncService {
 
                     while (!queueToArchive.isEmpty()) {
                         logger.info("q size: " + queueToArchive.size());
-                        semaphore.acquire();
+                        getSemaphore().acquire();
                         taskExecutor.execute(new ArchiveSaver(this, queueToArchive.poll()));
                     }
 
@@ -117,4 +117,7 @@ public class AuctionsSyncService {
         return auctionsDao;
     }
 
+    public Semaphore getSemaphore() {
+        return semaphore;
+    }
 }
