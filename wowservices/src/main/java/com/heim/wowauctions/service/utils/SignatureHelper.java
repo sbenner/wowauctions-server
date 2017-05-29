@@ -136,14 +136,9 @@ public class SignatureHelper {
         String params =
                 headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
 
-        AtomicInteger
-
         StringBuilder sb = new StringBuilder();
-
-//        url = url.contains("/wow")?
-//                url.replaceAll("/wow",""):url;
-
         if (!url.endsWith("?")) url += "?";
+
         sb.append(url);
 
         if (params.length() > 0)
