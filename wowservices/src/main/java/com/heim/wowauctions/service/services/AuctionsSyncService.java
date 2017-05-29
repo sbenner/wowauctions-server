@@ -84,7 +84,6 @@ public class AuctionsSyncService {
 
                     getAuctionsDao().insertAll(auctions);
 
-
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
                     queueToArchive.addAll(getAuctionsDao().findAuctionsToArchive(remote.getLastModified()));
 

@@ -169,6 +169,7 @@ public class MongoAuctionsDao extends MongoTemplate {
 
     public void archiveAuctions(Auction auction) {
         try {
+            logger.info("saving "+auction.toString());
                 this.insert(auction, "auctionsArchive");
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
