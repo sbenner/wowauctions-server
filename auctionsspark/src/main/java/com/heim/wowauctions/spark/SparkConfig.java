@@ -3,7 +3,6 @@ package com.heim.wowauctions.spark;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,9 +16,10 @@ public class SparkConfig {
     @Bean
     public SparkConf sparkConf() {
         SparkConf sc = new SparkConf()
-               // .setMaster("local")
-                .setMaster("spark://localhost:7077")
+                 .setMaster("local")
+                //.setMaster("spark://localhost:7077")
                 .setAppName("MongoSparkConnectorTour")
+                .set("spark.default.parallelism","10")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
         return sc;
