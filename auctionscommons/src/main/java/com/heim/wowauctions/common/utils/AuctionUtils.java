@@ -1,8 +1,8 @@
-package com.heim.wowauctions.service.utils;
+package com.heim.wowauctions.common.utils;
 
-import com.heim.wowauctions.service.persistence.models.Auction;
-import com.heim.wowauctions.service.persistence.models.AuctionUrl;
-import com.heim.wowauctions.service.persistence.models.Item;
+import com.heim.wowauctions.common.persistence.models.Auction;
+import com.heim.wowauctions.common.persistence.models.AuctionUrl;
+import com.heim.wowauctions.common.persistence.models.Item;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;

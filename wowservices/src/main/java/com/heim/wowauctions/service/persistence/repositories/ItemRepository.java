@@ -1,7 +1,8 @@
 package com.heim.wowauctions.service.persistence.repositories;
 
 
-import com.heim.wowauctions.service.persistence.models.Item;
+
+import com.heim.wowauctions.common.persistence.models.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Query;

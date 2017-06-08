@@ -1,6 +1,7 @@
 package com.heim.wowauctions.spark;
 
-import com.heim.wowauctions.service.persistence.models.ArchivedAuction;
+
+import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.mongodb.spark.MongoSpark;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.MapFunction;

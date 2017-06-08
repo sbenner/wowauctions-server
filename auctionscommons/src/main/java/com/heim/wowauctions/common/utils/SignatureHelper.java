@@ -1,4 +1,4 @@
-package com.heim.wowauctions.service.utils;
+package com.heim.wowauctions.common.utils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,17 +13,18 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.net.URLCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class SignatureHelper {

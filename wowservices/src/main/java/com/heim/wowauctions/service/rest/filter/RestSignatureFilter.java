@@ -7,7 +7,8 @@ package com.heim.wowauctions.service.rest.filter;
  * Time: 1:42 AM
  */
 
-import com.heim.wowauctions.service.utils.SignatureHelper;
+
+import com.heim.wowauctions.common.utils.SignatureHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

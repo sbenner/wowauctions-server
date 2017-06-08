@@ -1,8 +1,11 @@
 package com.heim.wowauctions.service.persistence.repositories;
 
-import com.heim.wowauctions.service.persistence.models.ArchivedAuction;
+
+
+import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

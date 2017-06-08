@@ -1,10 +1,11 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.common.utils.AuctionUtils;
+import com.heim.wowauctions.common.utils.HttpReqHandler;
 import com.heim.wowauctions.service.SyncServiceContext;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.service.utils.AuctionUtils;
-import com.heim.wowauctions.service.utils.HttpReqHandler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.heim.wowauctions.service.persistence.repositories;
 
-import com.heim.wowauctions.service.persistence.models.Realm;
+
+import com.heim.wowauctions.common.persistence.models.Realm;
 import org.springframework.stereotype.Repository;
 
 

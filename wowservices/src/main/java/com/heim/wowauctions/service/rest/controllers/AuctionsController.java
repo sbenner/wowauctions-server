@@ -1,9 +1,10 @@
 package com.heim.wowauctions.service.rest.controllers;
 
+import com.heim.wowauctions.common.persistence.models.Auction;
+import com.heim.wowauctions.common.persistence.models.Item;
+import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.service.persistence.models.Auction;
-import com.heim.wowauctions.service.persistence.models.Item;
-import com.heim.wowauctions.service.utils.AuctionUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

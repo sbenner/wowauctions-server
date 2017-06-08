@@ -1,7 +1,8 @@
 package com.heim.wowauctions.service.services;
 
+import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.service.persistence.models.Auction;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

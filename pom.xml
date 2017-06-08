@@ -145,6 +145,7 @@
     <modules>
         <module>wowservices</module>
         <module>auctionsspark</module>
+        <module>auctionscommons</module>
     </modules>
     <build>
         <plugins>

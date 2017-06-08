@@ -1,4 +1,4 @@
-package com.heim.wowauctions.service.utils;
+package com.heim.wowauctions.common.utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
