@@ -18,9 +18,8 @@ public class SparkConfig {
         SparkConf sc = new SparkConf()
                  .setMaster("local")
                 //.setMaster("spark://localhost:7077")
-                .setAppName("MongoSparkConnectorTour")
-                .set("spark.default.parallelism","10")
-                .set("spark.deploy.defaultCores","4")
+                .setAppName("WowAuctionsAggregator")
+                .set("spark.deploy.defaultCores","10")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
         return sc;

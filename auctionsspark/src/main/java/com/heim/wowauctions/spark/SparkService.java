@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import static org.apache.spark.sql.types.DataTypes.IntegerType;
+import static org.apache.spark.sql.types.DataTypes.LongType;
 
 
 /**
@@ -50,17 +51,17 @@ public class SparkService {
                 sql("SELECT itemId,buyout,quantity from archive where itemId='38925' group by itemId,buyout,quantity order by buyout");
 
 
-        StructType schema = new StructType().add("itemId", IntegerType).add("buyout", IntegerType).add("quantity", IntegerType);
+        StructType schema = new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType);
 
 
        Dataset<Row> modified=   centenarians.map(
                 (MapFunction<Row, Row>) r ->
                 {
-                    int q = r.getAs("quantity");
+                    int q = r.getInt(2);
                     if (q > 0) {
                         System.out.println("QUANTITY IS GREATER THAN 0");
-                        int b = Integer.valueOf(r.getAs("buyout")) / q;
-                        int id = r.getAs("itemId");
+                        long b = r.getLong(1) / q;
+                        long id = r.getAs("itemId");
                         return RowFactory.create(id, b, 1);
                     }else {
                         return r;
