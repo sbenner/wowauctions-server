@@ -12,7 +12,6 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import static org.apache.spark.sql.types.DataTypes.IntegerType;
@@ -32,7 +31,6 @@ public class SparkService {
     @Autowired
     private JavaSparkContext javaSparkContext;
 
-  // @Scheduled(fixedRate = 60000)
     public void count() {
 
 
@@ -52,10 +50,10 @@ public class SparkService {
 
 
         StructType schema =
-                new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType).add("timestamp",LongType);
+                new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType).add("timestamp", LongType);
 
 
-       Dataset<Row> modified=   centenarians.map(
+        Dataset<Row> modified = centenarians.map(
                 (MapFunction<Row, Row>) r ->
                 {
                     int quantity = r.getInt(2);
@@ -63,13 +61,15 @@ public class SparkService {
                         System.out.println("QUANTITY IS GREATER THAN 0");
                         long b = r.getLong(1) / quantity;
                         long id = r.getAs("itemId");
-                        return RowFactory.create(id, b, 1,r.getLong(3));
-                    }else {
+                        return RowFactory.create(id, b, 1, r.getLong(3));
+                    } else {
                         return r;
                     }
                 }, RowEncoder.apply(schema)
         );
         modified.show();
+
+        System.out.println("COUNT:" + modified.count());
 
         System.out.println("#################################################################");
 
