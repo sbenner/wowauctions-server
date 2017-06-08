@@ -32,7 +32,7 @@ public class SparkController {
 
         return new ResponseEntity("OK", HttpStatus.OK);
     }
-    @RequestMapping(method = RequestMethod.GET, value = "/start", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/list", produces = "application/json")
     public
     @ResponseBody
     ResponseEntity listJobs(HttpServletResponse res) {
