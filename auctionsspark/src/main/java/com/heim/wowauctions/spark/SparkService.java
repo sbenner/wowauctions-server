@@ -22,7 +22,7 @@ import static org.apache.spark.sql.types.DataTypes.IntegerType;
  * Created by sbenner on 30/05/2017.
  */
 @Component
-public class DistinctItemsCount {
+public class SparkService {
 
 
     @Autowired
@@ -31,7 +31,7 @@ public class DistinctItemsCount {
     @Autowired
     private JavaSparkContext javaSparkContext;
 
-    @Scheduled(fixedRate = 60000)
+  // @Scheduled(fixedRate = 60000)
     public void count() {
 
 
@@ -44,6 +44,8 @@ public class DistinctItemsCount {
 
         explicitDS.createOrReplaceTempView("archive");
 //
+
+
         Dataset<Row> centenarians = sparkSession.
                 sql("SELECT itemId,buyout,quantity from archive where itemId='38925' group by itemId,buyout,quantity order by buyout");
 
@@ -51,20 +53,21 @@ public class DistinctItemsCount {
         StructType schema = new StructType().add("itemId", IntegerType).add("buyout", IntegerType).add("quantity", IntegerType);
 
 
-        centenarians.map(
+       Dataset<Row> modified=   centenarians.map(
                 (MapFunction<Row, Row>) r ->
                 {
                     int q = r.getAs("quantity");
                     if (q > 0) {
+                        System.out.println("QUANTITY IS GREATER THAN 0");
                         int b = Integer.valueOf(r.getAs("buyout")) / q;
-                        int id = Integer.valueOf(r.getAs("itemId"));
+                        int id = r.getAs("itemId");
                         return RowFactory.create(id, b, 1);
+                    }else {
+                        return r;
                     }
-                    return r;
-
                 }, RowEncoder.apply(schema)
         );
-        centenarians.show();
+        modified.show();
 
         System.out.println("#################################################################");
 

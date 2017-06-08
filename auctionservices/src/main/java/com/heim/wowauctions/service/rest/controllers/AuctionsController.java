@@ -4,7 +4,6 @@ import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +28,7 @@ public class AuctionsController {
 
     @Autowired
     private MongoAuctionsDao mongoService;
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/items", produces = "application/json"
     )

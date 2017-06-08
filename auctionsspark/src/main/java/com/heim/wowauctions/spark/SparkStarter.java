@@ -12,9 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class SparkStarter {
 
-    @Autowired
-    DistinctItemsCount count;
-
 
     public static void main(String[] args) {
         Class cls = SparkStarter.class;
