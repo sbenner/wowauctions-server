@@ -48,21 +48,22 @@ public class SparkService {
 
 
         Dataset<Row> centenarians = sparkSession.
-                sql("SELECT itemId,buyout,quantity from archive where itemId='38925' group by itemId,buyout,quantity order by buyout");
+                sql("SELECT itemId,buyout,quantity,timestamp from archive where itemId='38925' group by itemId,buyout,quantity,timestamp order by buyout");
 
 
-        StructType schema = new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType);
+        StructType schema =
+                new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType).add("timestamp",LongType);
 
 
        Dataset<Row> modified=   centenarians.map(
                 (MapFunction<Row, Row>) r ->
                 {
-                    int q = r.getInt(2);
-                    if (q > 0) {
+                    int quantity = r.getInt(2);
+                    if (quantity > 0) {
                         System.out.println("QUANTITY IS GREATER THAN 0");
-                        long b = r.getLong(1) / q;
+                        long b = r.getLong(1) / quantity;
                         long id = r.getAs("itemId");
-                        return RowFactory.create(id, b, 1);
+                        return RowFactory.create(id, b, 1,r.getLong(3));
                     }else {
                         return r;
                     }
