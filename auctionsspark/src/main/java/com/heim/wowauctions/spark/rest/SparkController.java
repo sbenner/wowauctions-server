@@ -20,18 +20,17 @@ import javax.servlet.http.HttpServletResponse;
 public class SparkController {
 
     @Autowired
-    SparkService sparkService;
+    private SparkService sparkService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/start", produces = "application/json")
     @ResponseBody
     public DeferredResult<String> startJob(HttpServletResponse res) {
 
 
-        DeferredResult<String> result = new DeferredResult<>();
+        DeferredResult<String> result = new DeferredResult<>(180000L);
 
-        new Thread(() -> {
-            result.setResult("Result: " + sparkService.count());
-        }).start();
+        new Thread(() -> result.setResult("Result: " + sparkService.count())).start();
+
 
         return result;
 
