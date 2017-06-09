@@ -27,13 +27,13 @@ public class SparkController {
     public ResponseEntity<String> startJob(HttpServletResponse res) {
 
 
-        DeferredResult<Long> result = sparkService.count();
-        long r = 0;
+        DeferredResult<Long> result = new DeferredResult<>();
+
         new Thread(() -> {
-            result.setResult(r);
+            result.setResult(sparkService.count());
         }).start();
 
-        return new ResponseEntity<>("Result: " + r, HttpStatus.OK);
+        return new ResponseEntity<>("Result: " + result.getResult(), HttpStatus.OK);
 
         //return new ResponseEntity("OK", HttpStatus.OK);
     }
