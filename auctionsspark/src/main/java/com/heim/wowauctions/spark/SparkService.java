@@ -13,6 +13,9 @@ import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.List;
 
 import static org.apache.spark.sql.types.DataTypes.IntegerType;
 import static org.apache.spark.sql.types.DataTypes.LongType;
@@ -31,7 +34,7 @@ public class SparkService {
     @Autowired
     private JavaSparkContext javaSparkContext;
 
-    public void count() {
+    public DeferredResult<Long> count() {
 
 
         Dataset<ArchivedAuction> explicitDS =
@@ -67,11 +70,15 @@ public class SparkService {
                     }
                 }, RowEncoder.apply(schema)
         );
-        modified.show();
 
-        System.out.println("COUNT:" + modified.count());
 
+        long count = modified.count();
+        System.out.println("COUNT : "+count);
         System.out.println("#################################################################");
+
+        return new DeferredResult<>(count);
+
+
 
     }
 }

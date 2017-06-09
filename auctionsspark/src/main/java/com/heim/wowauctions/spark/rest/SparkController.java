@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,21 +23,27 @@ public class SparkController {
     SparkService sparkService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/start", produces = "application/json")
-    public
     @ResponseBody
-    ResponseEntity startJob(HttpServletResponse res) {
+    public ResponseEntity<String> startJob(HttpServletResponse res) {
 
+
+        DeferredResult<Long> result = sparkService.count();
+        long r = 0;
         new Thread(() -> {
-            sparkService.count();
+            result.setResult(r);
         }).start();
 
-        return new ResponseEntity("OK", HttpStatus.OK);
+        return new ResponseEntity<>("Result: " + r, HttpStatus.OK);
+
+        //return new ResponseEntity("OK", HttpStatus.OK);
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "/list", produces = "application/json")
     public
     @ResponseBody
     ResponseEntity listJobs(HttpServletResponse res) {
         return new ResponseEntity("OK", HttpStatus.OK);
     }
+
 
 }
