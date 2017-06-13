@@ -3,7 +3,7 @@ package com.heim.wowauctions.service.services;
 
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

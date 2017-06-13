@@ -1,4 +1,4 @@
-package com.heim.wowauctions.service.persistence.dao;
+package com.heim.wowauctions.common.persistence.dao;
 
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.Auction;
@@ -6,10 +6,10 @@ import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.AuctionUtils;
-import com.heim.wowauctions.service.persistence.repositories.ArchivedAuctionRepository;
-import com.heim.wowauctions.service.persistence.repositories.AuctionRepository;
-import com.heim.wowauctions.service.persistence.repositories.ItemRepository;
-import com.heim.wowauctions.service.persistence.repositories.RealmRepository;
+import com.heim.wowauctions.common.persistence.repositories.ArchivedAuctionRepository;
+import com.heim.wowauctions.common.persistence.repositories.AuctionRepository;
+import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
+import com.heim.wowauctions.common.persistence.repositories.RealmRepository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;

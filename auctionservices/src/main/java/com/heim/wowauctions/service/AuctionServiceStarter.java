@@ -1,6 +1,6 @@
 package com.heim.wowauctions.service;
 
-import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.mongodb.Mongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +31,7 @@ public class AuctionServiceStarter {
 
     @Autowired
     Mongo mongo;
+
     @Value("${spring.data.mongodb.database}")
     private String database;
 

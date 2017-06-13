@@ -3,7 +3,7 @@ package com.heim.wowauctions.service.services;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import com.heim.wowauctions.service.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

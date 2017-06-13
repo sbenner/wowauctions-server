@@ -24,17 +24,16 @@ public class SparkController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/start", produces = "application/json")
     @ResponseBody
-    public DeferredResult<String> startJob(HttpServletResponse res) {
+    public ResponseEntity<String> startJob(HttpServletResponse res) {
 
 
-        DeferredResult<String> result = new DeferredResult<>(180000L);
+//        DeferredResult<String> result = new DeferredResult<>(180000L);
 
-        new Thread(() -> result.setResult("Result: " + sparkService.count())).start();
+        new Thread(() -> sparkService.count()).start();
 
+        //return result;
 
-        return result;
-
-        //return new ResponseEntity("OK", HttpStatus.OK);
+        return new ResponseEntity("OK", HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list", produces = "application/json")
