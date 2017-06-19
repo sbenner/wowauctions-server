@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
@@ -24,8 +25,8 @@ import java.util.Properties;
 @SpringBootApplication
 @ServletComponentScan
 @EnableScheduling
-@ComponentScan(basePackages = {"com.heim.wowauctions.service"})
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class})
+@EnableMongoRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
+@ComponentScan(basePackages = {"com.heim.wowauctions.service","com.heim.wowauctions.common"})
 @EnableCaching
 public class AuctionServiceStarter {
 

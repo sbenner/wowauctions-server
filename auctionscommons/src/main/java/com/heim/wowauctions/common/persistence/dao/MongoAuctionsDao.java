@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -60,6 +61,7 @@ public class MongoAuctionsDao extends MongoTemplate {
     ArchivedAuctionRepository archivedAuctionRepository;
 
 
+    @Autowired
     public MongoAuctionsDao(Mongo mongo, String databaseName) {
         super(mongo, databaseName);
     }

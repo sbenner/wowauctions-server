@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Created by sbenner on 06/06/2017.
  */
 @SpringBootApplication
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
 @ComponentScan(basePackages = {"com.heim.wowauctions.common.persistence","com.heim.wowauctions.spark"})
 public class SparkStarter {
 

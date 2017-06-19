@@ -10,6 +10,7 @@ public class ItemChartData {
     private long itemId;
     private Map<Long,Long> valueTime;
     private int quantity;
+    private long timestamp;
 
 
     public Map<Long, Long> getValueTime() {
@@ -34,5 +35,13 @@ public class ItemChartData {
 
     public void setItemId(long itemId) {
         this.itemId = itemId;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
