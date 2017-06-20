@@ -112,17 +112,17 @@ public class SignatureHelper {
             try {
                 headersAndParams.put("query", code.decode(((HttpServletRequest) request).getQueryString()));
             } catch (DecoderException e1) {
-                e1.printStackTrace();
+                logger.error(e1.getMessage(),e1);
             }
             return createSortedUrl(
-                    ((HttpServletRequest) request).getContextPath() + ((HttpServletRequest) request).getServletPath() + ((HttpServletRequest) request).getPathInfo(),
+                    (((HttpServletRequest) request).getServletPath(),
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
             try {
                 headersAndParams.put("query", code.decode(((ClientHttpRequest) request).getURI().getQuery()));
             } catch (DecoderException e1) {
-                e1.printStackTrace();
+                logger.error(e1.getMessage(),e1);
             }
             return createSortedUrl(
                     ((ClientHttpRequest) request).getURI().getPath(),
@@ -134,6 +134,15 @@ public class SignatureHelper {
 
     public static String createSortedUrl(String url, TreeMap<String, String> headersAndParams) {
         // build the url with headers and parms sorted
+
+        logger.info("url "+url);
+
+        for(Map.Entry e: headersAndParams.entrySet()){
+            logger.info("key "+e.getKey());
+            logger.info("value "+e.getValue());
+        }
+
+
         String params =
                 headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
 
