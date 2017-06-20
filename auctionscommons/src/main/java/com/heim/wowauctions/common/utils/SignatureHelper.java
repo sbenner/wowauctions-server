@@ -115,7 +115,7 @@ public class SignatureHelper {
                 logger.error(e1.getMessage(),e1);
             }
             return createSortedUrl(
-                    (((HttpServletRequest) request).getServletPath(),
+                    ((HttpServletRequest) request).getServletPath(),
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
