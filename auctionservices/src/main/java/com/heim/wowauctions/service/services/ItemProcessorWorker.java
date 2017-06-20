@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 /**
@@ -27,7 +28,7 @@ public class ItemProcessorWorker implements Runnable {
     private HttpReqHandler httpReqHandler;
     private MongoAuctionsDao mongoAuctionsDao;
 
-    public ItemProcessorWorker(ItemsSyncService service, long itemId) {
+    ItemProcessorWorker(ItemsSyncService service, long itemId) {
         setService(service);
         setMongoAuctionsDao(service.getAuctionsDao());
         setHttpReqHandler(service.getHttpReqHandler());
@@ -74,11 +75,11 @@ public class ItemProcessorWorker implements Runnable {
         this.itemId = itemId;
     }
 
-    public ItemsSyncService getService() {
+    ItemsSyncService getService() {
         return service;
     }
 
-    public void setService(ItemsSyncService service) {
+    private void setService(ItemsSyncService service) {
         this.service = service;
     }
 
