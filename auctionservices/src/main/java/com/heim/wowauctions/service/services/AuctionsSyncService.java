@@ -25,9 +25,6 @@ import static java.lang.String.format;
 /**
  * Created by
  * User: Sergey Benner
- * Date: 22.02.2009
- * Time: 0:40:17
- * Purpose : sync xmls with db
  */
 
 @Component
@@ -38,11 +35,9 @@ public class AuctionsSyncService {
 
     private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
 
-
     private final MongoAuctionsDao auctionsDao;
     private final HttpReqHandler httpReqHandler;
     private final TaskExecutor taskExecutor;
-
 
 
     @Autowired
@@ -73,6 +68,7 @@ public class AuctionsSyncService {
                 logger.info(format("local.getLastModified() %s", local.getLastModified()));
 
                 logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
+
                 logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
                 logger.info(format("getAuctionsDao().getAuctionsCount() %s", getAuctionsDao().getAuctionsCount()));
 
@@ -84,18 +80,16 @@ public class AuctionsSyncService {
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
 
                     getAuctionsDao().insertAll(auctions);
-
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
                     queueToArchive.addAll(getAuctionsDao().findAuctionsToArchive(remote.getLastModified()));
+
+                    getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
 
                     while (!queueToArchive.isEmpty()) {
                         logger.info("q size: " + queueToArchive.size());
                         getSemaphore().acquire();
                         taskExecutor.execute(new ArchiveSaver(this, queueToArchive.poll()));
                     }
-
-                    getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
-
 
                     if (local.getUrl() == null) {
                         getAuctionsDao().insertAuctionsUrlData(remote);
@@ -114,11 +108,11 @@ public class AuctionsSyncService {
 
     }
 
-    public MongoAuctionsDao getAuctionsDao() {
+    MongoAuctionsDao getAuctionsDao() {
         return auctionsDao;
     }
 
-    public Semaphore getSemaphore() {
+    Semaphore getSemaphore() {
         return semaphore;
     }
 }
