@@ -24,6 +24,7 @@ import java.util.Map;
 
 
 @Controller
+@RequestMapping("/wow")
 public class AuctionsController {
 
     @Autowired
