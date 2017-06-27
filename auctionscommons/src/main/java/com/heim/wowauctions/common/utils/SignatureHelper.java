@@ -49,15 +49,17 @@ public class SignatureHelper {
 
         Signature sig = Signature.getInstance(ALGORITHM);
         sig.initSign(keyFactory.generatePrivate(privateKeySpec));
+
+
         sig.update(StringUtils.getBytesUtf8(sortedUrl));
 
         return Base64.encodeBase64String(sig.sign());
     }
 
-    public static boolean validateSignature(String url, String signatureString,String publicKey) throws Exception {
+    public static boolean validateSignature(String url, String signatureString, String publicKey) throws Exception {
 
-        logger.info("url to verify: "+url);
-        logger.info("signatureString to verify: "+signatureString);
+        logger.info("url to verify: " + url);
+        logger.info("signatureString to verify: " + signatureString);
         //  String publicKey = getPublicKey();
         if (publicKey == null) {
             logger.error("public key is NULL!!!!");
@@ -73,7 +75,7 @@ public class SignatureHelper {
             return signature.verify(Base64.decodeBase64(signatureString));
 
         } catch (SignatureException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
             return false;
         }
     }
@@ -112,17 +114,29 @@ public class SignatureHelper {
             try {
                 headersAndParams.put("query", code.decode(((HttpServletRequest) request).getQueryString()));
             } catch (DecoderException e1) {
-                e1.printStackTrace();
+                logger.error(e1.getMessage(), e1);
             }
+            String servletPath =
+                    org.springframework.util.StringUtils
+                            .isEmpty(((HttpServletRequest) request).getServletPath())
+                            ? "" : ((HttpServletRequest) request).getServletPath();
+
+            String pathInfo =
+                    org.springframework.util.StringUtils
+                            .isEmpty(((HttpServletRequest) request).getPathInfo())
+                            ? "" : ((HttpServletRequest) request).getPathInfo();
+
+            logger.info("servlet path: " + servletPath);
+            logger.info("path info: " + pathInfo);
             return createSortedUrl(
-                    ((HttpServletRequest) request).getContextPath() + ((HttpServletRequest) request).getServletPath() + ((HttpServletRequest) request).getPathInfo(),
+                    servletPath + pathInfo,
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
             try {
                 headersAndParams.put("query", code.decode(((ClientHttpRequest) request).getURI().getQuery()));
             } catch (DecoderException e1) {
-                e1.printStackTrace();
+                logger.error(e1.getMessage(), e1);
             }
             return createSortedUrl(
                     ((ClientHttpRequest) request).getURI().getPath(),
@@ -132,8 +146,17 @@ public class SignatureHelper {
         return null;
     }
 
-    public static String createSortedUrl(String url, TreeMap<String, String> headersAndParams) {
+    private static String createSortedUrl(String url, TreeMap<String, String> headersAndParams) {
         // build the url with headers and parms sorted
+
+        logger.info("createSortedUrl() " + url);
+
+        for (Map.Entry e : headersAndParams.entrySet()) {
+            logger.info("key " + e.getKey());
+            logger.info("value " + e.getValue());
+        }
+
+
         String params =
                 headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
 

@@ -1,4 +1,4 @@
-package com.heim.wowauctions.service.persistence.repositories;
+package com.heim.wowauctions.common.persistence.repositories;
 
 
 import com.heim.wowauctions.common.persistence.models.Auction;

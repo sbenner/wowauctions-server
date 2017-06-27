@@ -1,4 +1,4 @@
-package com.heim.wowauctions.service.persistence.dao;
+package com.heim.wowauctions.common.persistence.dao;
 
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.Auction;
@@ -6,10 +6,10 @@ import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.AuctionUtils;
-import com.heim.wowauctions.service.persistence.repositories.ArchivedAuctionRepository;
-import com.heim.wowauctions.service.persistence.repositories.AuctionRepository;
-import com.heim.wowauctions.service.persistence.repositories.ItemRepository;
-import com.heim.wowauctions.service.persistence.repositories.RealmRepository;
+import com.heim.wowauctions.common.persistence.repositories.ArchivedAuctionRepository;
+import com.heim.wowauctions.common.persistence.repositories.AuctionRepository;
+import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
+import com.heim.wowauctions.common.persistence.repositories.RealmRepository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -60,6 +61,7 @@ public class MongoAuctionsDao extends MongoTemplate {
     ArchivedAuctionRepository archivedAuctionRepository;
 
 
+    @Autowired
     public MongoAuctionsDao(Mongo mongo, String databaseName) {
         super(mongo, databaseName);
     }
@@ -175,7 +177,7 @@ public class MongoAuctionsDao extends MongoTemplate {
     public void archiveAuctions(Auction auction) {
         try {
             logger.info("saving "+auction.toString());
-                this.insert(auction, "auctionsArchive");
+                this.save(auction, "auctionsArchive");
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
