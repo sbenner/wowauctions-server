@@ -114,8 +114,12 @@ public class SignatureHelper {
             } catch (DecoderException e1) {
                 logger.error(e1.getMessage(),e1);
             }
+            String servletPath =
+                    org.springframework.util.StringUtils
+                            .isEmpty(((HttpServletRequest) request).getServletPath())
+                            ?"":((HttpServletRequest) request).getServletPath();
             return createSortedUrl(
-                    ((HttpServletRequest) request).getServletPath()+((HttpServletRequest) request).getPathInfo(),
+                    servletPath+((HttpServletRequest) request).getPathInfo(),
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
