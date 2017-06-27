@@ -118,8 +118,16 @@ public class SignatureHelper {
                     org.springframework.util.StringUtils
                             .isEmpty(((HttpServletRequest) request).getServletPath())
                             ?"":((HttpServletRequest) request).getServletPath();
+
+            String pathInfo =
+                    org.springframework.util.StringUtils
+                            .isEmpty(((HttpServletRequest) request).getPathInfo())
+                            ?"":((HttpServletRequest) request).getPathInfo();
+
+            logger.info("servlet path: "+servletPath);
+            logger.info("path info: "+pathInfo);
             return createSortedUrl(
-                    servletPath+((HttpServletRequest) request).getPathInfo(),
+                    servletPath+pathInfo,
                     headersAndParams);
         }
         if (request instanceof ClientHttpRequest) {
@@ -139,7 +147,7 @@ public class SignatureHelper {
     public static String createSortedUrl(String url, TreeMap<String, String> headersAndParams) {
         // build the url with headers and parms sorted
 
-        logger.info("url "+url);
+        logger.info("createSortedUrl "+url);
 
         for(Map.Entry e: headersAndParams.entrySet()){
             logger.info("key "+e.getKey());
