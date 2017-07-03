@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * Created by sbenner on 30/05/2017.
@@ -21,16 +20,16 @@ public class SparkConfig {
     String dbName;
 
     @Autowired
-    Mongo mongo;
+    private Mongo mongo;
 
 
     @Bean
     public SparkConf sparkConf() {
         SparkConf sc = new SparkConf()
-                 .setMaster("local")
+                .setMaster("local")
                 //.setMaster("spark://localhost:7077")
                 .setAppName("WowAuctionsAggregator")
-                .set("spark.deploy.defaultCores","10")
+                .set("spark.deploy.defaultCores", "10")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
         return sc;
@@ -43,8 +42,8 @@ public class SparkConfig {
     }
 
     @Bean
-    public MongoAuctionsDao mongoTemplate(){
-        return new MongoAuctionsDao(mongo,dbName);
+    public MongoAuctionsDao mongoTemplate() {
+        return new MongoAuctionsDao(mongo, dbName);
     }
 
     @Bean

@@ -31,7 +31,7 @@ import static java.lang.String.format;
 public class AuctionsSyncService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
-    private static final String url = "https://us.api.battle.net/wow/auction/data/veknilash";
+    private String url;
 
     private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
 

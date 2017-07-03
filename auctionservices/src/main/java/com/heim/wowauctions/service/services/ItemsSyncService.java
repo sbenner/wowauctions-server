@@ -33,9 +33,9 @@ public class ItemsSyncService {
     private static final Logger logger = LoggerFactory.getLogger(ItemsSyncService.class.getSimpleName());
     private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
     @Autowired
-    SyncServiceContext context;
+    private SyncServiceContext context;
     @Autowired
-    TaskExecutor taskExecutor;
+    private TaskExecutor taskExecutor;
     @Autowired
     private MongoAuctionsDao auctionsDao;
     @Autowired

@@ -30,13 +30,13 @@ import static org.apache.spark.sql.types.DataTypes.LongType;
 public class SparkService {
 
 
-    final
+    private final
     ItemChartDataRepository itemChartDataRepository;
     private final SparkSession sparkSession;
     private final JavaSparkContext javaSparkContext;
 
     @Autowired
-    MongoAuctionsDao mongoAuctionsDao;
+    private MongoAuctionsDao mongoAuctionsDao;
 
 
     @Autowired
@@ -110,14 +110,6 @@ public class SparkService {
             itemChartDataRepository.save(i);
         }
 
-
-//
-//
-//
-//
-//        System.out.println("COUNT : " + modified.size());
-        //long count = modified.size();
-        // System.out.println("COUNT : " + count);
         System.out.println("#################################################################");
         return 0L;
     }
