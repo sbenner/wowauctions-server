@@ -1,12 +1,11 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +31,23 @@ import static java.lang.String.format;
 public class AuctionsSyncService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
-
-    @Value("${wow.auctions.url}")
-    private String url;
-
     private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
-
     private final MongoAuctionsDao auctionsDao;
     private final HttpReqHandler httpReqHandler;
     private final TaskExecutor taskExecutor;
+    private final String realm;
+    @Value("${wow.auctions.url}")
+    private String url;
 
 
     @Autowired
-    public AuctionsSyncService(MongoAuctionsDao auctionsDao, HttpReqHandler httpReqHandler, TaskExecutor taskExecutor) {
+    public AuctionsSyncService(MongoAuctionsDao auctionsDao,
+                               HttpReqHandler httpReqHandler,
+                               TaskExecutor taskExecutor, String realm) {
         this.auctionsDao = auctionsDao;
         this.httpReqHandler = httpReqHandler;
         this.taskExecutor = taskExecutor;
+        this.realm = realm;
     }
 
     @Scheduled(fixedRate = 180000)
@@ -56,15 +56,14 @@ public class AuctionsSyncService {
         try {
 
 
-
             String out =
-                    httpReqHandler.getData(url);
+                    httpReqHandler.getData(url + realm);
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
-            logger.info("local "+local.toString());
-            logger.info("remote "+remote.toString());
+            logger.info("local " + local.toString());
+            logger.info("remote " + remote.toString());
 
             if (local.getLastModified() == null ||
                     local.getLastModified() < remote.getLastModified() ||

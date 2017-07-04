@@ -10,7 +10,7 @@ package com.heim.wowauctions.common.persistence.models;
 import java.util.Set;
 
 
-public class Realm {
+public class Realm implements Comparable{
 
     private String type;
     private int population;
@@ -115,5 +115,10 @@ public class Realm {
         int result = 1;
         result = prime * result + ((slug == null) ? 0 : slug.hashCode());
         return result;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return ((Realm)o).getSlug().compareTo(getSlug());
     }
 }

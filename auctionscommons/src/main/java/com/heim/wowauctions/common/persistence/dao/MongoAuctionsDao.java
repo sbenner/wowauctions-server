@@ -183,6 +183,10 @@ public class MongoAuctionsDao extends MongoTemplate {
             }
     }
 
+    public void saveRealms(List<Realm> realmList){
+        realmRepository.save(realmList);
+    }
+
     public void removeArchivedAuctions(long timestamp) {
         Query query1 = new Query(where("timestamp").lt(timestamp));
         this.remove(query1, Auction.class);

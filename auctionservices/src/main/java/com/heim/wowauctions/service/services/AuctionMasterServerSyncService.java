@@ -1,26 +1,26 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
+import java.util.PriorityQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 /**
  * Created by
  * User: Sergey Benner
- * Date: 22.02.2009
- * Time: 0:40:17
- * Purpose : sync xmls with db
  */
 
 //we keep disabled it for now
@@ -37,7 +37,7 @@ public class AuctionMasterServerSyncService {
     @Autowired
     private MongoAuctionsDao auctionsDao;
 
-    //  @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 3600000)
     public void retrieveServerAuction() {
         logger.debug("started");
         try {
@@ -45,21 +45,24 @@ public class AuctionMasterServerSyncService {
             String realms = httpReqHandler.getData(url);
 
             List<Realm> realmList = AuctionUtils.parseRealms(realms);
+            getAuctionsDao().saveRealms(realmList);
 
-//            List<Realm> realmsList = getAuctionsDao().getAllRealms();
-//
-//            for (Realm realm : realmsList) {
-//                if (realmsMap.get(realm.getName().toLowerCase()) == null) {
-//                    logger.info(" realm " + realm.getName());
-//                } else {
-//                    realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
-//                    getAuctionsDao().updateRealm(realm);
-//                }
-//            }
+            PriorityQueue<Realm>
+                    queueToArchive = new PriorityQueue<>();
+            queueToArchive.addAll(realmList);
 
-            // List<Realm> aggregatedRealms = getAuctionsDao().aggregateRealms();
-            //how work on this realm list q to download auctions
-            //todo: rebuild our downloader to download from all realms.
+            while (queueToArchive.isEmpty()) {
+                Realm realm = queueToArchive.poll();
+                //we remove connected realms to avoid pulling the auctions for the same
+                //realms twice
+                for (final String realmSlug : realm.getConnectedRealms()) {
+                    realmList.stream().filter(r -> r.getSlug().equals(realmSlug))
+                            .collect(Collectors.toList()).forEach(
+                            queueToArchive::remove
+                    );
+
+                }
+            }
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
