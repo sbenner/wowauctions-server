@@ -1,4 +1,5 @@
 *.iml
+*.json
 data
 config
 .idea

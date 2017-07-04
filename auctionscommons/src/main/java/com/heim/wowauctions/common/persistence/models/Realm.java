@@ -7,7 +7,7 @@ package com.heim.wowauctions.common.persistence.models;
  * Time: 7:36 PM
  */
 
-import org.bson.types.ObjectId;
+import java.util.Set;
 
 
 public class Realm {
@@ -20,8 +20,8 @@ public class Realm {
     private String battlegroup;
     private String locale;
     private String timezone;
-    //  private boolean isConnectionMaster;
-    private ObjectId connected;
+
+    private Set<String> connectedRealms;
 
     public String getType() {
         return type;
@@ -87,19 +87,33 @@ public class Realm {
         this.timezone = timezone;
     }
 
-    public ObjectId getConnected() {
-        return connected;
+
+    public Set<String> getConnectedRealms() {
+        return connectedRealms;
     }
 
-    public void setConnected(ObjectId connected) {
-        this.connected = connected;
+    public void setConnectedRealms(Set<String> connectedRealms) {
+        this.connectedRealms = connectedRealms;
     }
 
-//    public boolean isConnectionMaster() {
-//        return isConnectionMaster;
-//    }
-//
-//    public void setConnectionMaster(boolean connectionMaster) {
-//        isConnectionMaster = connectionMaster;
-//    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Realm other = (Realm) obj;
+        return slug != null && slug.equals(other.getSlug());
+
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((slug == null) ? 0 : slug.hashCode());
+        return result;
+    }
 }

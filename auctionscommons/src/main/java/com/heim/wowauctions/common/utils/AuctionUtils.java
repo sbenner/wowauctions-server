@@ -3,6 +3,7 @@ package com.heim.wowauctions.common.utils;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.persistence.models.Item;
+import com.heim.wowauctions.common.persistence.models.Realm;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -11,12 +12,14 @@ import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,7 +33,7 @@ public class AuctionUtils {
     private static final Logger logger = Logger.getLogger(AuctionUtils.class);
 
     public static AuctionUrl parseAuctionFile(String contents) {
-        logger.info("remote url: "+contents);
+        logger.info("remote url: " + contents);
         AuctionUrl auctionUrl = new AuctionUrl();
         JSONObject jsonObject = new JSONObject(contents);
         JSONArray files = jsonObject.getJSONArray("files");
@@ -40,6 +43,62 @@ public class AuctionUtils {
 
         return auctionUrl;
     }
+
+
+    public static List<Realm> parseRealms(String realmsJsonString) {
+        List<Realm> realms = new ArrayList<>();
+
+        if (StringUtils.isEmpty(realmsJsonString))
+            return realms;
+
+
+        JSONObject jsonObject = new JSONObject(realmsJsonString);
+        JSONArray jsonRealmsArray = jsonObject.getJSONArray("realms");
+
+        for (int i = 0; i < jsonRealmsArray.length(); i++) {
+            JSONObject object = (JSONObject) jsonRealmsArray.get(i);
+            Realm realm = new Realm();
+            realm.setSlug(object.getString("slug"));
+            realm.setName(object.getString("name"));
+            JSONArray connectedRealms = object.getJSONArray("connected_realms");
+            if (connectedRealms.length() > 0) {
+                Set<String> crs = new HashSet<>();
+                for (int j = 0; j < connectedRealms.length(); j++) {
+                    String r = connectedRealms.getString(j);
+                    if (!r.equals(realm.getSlug())) {
+                        crs.add(r);
+                    }
+                }
+                realm.setConnectedRealms(crs);
+            }
+
+            realms.add(realm);
+        }
+
+
+        return realms;
+    }
+
+    public static Set<String> lookupRealmConnections(String lookupRealm, List<Realm> realmList) {
+        Map<String, Realm>
+                map =
+                realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r));
+
+        Realm r = map.get(lookupRealm);
+        Set<String> connectedRealms = r.getConnectedRealms();
+        System.out.println("Connections for the " + r.getName() + " realm are :");
+        connectedRealms.forEach(System.out::println);
+
+        return connectedRealms;
+    }
+
+    public static boolean lookupRealmConnections(String realmIn, String lookupRealm, List<Realm> realmList) {
+        Realm realm =
+                realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r)).get(realmIn);
+        return realm != null && realm.getConnectedRealms().contains(lookupRealm);
+
+    }
+
 
     public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
 

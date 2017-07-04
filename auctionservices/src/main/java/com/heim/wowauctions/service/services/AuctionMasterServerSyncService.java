@@ -2,11 +2,14 @@ package com.heim.wowauctions.service.services;
 
 
 import com.heim.wowauctions.common.persistence.models.Realm;
+import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
 import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +24,13 @@ import java.util.Map;
  */
 
 //we keep disabled it for now
-//@Component
+@Component
 public class AuctionMasterServerSyncService {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuctionMasterServerSyncService.class);
 
+    @Value("${wow.status.url}")
+    String url;
 
     @Autowired
     HttpReqHandler httpReqHandler;
@@ -37,17 +42,20 @@ public class AuctionMasterServerSyncService {
         logger.debug("started");
         try {
 
-            Map<String, Integer> realmsMap = httpReqHandler.getServers();
-            List<Realm> realmsList = getAuctionsDao().getAllRealms();
+            String realms = httpReqHandler.getData(url);
 
-            for (Realm realm : realmsList) {
-                if (realmsMap.get(realm.getName().toLowerCase()) == null) {
-                    logger.info(" realm " + realm.getName());
-                } else {
-                    realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
-                    getAuctionsDao().updateRealm(realm);
-                }
-            }
+            List<Realm> realmList = AuctionUtils.parseRealms(realms);
+
+//            List<Realm> realmsList = getAuctionsDao().getAllRealms();
+//
+//            for (Realm realm : realmsList) {
+//                if (realmsMap.get(realm.getName().toLowerCase()) == null) {
+//                    logger.info(" realm " + realm.getName());
+//                } else {
+//                    realm.setPopulation(realmsMap.get(realm.getName().toLowerCase()));
+//                    getAuctionsDao().updateRealm(realm);
+//                }
+//            }
 
             // List<Realm> aggregatedRealms = getAuctionsDao().aggregateRealms();
             //how work on this realm list q to download auctions

@@ -9,6 +9,7 @@ package com.heim.wowauctions.common.persistence.models;
 public class AuctionUrl {
     private Long lastModified;
     private String url;
+    private String realm;
 
     public Long getLastModified() {
         return lastModified;
@@ -26,9 +27,16 @@ public class AuctionUrl {
         this.url = url;
     }
 
-
     @Override
     public String toString() {
-        return "lastModified: "+getLastModified()+" url: "+getUrl();
+        return "lastModified: " + getLastModified() + " url: " + getUrl();
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
     }
 }
