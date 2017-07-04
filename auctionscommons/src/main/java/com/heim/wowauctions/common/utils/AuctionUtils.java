@@ -80,16 +80,15 @@ public class AuctionUtils {
     }
 
     public static Set<String> lookupRealmConnections(String lookupRealm, List<Realm> realmList) {
-        Map<String, Realm>
-                map =
-                realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r));
-
-        Realm r = map.get(lookupRealm);
-        Set<String> connectedRealms = r.getConnectedRealms();
-        System.out.println("Connections for the " + r.getName() + " realm are :");
-        connectedRealms.forEach(System.out::println);
-
-        return connectedRealms;
+        Realm realm =
+                realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r)).get(lookupRealm);
+        if (realm != null) {
+            Set<String> connectedRealms = realm.getConnectedRealms();
+            System.out.println("Connections for the " + realm.getName() + " realm are :");
+            connectedRealms.forEach(System.out::println);
+            return connectedRealms;
+        }
+        return Collections.emptySet();
     }
 
     public static boolean lookupRealmConnections(String realmIn, String lookupRealm, List<Realm> realmList) {
