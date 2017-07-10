@@ -1,15 +1,13 @@
 package com.heim.wowauctions.service.services;
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 /**
@@ -36,11 +34,18 @@ public class ItemProcessorWorker implements Runnable {
     }
 
     public void run() {
-        processItem();
-        getService().releaseSemaphore();
+        try {
+            processItem();
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+        } finally {
+            getService().releaseSemaphore();
+        }
+
     }
 
     private void processItem() {
+
         long threadId = Thread.currentThread().getId();
         logger.info("Thread #" + threadId + " is processing item #" + getItemId());
         String url = getHttpReqHandler().getItemsUrl(getItemId());
