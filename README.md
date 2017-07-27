@@ -5,7 +5,11 @@ wow auctions api/services
 
 
 Contains services to sync the wow auctions/and items.
-Contains REST api to find items by name. 
+Contains REST api to find items by name.
+
+Contains SPARK project which is being run separately 
+to do the aggregations against MONGO and saves the results
+into a separate collection.
 
 e.g.
  
