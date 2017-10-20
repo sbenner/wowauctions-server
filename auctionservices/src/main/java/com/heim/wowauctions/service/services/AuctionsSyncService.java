@@ -57,7 +57,7 @@ public class AuctionsSyncService {
 
 
             String out =
-                    httpReqHandler.getData(url + realm);
+                    httpReqHandler.getData(url );
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class AuctionsController {
             name = name.replaceAll("[^a-zA-Z0-9 ']", "");
         }
 
-        if (name == null || name.trim().isEmpty() ||
+        if (StringUtils.isEmpty(name) ||
                 name.trim().length() <= 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         } else {
