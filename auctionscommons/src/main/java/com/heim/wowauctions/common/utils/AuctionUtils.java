@@ -79,6 +79,7 @@ public class AuctionUtils {
         return realms;
     }
 
+    
     public static Set<String> lookupRealmConnections(String lookupRealm, List<Realm> realmList) {
         Realm realm =
                 realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r)).get(lookupRealm);
@@ -90,6 +91,7 @@ public class AuctionUtils {
         }
         return Collections.emptySet();
     }
+    
 
     public static boolean lookupRealmConnections(String realmIn, String lookupRealm, List<Realm> realmList) {
         Realm realm =
