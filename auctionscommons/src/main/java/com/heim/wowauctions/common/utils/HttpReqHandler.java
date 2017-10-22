@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,9 +34,10 @@ public class HttpReqHandler {
     @Value("${wow.items.url}")
     String itemsUrl;
     @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate customRestTemplate;
     @Value("${apikey}")
     private String apikey;
+
 
     public static Map<String, Integer> getServers() {
         Map<String, Integer> serverList = new HashMap<String, Integer>();
@@ -78,7 +80,7 @@ public class HttpReqHandler {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey", apikey);
 
             return
-                    restTemplate.
+                    customRestTemplate.
                             exchange(builder.build().encode().toUri(),
                                     HttpMethod.GET,
                                     requestEntity,
