@@ -34,6 +34,12 @@ public class RestSignatureFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        if( request.getMethod().equals("OPTIONS")||
+                request.getPathInfo().contains("/web/")||request.getPathInfo().endsWith("test.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String url = SignatureHelper.createSortedUrl(request);
 
         String signature = request.getHeader(SignatureHelper.SIGNATURE_HEADER);

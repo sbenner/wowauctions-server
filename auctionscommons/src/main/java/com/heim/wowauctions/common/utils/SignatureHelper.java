@@ -71,22 +71,17 @@ public class SignatureHelper {
         signature.update(StringUtils.getBytesUtf8(url));
 
         try {
-
             return signature.verify(Base64.decodeBase64(signatureString));
-
         } catch (SignatureException e) {
             logger.error(e.getMessage(), e);
-            return false;
         }
+        return false;
     }
 
     public static boolean validateTimestamp(long timestamp) {
         long currentTime = System.currentTimeMillis();
-        if (timestamp > currentTime + 60000 ||
-                timestamp < currentTime - 60000) {
-            return false;
-        }
-        return true;
+        return timestamp <= currentTime + 60000 &&
+                timestamp >= currentTime - 60000;
     }
 
     public static <T> String createSortedUrl(T request) {
