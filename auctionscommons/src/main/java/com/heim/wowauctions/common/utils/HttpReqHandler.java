@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,11 +74,13 @@ public class HttpReqHandler {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
+            //headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
             HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey", apikey);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey", apikey);
 
             return
                     customRestTemplate.

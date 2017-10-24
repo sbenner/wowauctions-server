@@ -126,6 +126,7 @@
                 type: "GET",
                 url: "http://localhost:8080/wow/v1/web/itemchart?id="+id,
                 cache: false,
+                async:true,
                 success: function (data) {
                     var dt = [];
                     for (var p in data) {
@@ -183,7 +184,7 @@
                                 "<tr >" +
                                 "<td >" +
                                 "<a name='" + results.auc + "' id='" + results.item.id +
-                                "' href=''>"+results.item.name+"</a>" +
+                                "' href='#' onclick='return false;'>"+results.item.name+"</a>" +
                                 "<div  id='tooltip' class='tooltip'></div></td>" +
                                 "<td>" + results.item.itemLevel + "</td>" +
                                 "<td>" + results.owner + "</td>" +
@@ -236,9 +237,6 @@
             var tooltip=document.getElementById('tooltip');
 
             ahref.onclick = function () {
-                //Plotly.deleteTraces('chartDiv', 0);
-                var chart=document.getElementById('chartDiv');
-                chart.innerHTML="";
                 runChart(results.item.id);
             };
 
