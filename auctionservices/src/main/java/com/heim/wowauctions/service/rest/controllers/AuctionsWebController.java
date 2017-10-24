@@ -45,6 +45,23 @@ public class AuctionsWebController {
 
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/item/{id}", produces = "application/json"
+    )
+    public
+    @ResponseBody
+    ResponseEntity<String> getItem(@PathVariable(value = "id") long id
+                           ) throws IOException {
+
+        if (id!=0) {
+            return new ResponseEntity<>(service.getTooltip(id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+
+    }
+
     @RequestMapping(method = RequestMethod.GET,
             value = "/itemchart", produces = "application/json"
     )

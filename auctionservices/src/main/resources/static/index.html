@@ -172,48 +172,29 @@
 
         function getItemFromWeb(id) {
 
-           var req= createCORSRequest("GET","http://us.battle.net/wow/en/item/" + id+ "/tooltip");
+//           var req= createCORSRequest("GET","http://us.battle.net/wow/en/item/" + id+ "/tooltip");
+//
+//            if (req){
+//                req.onload = function(){
+//                    console.log(req.responseText);
+//                    //do something with request.responseText
+//                };
+//                req.send();
+//            }
+//
 
-            if (req){
-                req.onload = function(){
-                    console.log(req.responseText);
-                    //do something with request.responseText
-                };
-                req.send();
-            }
+//
+            $.ajax( {
+                url:"http://localhost:8080/wow/v1/web/item/" + id,
+                method:'GET',
+                success: function(result){
+                  console.log(result);
+                },
+                error: function(result){
+                    console.log("Error"+result);
+                },
 
-
-//
-//            $.ajax( {
-//                url:"http://us.battle.net/wow/en/item/" + id+ "/tooltip?format=jsonp",
-//                crossOrigin:true,
-//                jsonpCallback:'myJsonMethod',
-//                accepts: {
-//                    mycustomtype: 'text/html'
-//                },
-//                headers: {"Content-Type":"text/plain; charset=utf-8", "Accept": "*"},
-//                converters: {
-//                    'text mycustomtype': function(result) {
-//                        // Do Stuff
-//                        console.log(result);
-//                        return newresult;
-//                    }
-//                },
-//                dataType: 'jsonp',
-//
-//                success: function(result){
-//
-//                  console.log(result);
-//
-//                },
-//
-//                error: function(result){
-//
-//                    console.log("Error"+result);
-//
-//                },
-//
-//            });
+            });
 
 //          $.get("http://us.battle.net/wow/en/item/" + id+ "/tooltip",function (data,err) {
 //             console.log(data);

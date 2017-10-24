@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
@@ -40,6 +42,7 @@ public class AuctionsSyncService {
     private String url;
 
 
+
     @Autowired
     public AuctionsSyncService(MongoAuctionsDao auctionsDao,
                                HttpReqHandler httpReqHandler,
@@ -58,6 +61,8 @@ public class AuctionsSyncService {
 
             String out =
                     httpReqHandler.getData(url );
+            if(StringUtils.isEmpty(out))
+                return;
 
             AuctionUrl local = getAuctionsDao().getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
