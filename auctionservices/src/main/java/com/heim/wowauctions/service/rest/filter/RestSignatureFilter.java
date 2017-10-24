@@ -38,7 +38,8 @@ public class RestSignatureFilter extends OncePerRequestFilter {
         if( request.getMethod().equals("OPTIONS")||
                 (!StringUtils.isEmpty(request.getPathInfo())&&
                         (request.getPathInfo().contains("/web/")||
-                request.getPathInfo().endsWith("index.html")))) {
+                request.getPathInfo().contains(".html")||
+                                request.getPathInfo().contains(".css")))) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -1,6 +1,6 @@
 <html lang="en" xml:lang="en">
 <head>
-    <link rel="shortcut icon" href="#" />
+    <link rel="shortcut icon" href="#"/>
     <meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
@@ -21,17 +21,35 @@
     <!-- code highlighting -->
     <link rel="stylesheet" href="//plot.ly/gh-pages/documentation/static/javascripts/codehighlight/styles/tomorrow.css">
     <link rel="stylesheet" type="text/css" href="//plot.ly/gh-pages/documentation/static/css/js-splash-highlight.css"/>
-
+    <link rel='stylesheet' type='text/css' media='all' href='wow.css' />
     <!-- Main Stylesheets -->
     <link rel="stylesheet" type="text/css" href="https://images.plot.ly/assets/css/normalize.css">
     <link rel="stylesheet" type="text/css"
           href="https://plot.ly/gh-pages/documentation/static//css/main.css?version=66c7ea55d3">
 
+    <style>
+        .item {
+            background-color: black;
+        }
+        .tooltip {
+            background-color: black;
+        }
+        body {
+            background-color: black;
+            color: lightgrey;
+        }
+        a {
+            text-decoration: none;
+            background-color: none;
+            color: gray;
+        }
+    </style>
+
 </head>
 
 <br>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-<div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+<div id="myDiv" style="width: 70%"><!-- Plotly chart will be drawn inside this DIV --></div>
 <script>
 
     window.onload = function () {
@@ -61,18 +79,18 @@
             var sum = arr.reduce(function (a, b) {
                 return a + b;
             });
-            var result=Math.round(sum / arr.length);
-            var price=result.toString();
+            var result = Math.round(sum / arr.length);
+            var price = result.toString();
             var len = price.length;
 
-            if(len>4) {
+            if (len > 4) {
                 price = price.substr(0, len - 4) + "g"
-                    + price.substr(len-2,len) + "s" + price.substr(len - 2, len) + "c";
+                    + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
             }
-            if(len>2&&len<=4) {
+            if (len > 2 && len <= 4) {
                 price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
             }
-            if(len<=2) {
+            if (len <= 2) {
                 price = price.substr(0, len) + "c";
             }
 
@@ -135,25 +153,67 @@
 
         }
 
+        function getItemFromWeb(id) {
+         $.ajax({
+                type: "GET",
+                url: "http://us.battle.net/wow/en/item/" + id+ "/tooltip",
+                crossDomain: true,
+                crossOrigin: true,
+
+                jsonpCallback:'myJsonMethod',
+                dataType: 'jsonp',
+                jsonp:'jsonp',
+                cache: false,
+                success: function (data,d1,d2) {
+                    var html = $.parseHTML(data);
+                    var el=document.getElementsByClassName('tooltip');
+                    el.htmlText=html;
+                },
+                error: function (data,d1,d2) {
+
+                    data.responseType = 'text';
+
+                    data.success(function (a,b,c) {
+                       console.log(a);
+                        console.log(b);
+                        console.log(c);
+                    });
+
+                    console.log(data.statusText);
+                }
+            });
+        }
+
         function runGetitems(name) {
 
-            name=name.trim();
-
+            name = name.trim();
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/wow/v1/web/items?name="+name,
+                url: "http://localhost:8080/wow/v1/web/items?name=" + name,
                 cache: false,
+                crossDomain: true,
                 success: function (data) {
-                    if(data.numberOfElements>0) {
+                    if (data.numberOfElements > 0) {
                         $("#table tbody").text("");
                         $("#tbl").show();
                         $.each(data.content, function (d, results) {
 
-                            debugger;
+
                             $("#table tbody").append(
-                                "<tr><td>name: </td><td><a href=\"#" +
-                                results.itemId + "\">" + results.item.name + "</a></td></tr>"
-                            )
+                                "<tr>" +
+                                "<td><a id=\""+results.item.id+"\" onmouseover='' href=\"#"
+                                + results.item.id + "\">" +
+                                "<div class='item'>" + results.item.name + "</div>" +
+                                "<div class='tooltip'></div></a></td>" +
+                                "<td>" + results.item.itemLevel + "</td>" +
+                                "<td>" + results.owner + "</td>" +
+                                "<td>" + results.bid + "</td>" +
+                                "<td>" + results.buyout + "</td>" +
+                                "<td>" + results.ppi + "</td>" +
+                                "<td>" + results.quantity + "</td>" +
+                                "</tr>"
+                            );
+                            setAhrefColor(results.item);
 
                         });
                     }
@@ -166,12 +226,45 @@
 
         }
 
+        function setAhrefColor(item) {
+            var quality = item.quality;
+            var ahref = document.getElementById(item.id);
 
-        $('#btn_search').on('click',function () {
-                runGetitems($('#search').val());
+            if (ahref && ahref !== null) {
+                ahref.onmouseover = getItemFromWeb(item.id);
+            //    ahref.addEventListener("mouseover", getItemFromWeb(item.id));
+
+                if (quality === 1) {
+                    ahref.style.color = '#ffffff';
+                }
+                else if (quality === 2) {
+                    ahref.style.color = '#1eff00';
+                }
+                else if (quality === 3) {
+                    ahref.style.color = '#0070dd';
+                }
+                else if (quality === 4) {
+                    ahref.style.color = '#a335ee';
+                }
+                else if (quality === 7) {
+                    ahref.style.color = '#e5cc80';
+                }
+            }
+        }
+
+        $('#btn_search').on('click', function () {
+            runGetitems($('#search').val());
         });
+        function myJsonMethod(response){
+            console.log (response);
+        }
+
 
     }
+    function myJsonMethod(response){
+        console.log (response);
+    }
+
 </script>
 
 </br>
@@ -182,12 +275,34 @@
 </div>
 
 
-<div id="tbl" style="padding-left: 50px;padding-top: 30pt;display:none;">
+<div id="tbl" style="background-color:black;padding-left: 50px;padding-top: 30pt;display:none;">
     <table id="table" border="1">
+        <thead>
+        <th>
+            name
+        </th>
+        <th>
+            ilvl
+        </th>
+        <th>
+            seller
+        </th>
+        <th>
+            bid
+        </th>
+        <th>
+            buyout
+        </th>
+        <th>
+            PPI
+        </th>
+        <th>
+            quantity
+        </th>
+        </thead>
         <tbody>
         </tbody>
     </table>
 </div>
 </body>
 </html>
-</jsp:root>
