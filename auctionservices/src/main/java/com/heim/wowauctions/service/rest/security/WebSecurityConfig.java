@@ -31,7 +31,7 @@ public class WebSecurityConfig extends
                 // No CSRF due to allowedMethod
               
                 if(allowedMethods.matcher(request.getMethod()).matches()
-                        ||request.getPathInfo().endsWith("test.html"))
+                        ||request.getPathInfo().endsWith("index.html"))
                     return false;
 
                 // No CSRF due to api call

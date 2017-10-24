@@ -35,7 +35,7 @@ public class RestSignatureFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         if( request.getMethod().equals("OPTIONS")||
-                request.getPathInfo().contains("/web/")||request.getPathInfo().endsWith("test.html")) {
+                request.getPathInfo().contains("/web/")||request.getPathInfo().endsWith("index.html")) {
             filterChain.doFilter(request, response);
             return;
         }
