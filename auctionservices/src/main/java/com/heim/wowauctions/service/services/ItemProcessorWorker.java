@@ -37,7 +37,7 @@ public class ItemProcessorWorker implements Runnable {
         try {
             processItem();
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         } finally {
             getService().releaseSemaphore();
         }
