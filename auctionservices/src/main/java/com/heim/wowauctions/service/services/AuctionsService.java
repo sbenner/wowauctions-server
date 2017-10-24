@@ -6,6 +6,7 @@ import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,6 +35,9 @@ public class AuctionsService {
 
     @Autowired
     private MongoAuctionsDao mongoService;
+
+    @Value("${wow.tooltip.url}")
+    private String tooltipUrl;
 
     @Autowired
     HttpReqHandler httpReqHandler;
@@ -64,18 +68,16 @@ public class AuctionsService {
         return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
     }
 
-
     public  Map<Long, Long>  getItemChart(long id){
        return mongoService.getItemStatistics(id);
     }
 
-    private final static String url="http://us.battle.net/wow/en/item/%s/tooltip";
     public String getTooltip(long id){
-        String localurl= String.format(url,id);
+        String localurl= String.format(tooltipUrl,id);
         String out = cache.get(id);
         if(StringUtils.isEmpty(out)) {
             out=httpReqHandler.getData(localurl);
-            cache.put(id,out);
+            cache.put(id,out.trim());
         }
         return out;
     }

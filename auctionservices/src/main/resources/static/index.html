@@ -21,7 +21,7 @@
     <!-- code highlighting -->
     <link rel="stylesheet" href="//plot.ly/gh-pages/documentation/static/javascripts/codehighlight/styles/tomorrow.css">
     <link rel="stylesheet" type="text/css" href="//plot.ly/gh-pages/documentation/static/css/js-splash-highlight.css"/>
-    <link rel='stylesheet' type='text/css' media='all' href='wow.css' />
+    <link rel='stylesheet' type='text/css' media='all' href='wow.css'/>
     <!-- Main Stylesheets -->
     <link rel="stylesheet" type="text/css" href="https://images.plot.ly/assets/css/normalize.css">
     <link rel="stylesheet" type="text/css"
@@ -31,29 +31,26 @@
         .item {
             background-color: black;
         }
+
         .tooltip {
             background-color: black;
         }
-        body {
-            background-color: black;
-            color: lightgrey;
-        }
+
         a {
             text-decoration: none;
             background-color: none;
-            color: gray;
         }
     </style>
 
 </head>
 
 <br>
-<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
 <div id="myDiv" style="width: 70%"><!-- Plotly chart will be drawn inside this DIV --></div>
 <script>
 
-    window.myJsonpCallback = function(data) {
-      console.log(data);
+    window.myJsonpCallback = function (data) {
+        console.log(data);
     };
 
     window.onload = function () {
@@ -68,6 +65,11 @@
                 //   $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                 var token = xhr.getResponseHeader('X-CSRF-TOKEN');
                 //runReq(token)
+
+                $(document).ajaxSend(function (e, xhr, options) {
+                    var header = "X-CSRF-TOKEN";
+                    xhr.setRequestHeader(header, token);
+                });
 
 
             },
@@ -157,78 +159,26 @@
 
         }
 
-        function createCORSRequest(method, url){
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr){
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined"){
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
 
         function getItemFromWeb(id) {
 
-//           var req= createCORSRequest("GET","http://us.battle.net/wow/en/item/" + id+ "/tooltip");
-//
-//            if (req){
-//                req.onload = function(){
-//                    console.log(req.responseText);
-//                    //do something with request.responseText
-//                };
-//                req.send();
-//            }
-//
-
-//
-            $.ajax( {
-                url:"http://localhost:8080/wow/v1/web/item/" + id,
-                method:'GET',
-                success: function(result){
-                  console.log(result);
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/wow/v1/web/item/" + id,
+                crossDomain: true,
+                cache: false,
+                dataType: 'text',
+                success: function (result) {
+                    var ele = document.getElementById('tooltip');
+                    ele.innerHTML = result;
+                    //console.log(result);
                 },
-                error: function(result){
-                    console.log("Error"+result);
-                },
-
+                error: function (result) {
+                    ele.setAttribute('title', result.responseText);
+                    console.log("Error" + result.responseText);
+                }
             });
 
-//          $.get("http://us.battle.net/wow/en/item/" + id+ "/tooltip",function (data,err) {
-//             console.log(data);
-//              console.log(err);
-//          });
-
-//         $.ajax({
-//                type: "GET",
-//                url: "http://us.battle.net/wow/en/item/" + id+ "/tooltip",
-//                crossDomain: true,
-//                crossOrigin: true,
-//
-//                jsonpCallback:'myJsonMethod',
-//                dataType: 'jsonp',
-//                jsonp:'jsonp',
-//                cache: false,
-//                success: function (data,d1,d2) {
-//                    var html = $.parseHTML(data);
-//                    var el=document.getElementsByClassName('tooltip');
-//                    el.htmlText=html;
-//                },
-//                error: function (data,d1,d2) {
-//
-//                    data.responseType = 'text';
-//
-//                    data.success(function (a,b,c) {
-//                       console.log(a);
-//                        console.log(b);
-//                        console.log(c);
-//                    });
-//
-//                    console.log(data.statusText);
-//                }
-//            });
         }
 
         function runGetitems(name) {
@@ -245,13 +195,12 @@
                         $("#tbl").show();
                         $.each(data.content, function (d, results) {
 
-
                             $("#table tbody").append(
                                 "<tr>" +
-                                "<td><a id=\""+results.item.id+"\" onmouseover='' href=\"#"
+                                "<td><a name=\""+results.auc+"\" id=\"" + results.item.id + "\" onmouseover='' href=\"#"
                                 + results.item.id + "\">" +
                                 "<div class='item'>" + results.item.name + "</div>" +
-                                "<div class='tooltip'></div></a></td>" +
+                                "<div id='tooltip'></div></a></td>" +
                                 "<td>" + results.item.itemLevel + "</td>" +
                                 "<td>" + results.owner + "</td>" +
                                 "<td>" + results.bid + "</td>" +
@@ -260,7 +209,7 @@
                                 "<td>" + results.quantity + "</td>" +
                                 "</tr>"
                             );
-                            setAhrefColor(results.item);
+                            setAhrefColor(results);
 
                         });
                     }
@@ -273,13 +222,15 @@
 
         }
 
-        function setAhrefColor(item) {
-            var quality = item.quality;
-            var ahref = document.getElementById(item.id);
+        function setAhrefColor(results) {
+            var quality = results.item.quality;
+            var ahref = $('#'+results.auc);
+
+            ahref.onmouseenter=getItemFromWeb(results.item.id)
+
 
             if (ahref && ahref !== null) {
-                ahref.onmouseover = getItemFromWeb(item.id);
-            //    ahref.addEventListener("mouseover", getItemFromWeb(item.id));
+
 
                 if (quality === 1) {
                     ahref.style.color = '#ffffff';
@@ -302,15 +253,10 @@
         $('#btn_search').on('click', function () {
             runGetitems($('#search').val());
         });
-        function myJsonMethod(response){
-            console.log (response);
-        }
 
 
     }
-    function myJsonMethod(response){
-        console.log (response);
-    }
+
 
 </script>
 
@@ -322,7 +268,7 @@
 </div>
 
 
-<div id="tbl" style="background-color:black;padding-left: 50px;padding-top: 30pt;display:none;">
+<div id="tbl" style="padding-left: 50px;padding-top: 30pt;display:none;">
     <table id="table" border="1">
         <thead>
         <th>
