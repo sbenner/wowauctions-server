@@ -52,6 +52,10 @@
 <div id="myDiv" style="width: 70%"><!-- Plotly chart will be drawn inside this DIV --></div>
 <script>
 
+    window.myJsonpCallback = function(data) {
+      console.log(data);
+    };
+
     window.onload = function () {
 
         $.ajax({
@@ -63,7 +67,7 @@
 
                 //   $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                 var token = xhr.getResponseHeader('X-CSRF-TOKEN');
-                runReq(token)
+                //runReq(token)
 
 
             },
@@ -153,35 +157,97 @@
 
         }
 
+        function createCORSRequest(method, url){
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr){
+                xhr.open(method, url, true);
+            } else if (typeof XDomainRequest != "undefined"){
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+            } else {
+                xhr = null;
+            }
+            return xhr;
+        }
+
         function getItemFromWeb(id) {
-         $.ajax({
-                type: "GET",
-                url: "http://us.battle.net/wow/en/item/" + id+ "/tooltip",
-                crossDomain: true,
-                crossOrigin: true,
 
-                jsonpCallback:'myJsonMethod',
-                dataType: 'jsonp',
-                jsonp:'jsonp',
-                cache: false,
-                success: function (data,d1,d2) {
-                    var html = $.parseHTML(data);
-                    var el=document.getElementsByClassName('tooltip');
-                    el.htmlText=html;
-                },
-                error: function (data,d1,d2) {
+           var req= createCORSRequest("GET","http://us.battle.net/wow/en/item/" + id+ "/tooltip");
 
-                    data.responseType = 'text';
+            if (req){
+                req.onload = function(){
+                    console.log(req.responseText);
+                    //do something with request.responseText
+                };
+                req.send();
+            }
 
-                    data.success(function (a,b,c) {
-                       console.log(a);
-                        console.log(b);
-                        console.log(c);
-                    });
 
-                    console.log(data.statusText);
-                }
-            });
+//
+//            $.ajax( {
+//                url:"http://us.battle.net/wow/en/item/" + id+ "/tooltip?format=jsonp",
+//                crossOrigin:true,
+//                jsonpCallback:'myJsonMethod',
+//                accepts: {
+//                    mycustomtype: 'text/html'
+//                },
+//                headers: {"Content-Type":"text/plain; charset=utf-8", "Accept": "*"},
+//                converters: {
+//                    'text mycustomtype': function(result) {
+//                        // Do Stuff
+//                        console.log(result);
+//                        return newresult;
+//                    }
+//                },
+//                dataType: 'jsonp',
+//
+//                success: function(result){
+//
+//                  console.log(result);
+//
+//                },
+//
+//                error: function(result){
+//
+//                    console.log("Error"+result);
+//
+//                },
+//
+//            });
+
+//          $.get("http://us.battle.net/wow/en/item/" + id+ "/tooltip",function (data,err) {
+//             console.log(data);
+//              console.log(err);
+//          });
+
+//         $.ajax({
+//                type: "GET",
+//                url: "http://us.battle.net/wow/en/item/" + id+ "/tooltip",
+//                crossDomain: true,
+//                crossOrigin: true,
+//
+//                jsonpCallback:'myJsonMethod',
+//                dataType: 'jsonp',
+//                jsonp:'jsonp',
+//                cache: false,
+//                success: function (data,d1,d2) {
+//                    var html = $.parseHTML(data);
+//                    var el=document.getElementsByClassName('tooltip');
+//                    el.htmlText=html;
+//                },
+//                error: function (data,d1,d2) {
+//
+//                    data.responseType = 'text';
+//
+//                    data.success(function (a,b,c) {
+//                       console.log(a);
+//                        console.log(b);
+//                        console.log(c);
+//                    });
+//
+//                    console.log(data.statusText);
+//                }
+//            });
         }
 
         function runGetitems(name) {
