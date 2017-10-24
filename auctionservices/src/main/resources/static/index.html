@@ -1,6 +1,6 @@
 <html lang="en" xml:lang="en">
 <head>
-
+    <link rel="shortcut icon" href="#" />
     <meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
@@ -61,7 +61,22 @@
             var sum = arr.reduce(function (a, b) {
                 return a + b;
             });
-            return sum / arr.length;
+            var result=Math.round(sum / arr.length);
+            var price=result.toString();
+            var len = price.length;
+
+            if(len>4) {
+                price = price.substr(0, len - 4) + "g"
+                    + price.substr(len-2,len) + "s" + price.substr(len - 2, len) + "c";
+            }
+            if(len>2&&len<=4) {
+                price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
+            }
+            if(len<=2) {
+                price = price.substr(0, len) + "c";
+            }
+
+            return price;
         };
 
 
@@ -102,10 +117,10 @@
 
                     var grouped = dt.groupBy('x');
 
-                    var dt1 = {mode: 'markers', x: [], y: []};
+                    var dt1 = {mode: 'markers+lines', x: [], y: []};
                     for (p in grouped) {
                         dt1.x.push(p);
-                        dt1.y.push(avg(grouped[p]) / 1000);
+                        dt1.y.push(avg(grouped[p]));
                     }
 
                     console.log(dt1);
