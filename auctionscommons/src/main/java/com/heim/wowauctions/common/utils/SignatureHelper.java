@@ -40,8 +40,6 @@ public class SignatureHelper {
     private static final String ALGORITHM = "DSA";
 
     public static <T> String createSignature(T request, String privateKey) throws Exception {
-
-
         String sortedUrl = createSortedUrl(request);
 
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -50,8 +48,8 @@ public class SignatureHelper {
         Signature sig = Signature.getInstance(ALGORITHM);
         sig.initSign(keyFactory.generatePrivate(privateKeySpec));
 
-
-        sig.update(StringUtils.getBytesUtf8(sortedUrl));
+        if(!org.springframework.util.StringUtils.isEmpty(sortedUrl))
+            sig.update(StringUtils.getBytesUtf8(sortedUrl));
 
         return Base64.encodeBase64String(sig.sign());
     }
