@@ -32,7 +32,8 @@ public class WebSecurityConfig extends
               
                 if(allowedMethods.matcher(request.getMethod()).matches()
                         ||(request.getPathInfo().endsWith(".html")||
-                            request.getPathInfo().endsWith(".css")))
+                            request.getPathInfo().endsWith(".css")||
+                        request.getPathInfo().endsWith(".png")))
                     return false;
 
                 // No CSRF due to api call

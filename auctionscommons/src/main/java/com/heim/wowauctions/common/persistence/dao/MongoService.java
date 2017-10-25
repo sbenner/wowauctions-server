@@ -74,6 +74,10 @@ public class MongoService {
 
     }
 
+    public void deleteItemChartData(){
+        itemChartDataRepository.deleteAll();
+    }
+
     public ItemChartData saveItemChart(ItemChartData data){
         return itemChartDataRepository.save(data);
     }

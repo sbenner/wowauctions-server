@@ -54,10 +54,6 @@
 
 <script>
 
-    window.myJsonpCallback = function (data) {
-        console.log(data);
-    };
-
     window.onload = function () {
 
         $.ajax({
@@ -66,7 +62,6 @@
             cache: false,
             async: true,
             success: function (data, opts, xhr) {
-                console.log(xhr.getAllResponseHeaders());
 
                 //   $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                 var token = xhr.getResponseHeader('X-CSRF-TOKEN');
@@ -80,7 +75,7 @@
 
             },
             error: function (data) {
-                console.log(data.statusText);
+
             }
         });
 
@@ -149,14 +144,13 @@
                         dt1.y.push(avg(grouped[p]));
                     }
 
-                    console.log(dt1);
 
                     Plotly.newPlot('chartDiv', [dt1]);
 
-                    // $("#resultarea").text(data);
+
                 },
                 error: function (data) {
-                    console.log(data.statusText);
+
                 }
             });
 
@@ -198,7 +192,6 @@
                     }
                 },
                 error: function (data) {
-                    console.log(data.statusText);
                 }
             });
         }
@@ -217,12 +210,11 @@
                     //var tooltip = ele.firstChild;
                     ele.style.display = 'block';
                     ele.innerHTML = result;
-                    console.log(result);
-                    //console.log(result);
+
                 },
                 error: function (result, a, err) {
                     // ele.setAttribute('title', result.responseText);
-                    console.log("Error" + err);
+
                 }
             });
 
@@ -241,12 +233,10 @@
 
 
             ahref.onmouseover = function () {
-                console.log(this);
                 getItemFromWeb(results.item.id, tooltip);
             };
 
             ahref.onmouseout = function () {
-                //console.log(this);
                 tooltip.innerHTML = "";
                 tooltip.style.display = 'none';
             };
@@ -291,7 +281,7 @@
 
 </br>
 <div style="padding-left: 50px;" align="center">
-    <img src="ooktioneer.png" style="width: 50%">
+    <img src="/wow/v1/ooktioneer.png" style="width: 50%">
 
     </br>
     </br>
@@ -329,6 +319,7 @@
         </tbody>
     </table>
 </div>
-<div id="chartDiv" align="center" style="width: 70%;"><!-- Plotly chart will be drawn inside this DIV --></div>
+<div id="chartDiv"
+     align="center" style="padding-left: 50px;"><!-- Plotly chart will be drawn inside this DIV --></div>
 </body>
 </html>

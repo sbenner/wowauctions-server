@@ -107,6 +107,7 @@ public class SparkService {
         }
         long timestamp = mongoAuctionsDao.getAuctionsUrl().getLastModified();
 
+        mongoService.deleteItemChartData();
         for (Map.Entry<Long, ItemChartData> e : map.entrySet()) {
             ItemChartData i = e.getValue();
             i.setTimestamp(timestamp);
