@@ -48,8 +48,7 @@ public class SparkService {
     }
 
     @Scheduled(fixedRate = 3600000)
-    public Long count() {
-
+    public void count() {
 
         Dataset<ArchivedAuction> explicitDS =
                 MongoSpark.load(javaSparkContext).toDS(ArchivedAuction.class);
@@ -60,13 +59,14 @@ public class SparkService {
         Dataset<Row> centenarians = sparkSession.
                 sql("SELECT itemId,buyout,quantity,timestamp from archive group by itemId,buyout,quantity,timestamp order by buyout");
 
-
         StructType schema =
-                new StructType().add("itemId", LongType).add("buyout", LongType).add("quantity", IntegerType).add("timestamp", LongType);
-
+                new StructType()
+                        .add("itemId", LongType)
+                        .add("buyout", LongType)
+                        .add("quantity", IntegerType)
+                        .add("timestamp", LongType);
 
         List<Row> modified =
-
                 centenarians.map((MapFunction<Row, Row>) r ->
                         {
                             int quantity = r.getInt(2);
@@ -78,42 +78,41 @@ public class SparkService {
                                 return r;
                             }
                         }, RowEncoder.apply(schema)
-                ).collectAsList();//.write().option("collection", "archivedCharts").mode("overwrite").save();
+                ).collectAsList();
+        //.write().option("collection", "archivedCharts").mode("overwrite").save();
 
 
         Map<Long, ItemChartData> map = new HashMap<>();
         ItemChartData itemChartData = null;
         for (Row r : modified) {
             Long id = r.getAs(0);
-            if (id != null && map.containsKey(id)) {
-                itemChartData = map.get(id);
-                long value = r.getAs(1);
-                long timestamp = r.getAs(3);
-                itemChartData.getValueTime().put(value, timestamp);
-                map.put(id, itemChartData);
-            } else {
-                itemChartData = new ItemChartData();
-                itemChartData.setItemId(id);
-                Map<Long, Long> values = new HashMap<>();
-                long value = r.getAs(1);
-                long timestamp = r.getAs(3);
-                values.put(value, timestamp);
-                itemChartData.setValueTime(values);
+            if (id != null) {
+                if (map.containsKey(id)) {
+                    itemChartData = map.get(id);
+                    long value = r.getAs(1);
+                    long timestamp = r.getAs(3);
+                    itemChartData.getValueTime().put(value, timestamp);
+                } else {
+                    itemChartData = new ItemChartData();
+                    itemChartData.setItemId(id);
+                    Map<Long, Long> values = new HashMap<>();
+                    long value = r.getAs(1);
+                    long timestamp = r.getAs(3);
+                    values.put(value, timestamp);
+                    itemChartData.setValueTime(values);
+                }
                 map.put(id, itemChartData);
             }
 
         }
         long timestamp = mongoAuctionsDao.getAuctionsUrl().getLastModified();
-
         mongoService.deleteItemChartData();
-        for (Map.Entry<Long, ItemChartData> e : map.entrySet()) {
-            ItemChartData i = e.getValue();
-            i.setTimestamp(timestamp);
-            mongoService.saveItemChart(i);
-        }
+        map.forEach((key, value) -> {
+            value.setTimestamp(timestamp);
+            mongoService.saveItemChart(value);
+        });
 
         System.out.println("#################################################################");
-        return 0L;
     }
 }
 
