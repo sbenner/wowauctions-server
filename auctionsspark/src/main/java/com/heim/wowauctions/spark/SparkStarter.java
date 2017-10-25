@@ -1,7 +1,12 @@
 package com.heim.wowauctions.spark;
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.mongodb.Mongo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -10,7 +15,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
-@ComponentScan(basePackages = {"com.heim.wowauctions.common.persistence","com.heim.wowauctions.spark"})
+@ComponentScan(basePackages = {"com.heim.wowauctions.common.persistence",
+        "com.heim.wowauctions.spark"})
 public class SparkStarter {
 
 

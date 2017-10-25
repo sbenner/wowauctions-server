@@ -1,7 +1,7 @@
 package com.heim.wowauctions.service.services;
 
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +32,7 @@ public class AuctionMasterServerSyncService {
     @Autowired
     HttpReqHandler httpReqHandler;
     @Autowired
-    private MongoAuctionsDao auctionsDao;
+    private MongoService mongoService;
 
     @Scheduled(fixedRate = 3600000)
     public void retrieveServerAuction() {
@@ -45,7 +42,7 @@ public class AuctionMasterServerSyncService {
             String realms = httpReqHandler.getData(url);
 
             List<Realm> realmList = AuctionUtils.parseRealms(realms);
-            getAuctionsDao().saveRealms(realmList);
+            mongoService.saveRealms(realmList);
 
             PriorityQueue<Realm>
                     queueToArchive = new PriorityQueue<>();
@@ -71,11 +68,4 @@ public class AuctionMasterServerSyncService {
 
     }
 
-    public MongoAuctionsDao getAuctionsDao() {
-        return auctionsDao;
-    }
-
-    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
-        this.auctionsDao = auctionsDao;
-    }
 }

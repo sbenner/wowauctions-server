@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public interface ItemChartDataRepository extends PagingAndSortingRepository<ItemChartData, Long> {
 
-    Page<ItemChartData> findByItemId(Long itemId, Pageable pageable);
+   // ItemChartData findByItemId(Long itemId, Pageable pageable);
 
-    List<ItemChartData> findByItemId(Long itemId);
+    ItemChartData findByItemId(Long itemId);
 
-    List<ItemChartData> findByTimestampBetween(long from, long to, long itemId);
+   // ItemChartData findByTimestampBetween(long from, long to, long itemId);
 
 }

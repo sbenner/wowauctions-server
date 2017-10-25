@@ -31,11 +31,6 @@ import java.util.Properties;
 @EnableCaching
 public class AuctionServiceStarter {
 
-    @Autowired
-    Mongo mongo;
-
-    @Value("${spring.data.mongodb.database}")
-    private String database;
 
     public static void main(String[] args) {
         Class cls = AuctionServiceStarter.class;
@@ -58,6 +53,12 @@ public class AuctionServiceStarter {
         return new RestTemplate(httpRequestFactory);
     }
 
+
+    @Autowired
+    Mongo mongo;
+
+    @Value("${spring.data.mongodb.database}")
+    private String database;
     @Bean
     String database() {
         return database;

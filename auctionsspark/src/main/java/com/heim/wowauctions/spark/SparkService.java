@@ -2,6 +2,7 @@ package com.heim.wowauctions.spark;
 
 
 import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.persistence.models.ItemChartData;
@@ -30,20 +31,22 @@ import static org.apache.spark.sql.types.DataTypes.LongType;
 public class SparkService {
 
 
-    private final
-    ItemChartDataRepository itemChartDataRepository;
+
     private final SparkSession sparkSession;
     private final JavaSparkContext javaSparkContext;
 
     @Autowired
     private MongoAuctionsDao mongoAuctionsDao;
 
+    @Autowired
+    private MongoService mongoService;
+
+
 
     @Autowired
     public SparkService(SparkSession sparkSession, JavaSparkContext javaSparkContext, ItemChartDataRepository itemChartDataRepository) {
         this.sparkSession = sparkSession;
         this.javaSparkContext = javaSparkContext;
-        this.itemChartDataRepository = itemChartDataRepository;
     }
 
     public Long count() {
@@ -56,7 +59,7 @@ public class SparkService {
         explicitDS.createOrReplaceTempView("archive");
 
         Dataset<Row> centenarians = sparkSession.
-                sql("SELECT itemId,buyout,quantity,timestamp from archive where itemId='38925' group by itemId,buyout,quantity,timestamp order by buyout");
+                sql("SELECT itemId,buyout,quantity,timestamp from archive group by itemId,buyout,quantity,timestamp order by buyout");
 
 
         StructType schema =
@@ -107,7 +110,7 @@ public class SparkService {
         for (Map.Entry<Long, ItemChartData> e : map.entrySet()) {
             ItemChartData i = e.getValue();
             i.setTimestamp(timestamp);
-            itemChartDataRepository.save(i);
+            mongoService.saveItemChart(i);
         }
 
         System.out.println("#################################################################");

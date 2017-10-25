@@ -20,11 +20,10 @@ public class ArchiveSaver implements Runnable {
     private MongoAuctionsDao mongoAuctionsDao;
     private AuctionsSyncService service;
 
-    public ArchiveSaver(AuctionsSyncService service, Auction auction) {
-
-        setMongoAuctionsDao(service.getAuctionsDao());
-        setService(service);
-        setAuction(auction);
+    public ArchiveSaver(AuctionsSyncService service, Auction auction,MongoAuctionsDao mongoAuctionsDao) {
+        this.mongoAuctionsDao=mongoAuctionsDao;
+        this.service=service;
+        this.auction=auction;
     }
 
     public void run() {
@@ -33,31 +32,8 @@ public class ArchiveSaver implements Runnable {
     }
 
     private void processItem() {
-        mongoAuctionsDao.archiveAuctions(getAuction());
-        getService().getSemaphore().release();
+        mongoAuctionsDao.archiveAuctions(auction);
+        service.getSemaphore().release();
     }
 
-    private MongoAuctionsDao getMongoAuctionsDao() {
-        return mongoAuctionsDao;
-    }
-
-    private void setMongoAuctionsDao(MongoAuctionsDao mongoAuctionsDao) {
-        this.mongoAuctionsDao = mongoAuctionsDao;
-    }
-
-    public AuctionsSyncService getService() {
-        return service;
-    }
-
-    public void setService(AuctionsSyncService service) {
-        this.service = service;
-    }
-
-    public Auction getAuction() {
-        return auction;
-    }
-
-    public void setAuction(Auction auction) {
-        this.auction = auction;
-    }
 }

@@ -33,15 +33,15 @@
         }
 
         .tooltip {
-            display:block;
-            background-color:black;
-            border-radius:5px;
-            color:white;
-            box-shadow:1px 1px 3px gray;
+            display: block;
+            background-color: black;
+            border-radius: 5px;
+            color: white;
+            box-shadow: 1px 1px 3px gray;
             position: fixed;
             padding-left: 0px;
             max-width: 250px;
-            left:250px;
+            left: 250px;
             z-index: 999;
         }
 
@@ -64,7 +64,7 @@
             type: "OPTIONS",
             url: "http://localhost:8080/",
             cache: false,
-            async:true,
+            async: true,
             success: function (data, opts, xhr) {
                 console.log(xhr.getAllResponseHeaders());
 
@@ -83,8 +83,6 @@
                 console.log(data.statusText);
             }
         });
-
-
 
 
         var avg = function (arr) {
@@ -124,9 +122,9 @@
 
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/wow/v1/web/itemchart?id="+id,
+                url: "http://localhost:8080/wow/v1/web/itemchart?id=" + id,
                 cache: false,
-                async:true,
+                async: true,
                 success: function (data) {
                     var dt = [];
                     for (var p in data) {
@@ -145,7 +143,7 @@
 
                     var grouped = dt.groupBy('x');
 
-                    var dt1 = {mode: 'markers+lines', x: [], y: []};
+                    var dt1 = {mode: 'markers', x: [], y: []};
                     for (p in grouped) {
                         dt1.x.push(p);
                         dt1.y.push(avg(grouped[p]));
@@ -172,7 +170,7 @@
                 type: "GET",
                 url: "http://localhost:8080/wow/v1/web/items?name=" + name,
                 cache: false,
-                async:true,
+                async: true,
                 crossDomain: true,
                 success: function (data) {
                     if (data.numberOfElements > 0) {
@@ -184,7 +182,7 @@
                                 "<tr >" +
                                 "<td >" +
                                 "<a name='" + results.auc + "' id='" + results.item.id +
-                                "' href='#' onclick='return false;'>"+results.item.name+"</a>" +
+                                "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
                                 "<div  id='tooltip' class='tooltip'></div></td>" +
                                 "<td>" + results.item.itemLevel + "</td>" +
                                 "<td>" + results.owner + "</td>" +
@@ -206,24 +204,24 @@
         }
 
 
-        function getItemFromWeb(id,ele) {
+        function getItemFromWeb(id, ele) {
 
             $.ajax({
                 type: 'GET',
                 url: "http://localhost:8080/wow/v1/web/item/" + id,
                 crossDomain: true,
                 cache: false,
-                async:true,
+                async: true,
                 dataType: 'text',
                 success: function (result) {
                     //var tooltip = ele.firstChild;
                     ele.style.display = 'block';
-                    ele.innerHTML=result;
+                    ele.innerHTML = result;
                     console.log(result);
                     //console.log(result);
                 },
-                error: function (result,a,err) {
-                   // ele.setAttribute('title', result.responseText);
+                error: function (result, a, err) {
+                    // ele.setAttribute('title', result.responseText);
                     console.log("Error" + err);
                 }
             });
@@ -233,25 +231,26 @@
 
         function setAhrefColor(results) {
             var quality = results.item.quality;
-            var ahref= document.getElementsByName(results.auc)[0];
-            var tooltip=document.getElementById('tooltip');
+            var ahref = document.getElementsByName(results.auc)[0];
+            var tooltip = document.getElementById('tooltip');
 
             ahref.onclick = function () {
+                $("#tbl").hide();
                 runChart(results.item.id);
             };
 
 
-            ahref.onmouseover= function() {
+            ahref.onmouseover = function () {
                 console.log(this);
-                getItemFromWeb(results.item.id,tooltip);
+                getItemFromWeb(results.item.id, tooltip);
             };
 
-            ahref.onmouseout= function() {
+            ahref.onmouseout = function () {
                 //console.log(this);
-                tooltip.innerHTML="" ;
+                tooltip.innerHTML = "";
                 tooltip.style.display = 'none';
             };
-            
+
             if (ahref && ahref !== null) {
 
 
@@ -277,26 +276,31 @@
             runGetitems($('#search').val());
         });
 
-        $("#search").on("keydown",function search(e) {
-            if(e.keyCode == 13) {
-                
+        $("#search").on("keydown", function search(e) {
+            if (e.keyCode == 13) {
+
                 runGetitems($(this).val());
             }
         });
 
-        
+
     }
 
 
 </script>
 
 </br>
-<div style="padding-left: 50px">
-    <input type="text" name="search"  id="search" style="width: 200px; height: 20px"/>
+<div style="padding-left: 50px;" align="center">
+    <img src="ooktioneer.png" style="width: 50%">
+
+    </br>
+    </br>
+    <input type="text" name="search" id="search" style="width: 200px; height: 20px"/>
+    </br>
     </br>
     <input type="button" id="btn_search" name="btn_search" value="Search" style="width: 70px"/>
 </div>
-<div id="tbl" style="padding-left: 50px;padding-top: 30pt;">
+<div id="tbl" align="center" style="display:none;padding-left: 50px;padding-top: 30pt;">
     <table id="table" border="1">
         <thead>
         <th>
@@ -325,6 +329,6 @@
         </tbody>
     </table>
 </div>
-<div id="chartDiv" style="width: 70%;"><!-- Plotly chart will be drawn inside this DIV --></div>
+<div id="chartDiv" align="center" style="width: 70%;"><!-- Plotly chart will be drawn inside this DIV --></div>
 </body>
 </html>

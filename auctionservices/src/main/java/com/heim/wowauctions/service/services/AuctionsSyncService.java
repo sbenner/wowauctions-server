@@ -2,6 +2,7 @@ package com.heim.wowauctions.service.services;
 
 
 import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.utils.AuctionUtils;
@@ -41,16 +42,18 @@ public class AuctionsSyncService {
     @Value("${wow.auctions.url}")
     private String url;
 
-
+    final
+    MongoService mongoService;
 
     @Autowired
     public AuctionsSyncService(MongoAuctionsDao auctionsDao,
                                HttpReqHandler httpReqHandler,
-                               TaskExecutor taskExecutor, String realm) {
+                               TaskExecutor taskExecutor, String realm, MongoService mongoService) {
         this.auctionsDao = auctionsDao;
         this.httpReqHandler = httpReqHandler;
         this.taskExecutor = taskExecutor;
         this.realm = realm;
+        this.mongoService = mongoService;
     }
 
     @Scheduled(fixedRate = 180000)
@@ -64,7 +67,7 @@ public class AuctionsSyncService {
             if(StringUtils.isEmpty(out))
                 return;
 
-            AuctionUrl local = getAuctionsDao().getAuctionsUrl();
+            AuctionUrl local = auctionsDao.getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
             logger.info("local " + local.toString());
@@ -72,14 +75,14 @@ public class AuctionsSyncService {
 
             if (local.getLastModified() == null ||
                     local.getLastModified() < remote.getLastModified() ||
-                    getAuctionsDao().getAuctionsCount() == 0) {
+                    mongoService.getAuctionsCount() == 0) {
 
                 logger.info(format("local.getLastModified() %s", local.getLastModified()));
 
                 logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
 
                 logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
-                logger.info(format("getAuctionsDao().getAuctionsCount() %s", getAuctionsDao().getAuctionsCount()));
+                logger.info(format("auctionsDao.getAuctionsCount() %s", mongoService.getAuctionsCount()));
 
                 //get new auctions
                 String auctionsString = httpReqHandler.getData(remote.getUrl());
@@ -88,22 +91,23 @@ public class AuctionsSyncService {
                     List<Auction> auctions = AuctionUtils.
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
 
-                    getAuctionsDao().insertAll(auctions);
+                    auctionsDao.insertAll(auctions);
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
-                    queueToArchive.addAll(getAuctionsDao().findAuctionsToArchive(remote.getLastModified()));
+                    queueToArchive.addAll(auctionsDao.findAuctionsToArchive(remote.getLastModified()));
 
-                    getAuctionsDao().removeArchivedAuctions(remote.getLastModified());
+                    auctionsDao.removeArchivedAuctions(remote.getLastModified());
 
                     while (!queueToArchive.isEmpty()) {
                         logger.info("q size: " + queueToArchive.size());
                         getSemaphore().acquire();
-                        taskExecutor.execute(new ArchiveSaver(this, queueToArchive.poll()));
+                        taskExecutor.execute(
+                                new ArchiveSaver(this, queueToArchive.poll(),auctionsDao));
                     }
 
                     if (local.getUrl() == null) {
-                        getAuctionsDao().insertAuctionsUrlData(remote);
+                        auctionsDao.insertAuctionsUrlData(remote);
                     } else {
-                        getAuctionsDao().updateAuctionsUrl(remote);
+                        auctionsDao.updateAuctionsUrl(remote);
                     }
 
                 }
@@ -117,9 +121,6 @@ public class AuctionsSyncService {
 
     }
 
-    MongoAuctionsDao getAuctionsDao() {
-        return auctionsDao;
-    }
 
     Semaphore getSemaphore() {
         return semaphore;

@@ -1,6 +1,6 @@
 package com.heim.wowauctions.service.services;
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.HttpRequestHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +28,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AuctionsService {
 
 
-    private static ConcurrentHashMap<Long,String> cache =new ConcurrentHashMap<>();
-
+    private static ConcurrentHashMap<Long, String> cache = new ConcurrentHashMap<>();
     @Autowired
-    private MongoAuctionsDao mongoService;
-
+    HttpReqHandler httpReqHandler;
+    @Autowired
+    private MongoService mongoService;
     @Value("${wow.tooltip.url}")
     private String tooltipUrl;
 
-    @Autowired
-    HttpReqHandler httpReqHandler;
-
-    public Page<Auction> getAuctions(String name,int pageSize,boolean exact,int page){
+    public Page<Auction> getAuctions(String name, int pageSize, boolean exact, int page) {
         //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
         List<Item> items;
         if (!exact)
@@ -68,16 +62,16 @@ public class AuctionsService {
         return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
     }
 
-    public  Map<Long, Long>  getItemChart(long id){
-       return mongoService.getItemStatistics(id);
+    public Map<Long, Long> getItemChart(long id) {
+        return mongoService.getItemStatistics(id);
     }
 
-    public String getTooltip(long id){
-        String localurl= String.format(tooltipUrl,id);
+    public String getTooltip(long id) {
+        String localurl = String.format(tooltipUrl, id);
         String out = cache.get(id);
-        if(StringUtils.isEmpty(out)) {
-            out=httpReqHandler.getData(localurl).replaceAll("[\n\t\r]", "");
-            cache.put(id,out.trim());
+        if (StringUtils.isEmpty(out)) {
+            out = httpReqHandler.getData(localurl).replaceAll("[\n\t\r]", "");
+            cache.put(id, out.trim());
         }
         return out;
     }
