@@ -22,7 +22,7 @@ public class WebSecurityConfig extends
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().requireCsrfProtectionMatcher(new RequestMatcher() {
-            private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
+            private Pattern allowedMethods = Pattern.compile("^(HEAD|TRACE|OPTIONS)$");
             private RegexRequestMatcher apiMatcher =
                     new RegexRequestMatcher("/v[0-9]*/web/.*", null);
 
@@ -31,7 +31,8 @@ public class WebSecurityConfig extends
                 // No CSRF due to allowedMethod
               
                 if(allowedMethods.matcher(request.getMethod()).matches()
-                        ||request.getPathInfo().endsWith("index.html"))
+                        ||(request.getPathInfo().endsWith(".html")||
+                            request.getPathInfo().endsWith(".css")))
                     return false;
 
                 // No CSRF due to api call

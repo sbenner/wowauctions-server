@@ -31,9 +31,6 @@ public class CsrfTokenResponseHeaderBindingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, javax.servlet.FilterChain filterChain) throws ServletException, IOException {
         response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
-        //response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "x-requested-with,Access-Control-Expose-Headers,X-CSRF-TOKEN,X-CSRF-PARAM,X-CSRF-HEADER,*");
-        //response.addHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with,Access-Control-Expose-Headers,X-CSRF-TOKEN,X-CSRF-PARAM,X-CSRF-HEADER,*");
-        //response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
         response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "OPTIONS,GET,POST");
 
         //CsrfToken token = (CsrfToken) request.getSession().getAttribute(DEFAULT_CSRF_TOKEN_ATTR_NAME);
