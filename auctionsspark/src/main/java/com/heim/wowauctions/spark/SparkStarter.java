@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by sbenner on 06/06/2017.
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
 @ComponentScan(basePackages = {"com.heim.wowauctions.common.persistence",
         "com.heim.wowauctions.spark"})
+@EnableScheduling
 public class SparkStarter {
 
 
