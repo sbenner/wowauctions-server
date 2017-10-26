@@ -149,7 +149,6 @@ public class SignatureHelper {
             logger.info("value " + e.getValue());
         }
 
-
         String params =
                 headersAndParams.get("query") != null ? headersAndParams.get("query") : "";
 

@@ -170,6 +170,7 @@
                     if (data.numberOfElements > 0) {
                         $("#table tbody").text("");
                         $("#tbl").show();
+                        $("#chartDiv").hide();
                         $.each(data.content, function (d, results) {
 
                             $("#table tbody").append(
@@ -228,6 +229,7 @@
 
             ahref.onclick = function () {
                 $("#tbl").hide();
+                $("#chartDiv").show();
                 runChart(results.item.id);
             };
 
@@ -245,18 +247,19 @@
 
 
                 if (quality === 1) {
-                    ahref.color = '#ffffff';
+
+                    ahref.style.cssText='color:#ffffff';
                 }
-                else if (quality === 2) {
+                if (quality === 2) {
                     ahref.color = '#1eff00';
                 }
-                else if (quality === 3) {
+                if (quality === 3) {
                     ahref.color = '#0070dd';
                 }
-                else if (quality === 4) {
+                if (quality === 4) {
                     ahref.color = '#a335ee';
                 }
-                else if (quality === 7) {
+                if (quality === 7) {
                     ahref.color = '#e5cc80';
                 }
             }

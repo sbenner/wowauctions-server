@@ -51,7 +51,8 @@ public class MongoService {
     public List<Item> findItemByExactName(String name) {
         return itemRepository.findItemsByNameRegexExactMatch(name);
     }
-    public long getAuctionsCount(){
+
+    public long getAuctionsCount() {
         return auctionRepository.count();
     }
 
@@ -69,21 +70,27 @@ public class MongoService {
 
 
     public Map<Long, Long> getItemStatistics(long itemId) {
+        ItemChartData
+                item =
+        itemChartDataRepository.findByItemId(itemId);
+        if (item != null)
+            return item.getValueTime();
+        else
+            return null;
 
-        return itemChartDataRepository.findByItemId(itemId).getValueTime();
 
     }
 
-    public void deleteItemChartData(){
+    public void deleteItemChartData() {
         itemChartDataRepository.deleteAll();
     }
 
-    public ItemChartData saveItemChart(ItemChartData data){
+    public ItemChartData saveItemChart(ItemChartData data) {
         return itemChartDataRepository.save(data);
     }
 
 
-    public void saveRealms(List<Realm> realmList){
+    public void saveRealms(List<Realm> realmList) {
         realmRepository.save(realmList);
     }
 
