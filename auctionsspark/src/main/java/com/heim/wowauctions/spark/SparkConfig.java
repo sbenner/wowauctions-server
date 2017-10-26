@@ -34,6 +34,7 @@ public class SparkConfig {
 //                .set("spark.driver.memory","5g")
 //                .set("spark.executor.memory","4g")
                // .set("spark.executor.cores","7")
+                .set("spark.memory.offHeap.size","2147483648")
                 .set("spark.memory.offHeap.enabled","true")
                 .set("spark.mongodb.input.partitionerOptions.partitionSizeMB","512")
                 .set("spark.mongodb.input.partitionerOptions.partitionKey","itemId")
