@@ -3,4 +3,5 @@ data
 config
 .idea
 *.log
+remote.js
 application.properties
