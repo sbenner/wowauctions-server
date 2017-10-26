@@ -30,7 +30,9 @@ public class WebSecurityConfig extends
             @Override
             public boolean matches(HttpServletRequest request) {
                 // No CSRF due to allowedMethod
-                if(StringUtils.isEmpty(request.getPathInfo()))return false;
+                if(StringUtils.isEmpty(request.getPathInfo())
+                        ||
+                        request.getPathInfo().contains("/mobi/"))return false;
               
                 if(allowedMethods.matcher(request.getMethod()).matches()
                         ||(request.getPathInfo().endsWith(".html")||
