@@ -56,31 +56,27 @@ public class RestSignatureFilter extends OncePerRequestFilter {
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
 
             if (!SignatureHelper.validateTimestamp(timestamp)) {
-                logger.error("BAD REQUEST invalid timestamp");
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
 
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            logger.error("BAD REQUEST invalid timestamp");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         if (signature == null || apiKey == null) {
-            logger.error("BAD REQUEST invalid signature or apikey");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         try {
             if (!SignatureHelper.validateSignature(url, signature,publicKey)) {
-                logger.error("UNAUTHORIZED invalid signature failed validation");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             return;
         }
 

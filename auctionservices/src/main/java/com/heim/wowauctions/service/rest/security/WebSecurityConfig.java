@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
@@ -29,6 +30,7 @@ public class WebSecurityConfig extends
             @Override
             public boolean matches(HttpServletRequest request) {
                 // No CSRF due to allowedMethod
+                if(StringUtils.isEmpty(request.getPathInfo()))return false;
               
                 if(allowedMethods.matcher(request.getMethod()).matches()
                         ||(request.getPathInfo().endsWith(".html")||
