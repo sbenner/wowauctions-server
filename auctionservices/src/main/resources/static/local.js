@@ -227,12 +227,13 @@ window.onload = function () {
     }
 
     $('#btn_search').on('click', function () {
+        $('#pager').hide();
         runGetitems($('#search').val());
     });
 
     $("#search").on("keydown", function search(e) {
         if (e.keyCode == 13) {
-
+            $('#pager').hide();
             runGetitems($(this).val());
         }
     });
