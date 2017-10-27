@@ -12,11 +12,7 @@
 
     <artifactId>auctionservices</artifactId>
 <dependencies>
-    <dependency>
-        <groupId>com.heim.wowauctions</groupId>
-        <artifactId>auctionscommons</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
+  
 
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
     <dependency>
@@ -41,6 +37,11 @@
         </exclusions>
     </dependency>
 
+    <dependency>
+        <groupId>com.heim.wowauctions</groupId>
+        <artifactId>auctionscommons</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
 
 </dependencies>
     <build>
@@ -48,6 +49,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
             </plugin>
         </plugins>
     </build>

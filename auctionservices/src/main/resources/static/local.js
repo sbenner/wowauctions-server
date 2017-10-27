@@ -1,5 +1,5 @@
 window.onload = function () {
-
+    $('#pager').hide();
     $.ajax({
         type: "OPTIONS",
         url: "http://localhost:8080/",
@@ -101,12 +101,13 @@ window.onload = function () {
 
     }
 
-    function runGetitems(name) {
+    function runGetitems(name, params) {
 
+        if(!params)params="";
         name = name.trim();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/items?name=" + name,
+            url: "http://localhost:8080/wow/v1/web/items?name=" + name + params,
             cache: false,
             async: true,
             crossDomain: true,
@@ -123,18 +124,50 @@ window.onload = function () {
                             "<a name='" + results.auc + "' id='" + results.item.id +
                             "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
                             "<div  id='tooltip' class='tooltip'></div></td>" +
-                            "<td>" + results.item.itemLevel + "</td>" +
-                            "<td>" + results.owner + "</td>" +
-                            "<td>" + results.bid + "</td>" +
-                            "<td>" + results.buyout + "</td>" +
-                            "<td>" + results.ppi + "</td>" +
-                            "<td>" + results.quantity + "</td>" +
+                            "<td><span style='color: white;'>" + results.item.itemLevel + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.owner + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.bid + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.buyout + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.ppi + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.quantity + "</span></td>" +
                             "</tr>"
                         );
                         setAhrefColor(results);
 
                     });
+                    var total = data.totalPages;
+                    var page = data.number;
+                    var p = page+1;
+                    if (total > 1) {
+                        $('#pager').show();
+                        $('#pages').text("Page "+ p +" of "+total);
+                        var first = document.getElementById('first');
+                        first.onclick = function () {
+                            runGetitems(name, "");
+                        };
+                        var last = document.getElementById('last');
+                        last.onclick = function () {
+                            runGetitems(name, "&page=" + total);
+                        };
+                        var prev = document.getElementById('prev');
+                        prev.onclick = function () {
+                            if (page > 0) {
+                                runGetitems(name, "&page=" + (parseInt(p)));
+
+                            }
+                        };
+                        var next = document.getElementById('next');
+                        next.onclick = function () {
+                            if (page < total) {
+                                runGetitems(name, "&page=" + (parseInt(page + 1)));
+                                
+                            }
+                        };
+
+                    }
+
                 }
+
             },
             error: function (data) {
             }
@@ -168,11 +201,12 @@ window.onload = function () {
 
     function setAhrefColor(results) {
         var quality = results.item.quality;
-        var ahref =  document.getElementsByName(results.auc)[0];//$("a[name=\'"+results.auc+"\']");
+        var ahref = document.getElementsByName(results.auc)[0];//$("a[name=\'"+results.auc+"\']");
         var tooltip = document.getElementById('tooltip');
 
         ahref.onclick = function () {
             $("#tbl").hide();
+
             $("#chartDiv").show();
             runChart(results.item.id);
         };
@@ -188,7 +222,7 @@ window.onload = function () {
         };
 
         if (ahref && ahref !== null) {
-                ahref.className='color-q'+quality;
+            ahref.className = 'color-q' + quality;
         }
     }
 
