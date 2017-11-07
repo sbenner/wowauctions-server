@@ -78,6 +78,8 @@ public class SignatureHelper {
 
     public static boolean validateTimestamp(long timestamp) {
         long currentTime = System.currentTimeMillis();
+        logger.info("inc ts "+timestamp);
+        logger.info("current ts "+currentTime);
         return timestamp <= currentTime + 60000 &&
                 timestamp >= currentTime - 60000;
     }
