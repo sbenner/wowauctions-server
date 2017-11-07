@@ -56,26 +56,31 @@ public class RestSignatureFilter extends OncePerRequestFilter {
             timestamp = Long.parseLong(request.getHeader(SignatureHelper.TIMESTAMP_HEADER));
 
             if (!SignatureHelper.validateTimestamp(timestamp)) {
+                logger.error("timestamp is wrong");
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
 
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            logger.error(e.getMessage(),e);
             return;
         }
 
         if (signature == null || apiKey == null) {
+            logger.error("apikey or signature is null");
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         try {
             if (!SignatureHelper.validateSignature(url, signature,publicKey)) {
+                logger.error("validateSignature returned false");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         } catch (Exception e) {
+            logger.error(e.getMessage(),e);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             return;
         }
