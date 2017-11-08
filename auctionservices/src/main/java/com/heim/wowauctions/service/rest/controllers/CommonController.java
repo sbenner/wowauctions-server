@@ -1,10 +1,10 @@
 package com.heim.wowauctions.service.rest.controllers;
 
+import com.heim.wowauctions.common.persistence.models.Feedback;
 import com.heim.wowauctions.service.services.AuctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +56,7 @@ public class CommonController {
     ResponseEntity<String> getItem(@PathVariable(value = "id") long id
     ) throws IOException {
 
-        if (id!=0) {
+        if (id != 0) {
             return new ResponseEntity<>(service.getTooltip(id), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -89,5 +89,26 @@ public class CommonController {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
 
     }
+
+    @RequestMapping(method = RequestMethod.POST,
+            value = "/feedback", produces = "application/json"
+    )
+    public
+    @ResponseBody
+    ResponseEntity feedback(@RequestBody Feedback feedback) throws IOException {
+        service.saveFeedback(feedback);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST,
+            value = "/feedback", produces = "application/json"
+    )
+    public
+    @ResponseBody
+    ResponseEntity getAuctionDate() throws IOException {
+        return
+
+    }
+
 
 }
