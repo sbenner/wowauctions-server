@@ -22,6 +22,10 @@ public class MongoService {
 
     @Autowired
     private
+    FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private
     ItemRepository itemRepository;
 
     @Autowired
@@ -60,6 +64,11 @@ public class MongoService {
 
         return (ArrayList<Realm>) realmRepository.findAll();
 
+    }
+
+    public void saveFeedback(Feedback feedback){
+        feedback.setTimestamp(System.currentTimeMillis());
+        feedbackRepository.save(feedback);
     }
 
     public List<ArchivedAuction> getItemStatisticsByTimestamp(long itemId) {

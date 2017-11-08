@@ -2,6 +2,7 @@ package com.heim.wowauctions.service.services;
 
 import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Auction;
+import com.heim.wowauctions.common.persistence.models.Feedback;
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
@@ -61,6 +62,12 @@ public class AuctionsService {
 
         return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
     }
+
+    public void saveFeedback(Feedback feedback){
+        mongoService.saveFeedback(feedback);
+    }
+
+    public String getAuc
 
     public Map<Long, Long> getItemChart(long id) {
         return mongoService.getItemStatistics(id);
