@@ -6,28 +6,24 @@
     <meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
     <!-- Plotly.js -->
     <!-- Latest compiled and minified plotly.js JavaScript -->
-    <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript" src="local.js"></script>
 
+    <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"-->
+            <!--integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"-->
+            <!--crossorigin="anonymous"></script>-->
     <!-- Fonts -->
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:600,400,300,200|Inconsolata|Ubuntu+Mono:400,700"
-          rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:600,400,300,200|Inconsolata|Ubuntu+Mono:400,700"-->
+          <!--rel="stylesheet" type="text/css"/>-->
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
 
     <!-- code highlighting -->
-    <link rel="stylesheet" href="//plot.ly/gh-pages/documentation/static/javascripts/codehighlight/styles/tomorrow.css">
-    <link rel="stylesheet" type="text/css" href="//plot.ly/gh-pages/documentation/static/css/js-splash-highlight.css"/>
     <link rel='stylesheet' type='text/css' media='all' href='wow.css'/>
     <!-- Main Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="https://images.plot.ly/assets/css/normalize.css">
-    <link rel="stylesheet" type="text/css"
-          href="https://plot.ly/gh-pages/documentation/static//css/main.css?version=66c7ea55d3">
 
     <style>
         .item {
@@ -94,10 +90,11 @@
 <div style="padding-left: 50px;" align="center">
     <img src="ooktioneer.png" style="width: 20%">
     <div style="padding-bottom: 20px;padding-top: 20px;">
-        For <span style="font-weight: bolder;font-size: larger;">Vek'nilash, Nazgrel and Nesingwary</span> servers only. For now.
+        For <span style="font-weight: bolder;font-size: larger;">Vek'nilash, Nazgrel and Nesingwary</span> servers only.
+        For now.
         <br>
-    Search for current auctions.
-    Click on the respective <u>item links</u> to see price charts.
+        Search for current auctions.
+        Click on the respective <u>item links</u> to see price charts.
 
     </div>
     <input type="text" name="search" id="search" placeholder="demonsteel" style="width: 200px; height: 20px"/>
@@ -143,9 +140,11 @@
     <a style="font-weight: bold;" id="next" href="#">&gt;</a>&nbsp;
     <a style="font-weight: bold;" id="last" href="#">&gt;&gt;</a>
 </div>
-<div id="chartDiv"
-     align="center" style="padding-left: 50px;"><!-- Plotly chart will be drawn inside this DIV --></div>
 
+<div class="chartDiv">
+    <canvas id="chartjs-0"
+            class="chartjs" ></canvas>
+</div>
 <footer>
     <div class="content">
         <img class="i1" src="spark-logo-hd.png" width="70px" height="70px">

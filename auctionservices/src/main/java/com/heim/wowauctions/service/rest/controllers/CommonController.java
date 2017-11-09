@@ -100,14 +100,13 @@ public class CommonController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST,
-            value = "/feedback", produces = "application/json"
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/lastauctiondate", produces = "application/json"
     )
     public
     @ResponseBody
-    ResponseEntity getAuctionDate() throws IOException {
-        return
-
+    ResponseEntity<String> getAuctionDate() throws IOException {
+        return new ResponseEntity<>(service.getLastAuctionDate(),HttpStatus.OK);
     }
 
 

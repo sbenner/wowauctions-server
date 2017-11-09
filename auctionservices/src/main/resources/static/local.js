@@ -29,21 +29,21 @@ window.onload = function () {
             return a + b;
         });
         var result = Math.round(sum / arr.length);
-        var price = result.toString();
-        var len = price.length;
+        // var price = result.toString();
+        // var len = price.length;
+        //
+        // if (len > 4) {
+        //     price = price.substr(0, len - 4) + "g"
+        //         + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
+        // }
+        // if (len > 2 && len <= 4) {
+        //     price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
+        // }
+        // if (len <= 2) {
+        //     price = price.substr(0, len) + "c";
+        // }
 
-        if (len > 4) {
-            price = price.substr(0, len - 4) + "g"
-                + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
-        }
-        if (len > 2 && len <= 4) {
-            price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
-        }
-        if (len <= 2) {
-            price = price.substr(0, len) + "c";
-        }
-
-        return price;
+        return result;
     };
 
 
@@ -68,28 +68,45 @@ window.onload = function () {
                 var dt = [];
                 for (var p in data) {
                     if (data.hasOwnProperty(p)) {
-
                         dt.push({
-                            x: $.datepicker.formatDate('yy-mm-dd',
-                                new Date(data[p])), y: parseInt(p)
+                            x: data[p], y: parseInt(p)
                         });
                     }
                 }
+                //
+                // var grouped = dt.groupBy('x');
+                //
+                // var dt1 = [];
+                // for (p in grouped) {
+                //     dt1.push({x:p,y:avg(grouped[p])});
+                // }
 
-                var layout = {
-                    title: 'Item Prices'
-                };
-
-                var grouped = dt.groupBy('x');
-
-                var dt1 = {mode: 'markers', x: [], y: []};
-                for (p in grouped) {
-                    dt1.x.push(p);
-                    dt1.y.push(avg(grouped[p]));
-                }
-
-
-                Plotly.newPlot('chartDiv', [dt1]);
+                new Chart(document.getElementById("chartjs-0"), {
+                    "type": "line",
+                    "data": {
+                        //"labels": ["January", "February", "March", "April", "May", "June", "July"],
+                        "datasets": [{
+                            "label": "Price",
+                            "data": dt,
+                            "fill": false,
+                            "borderColor": "rgb(75, 192, 192)",
+                            //"lineTension": 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    displayFormats: {
+                                        quarter: 'YYYY-mm-dd'
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                });
+                //Plotly.newPlot('chartDiv', [dt1]);
 
 
             },

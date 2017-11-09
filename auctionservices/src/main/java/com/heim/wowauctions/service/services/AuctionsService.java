@@ -1,5 +1,6 @@
 package com.heim.wowauctions.service.services;
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.Feedback;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,10 @@ public class AuctionsService {
     HttpReqHandler httpReqHandler;
     @Autowired
     private MongoService mongoService;
+
+    @Autowired
+    private MongoAuctionsDao auctionsDao;
+
     @Value("${wow.tooltip.url}")
     private String tooltipUrl;
 
@@ -67,7 +73,9 @@ public class AuctionsService {
         mongoService.saveFeedback(feedback);
     }
 
-    public String getAuc
+    public String getLastAuctionDate(){
+        return Instant.ofEpochMilli(auctionsDao.getAuctionsUrl().getLastModified()).toString();
+    }
 
     public Map<Long, Long> getItemChart(long id) {
         return mongoService.getItemStatistics(id);

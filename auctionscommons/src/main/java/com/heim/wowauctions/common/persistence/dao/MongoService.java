@@ -32,6 +32,7 @@ public class MongoService {
     private
     AuctionRepository auctionRepository;
 
+
     @Autowired
     private
     ArchivedAuctionRepository archivedAuctionRepository;

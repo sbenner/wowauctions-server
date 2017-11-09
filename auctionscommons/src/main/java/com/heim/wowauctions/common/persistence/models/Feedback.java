@@ -2,6 +2,7 @@ package com.heim.wowauctions.common.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.heim.wowauctions.common.utils.AuctionUtils;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * Time: 11:47 PM
  */
 
-
+@Document
 public class Feedback {
 
     private long timestamp;

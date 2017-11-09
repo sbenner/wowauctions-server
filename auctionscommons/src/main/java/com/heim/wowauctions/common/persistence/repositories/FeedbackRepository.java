@@ -18,9 +18,5 @@ import java.util.List;
 @Repository
 public interface FeedbackRepository extends PagingAndSortingRepository<Feedback, Long> {
 
-    Page<Feedback> findByItemId(Long itemId, Pageable pageable);
-
-    Page<Feedback> findByItemIdIn(List<Long> itemIDsList, Pageable pageable);
-
 
 }
