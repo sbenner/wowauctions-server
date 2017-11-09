@@ -46,6 +46,23 @@ window.onload = function () {
         return result;
     };
 
+    var formatPrice = function(result){
+        var price = result.toString();
+        var len = price.length;
+
+        if (len > 4) {
+            price = price.substr(0, len - 4) + "g"
+                + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
+        }
+        if (len > 2 && len <= 4) {
+            price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
+        }
+        if (len <= 2) {
+            price = price.substr(0, len) + "c";
+        }
+        return price;
+    }
+
 
     Array.prototype.groupBy = function (prop) {
         return this.reduce(function (groups, item) {
@@ -65,49 +82,44 @@ window.onload = function () {
             cache: false,
             async: true,
             success: function (data) {
-                var dt = [];
+                var price = [];
+                var label = [];
+                var b = [];
+
                 for (var p in data) {
                     if (data.hasOwnProperty(p)) {
-                        dt.push({
-                            x: data[p], y: parseInt(p)
-                        });
+                        b.push({x:data[p],y:parseInt(p)});
                     }
                 }
-                //
-                // var grouped = dt.groupBy('x');
-                //
-                // var dt1 = [];
-                // for (p in grouped) {
-                //     dt1.push({x:p,y:avg(grouped[p])});
-                // }
+                b.sort(compare);
+                function compare(a, b) {
+                    if (a.x < b.x) {
+                        return -1;
+                    }
+                    if (a.x > b.x) {
+                        return 1;
+                    }
+                    return 0;
+                }
+
+
+                for (var i=0;i<b.length;i++) {
+                         label.push($.datepicker.formatDate('yy-mm-dd',new Date(b[i].x)));
+                         price.push(b[i].y/10000);
+                }
+
 
                 new Chart(document.getElementById("chartjs-0"), {
                     "type": "line",
                     "data": {
-                        //"labels": ["January", "February", "March", "April", "May", "June", "July"],
+                        "labels": label,
                         "datasets": [{
                             "label": "Price",
-                            "data": dt,
-                            "fill": false,
-                            "borderColor": "rgb(75, 192, 192)",
-                            //"lineTension": 0.1
+                            "data": price,
+                             "borderColor": "rgb(75, 192, 192)",
                         }]
-                    },
-                    options: {
-                        scales: {
-                            xAxes: [{
-                                type: 'time',
-                                time: {
-                                    displayFormats: {
-                                        quarter: 'YYYY-mm-dd'
-                                    }
-                                }
-                            }]
-                        }
                     }
                 });
-                //Plotly.newPlot('chartDiv', [dt1]);
-
 
             },
             error: function (data) {
