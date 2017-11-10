@@ -215,7 +215,7 @@ window.onload = function () {
             dataType: 'text',
             success: function (result) {
                 //var tooltip = ele.firstChild;
-                ele.style.display = 'block';
+                $('.wiki-tooltip').remove();
                 ele.innerHTML = result;
 
             },
@@ -241,13 +241,12 @@ window.onload = function () {
         };
 
 
-        ahref.onmouseover = function () {
+        ahref.onmouseenter = function () {
             getItemFromWeb(results.item.id, tooltip);
         };
 
-        ahref.onmouseout = function () {
-            tooltip.innerHTML = "";
-            tooltip.style.display = 'none';
+        ahref.onmouseleave = function () {
+            $('.wiki-tooltip').remove();
         };
 
         if (ahref && ahref !== null) {
