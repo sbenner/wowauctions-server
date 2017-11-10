@@ -29,21 +29,8 @@ window.onload = function () {
             return a + b;
         });
         var result = Math.round(sum / arr.length);
-        // var price = result.toString();
-        // var len = price.length;
-        //
-        // if (len > 4) {
-        //     price = price.substr(0, len - 4) + "g"
-        //         + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
-        // }
-        // if (len > 2 && len <= 4) {
-        //     price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
-        // }
-        // if (len <= 2) {
-        //     price = price.substr(0, len) + "c";
-        // }
 
-        return result;
+        return formatPrice(result);
     };
 
     var formatPrice = function(result){
@@ -51,11 +38,11 @@ window.onload = function () {
         var len = price.length;
 
         if (len > 4) {
-            price = price.substr(0, len - 4) + "g"
-                + price.substr(len - 2, len) + "s" + price.substr(len - 2, len) + "c";
+            price = price.substr(0, len - 4) + "g "
+                + price.substr(len - 2, len) + "s " + price.substr(len - 2, len) + "c";
         }
         if (len > 2 && len <= 4) {
-            price = price.substr(0, len - 2) + "s" + price.substr(len - 2, len) + "c";
+            price = price.substr(0, len - 2) + "s " + price.substr(len - 2, len) + "c";
         }
         if (len <= 2) {
             price = price.substr(0, len) + "c";
@@ -63,17 +50,6 @@ window.onload = function () {
         return price;
     }
 
-
-    Array.prototype.groupBy = function (prop) {
-        return this.reduce(function (groups, item) {
-            var val = item[prop];
-            groups[val] = groups[val] || [];
-            groups[val].push(item.y);
-            return groups;
-        }, {});
-    };
-
-//        //function to be executed before an Ajax request is sent.
     function runChart(id) {
 
         $.ajax({
@@ -114,7 +90,7 @@ window.onload = function () {
                     "data": {
                         "labels": label,
                         "datasets": [{
-                            "label": "Price",
+                            "label": "AVG Price "+avg(price),
                             "data": price,
                              "borderColor": "rgb(75, 192, 192)",
                         }]
