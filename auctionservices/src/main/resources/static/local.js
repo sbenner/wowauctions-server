@@ -59,6 +59,7 @@ window.onload = function () {
             async: true,
             success: function (data) {
                 var price = [];
+                var pp = [];
                 var label = [];
                 var b = [];
 
@@ -82,15 +83,16 @@ window.onload = function () {
                 for (var i=0;i<b.length;i++) {
                          label.push($.datepicker.formatDate('yy-mm-dd',new Date(b[i].x)));
                          price.push(b[i].y/10000);
+                         pp.push(b[i].y);
                 }
 
-
+                $('#avg_price').html('AVG Price: '+avg(pp));
                 new Chart(document.getElementById("chartjs-0"), {
                     "type": "line",
                     "data": {
                         "labels": label,
                         "datasets": [{
-                            "label": "AVG Price "+avg(price),
+                            "label": "Price",
                             "data": price,
                              "borderColor": "rgb(75, 192, 192)",
                         }]
