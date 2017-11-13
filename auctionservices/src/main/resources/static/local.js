@@ -1,10 +1,6 @@
 window.onload = function () {
     $('#pager').hide();
     $('#chartDiv').hide();
-
-
-
-
     $.ajax({
         type: "OPTIONS",
         url: "http://localhost:8080/",
