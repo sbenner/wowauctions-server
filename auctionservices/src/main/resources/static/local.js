@@ -121,6 +121,8 @@ window.onload = function () {
                 });
                 var canvas = document.getElementById("chartjs-0");
 
+                canvas.style.maxHeight='768px';
+                canvas.style.maxWidth='1024px';
                 canvas.style.height='768px';
                 canvas.style.width='1024px';
 
