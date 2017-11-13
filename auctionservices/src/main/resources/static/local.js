@@ -71,7 +71,7 @@ window.onload = function () {
     };
 
 
-    function runChart(id) {
+    function runChart(id, name) {
 
         $.ajax({
             type: "GET",
@@ -107,7 +107,7 @@ window.onload = function () {
                          pp.push(b[i].y);
                 }
 
-                $('#avg_price').html('AVG Price: '+avg(pp));
+                $('#avg_price').html('AVG Price for <u>'+name+'</u> : '+avg(pp));
                 new Chart(document.getElementById("chartjs-0"), {
                     "type": "line",
                     "data": {
@@ -119,6 +119,10 @@ window.onload = function () {
                         }]
                     }
                 });
+                var canvas = document.getElementById("chartjs-0");
+
+                canvas.style.height='768px';
+                canvas.style.width='1024px';
 
             },
             error: function (data) {
@@ -234,7 +238,7 @@ window.onload = function () {
             $("#tbl").hide();
 
             $("#chartDiv").show();
-            runChart(results.item.id);
+            runChart(results.item.id,results.item.name);
         };
 
 
