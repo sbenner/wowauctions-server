@@ -1,6 +1,10 @@
 window.onload = function () {
     $('#pager').hide();
     $('#chartDiv').hide();
+
+
+
+
     $.ajax({
         type: "OPTIONS",
         url: "http://localhost:8080/",
@@ -17,6 +21,7 @@ window.onload = function () {
                 xhr.setRequestHeader(header, token);
             });
 
+            loadCountAndDate();
 
         },
         error: function (data) {
@@ -24,6 +29,24 @@ window.onload = function () {
         }
     });
 
+
+
+    var loadCountAndDate= function ()
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/wow/v1/web/current_status",
+            cache: false,
+            async: true,
+            crossDomain: true,
+            success: function (data) {
+                $('#date_num').html('Current Auctions Date '+new Date(data.auctions_date).toUTCString()+" Count: "+data.count);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
 
     var avg = function (arr) {
         var sum = arr.reduce(function (a, b) {
@@ -49,7 +72,8 @@ window.onload = function () {
             price = price.substr(0, len) + "c";
         }
         return price;
-    }
+    };
+
 
     function runChart(id) {
 
@@ -109,7 +133,7 @@ window.onload = function () {
 
     }
 
-    function runGetitems(name, params) {
+    function getItems(name, params) {
 
         if(!params)params="";
         name = name.trim();
@@ -151,24 +175,22 @@ window.onload = function () {
                         $('#pages').text("Page "+ p +" of "+total);
                         var first = document.getElementById('first');
                         first.onclick = function () {
-                            runGetitems(name, "");
+                            getItems(name, "");
                         };
                         var last = document.getElementById('last');
                         last.onclick = function () {
-                            runGetitems(name, "&page=" + total);
+                            getItems(name, "&page=" + total);
                         };
                         var prev = document.getElementById('prev');
                         prev.onclick = function () {
                             if (page > 0) {
-                                runGetitems(name, "&page=" + (parseInt(p)));
-
+                                getItems(name, "&page=" + (parseInt(p - 1)));
                             }
                         };
                         var next = document.getElementById('next');
                         next.onclick = function () {
                             if (page < total) {
-                                runGetitems(name, "&page=" + (parseInt(page + 1)));
-                                
+                                getItems(name, "&page=" + (parseInt(page + 1)));
                             }
                         };
 
@@ -235,15 +257,14 @@ window.onload = function () {
 
     $('#btn_search').on('click', function () {
         $('#pager').hide();
-        runGetitems($('#search').val());
+        getItems($('#search').val());
     });
 
     $("#search").on("keydown", function search(e) {
         if (e.keyCode == 13) {
             $('#pager').hide();
-            runGetitems($(this).val());
+            getItems($(this).val());
         }
     });
 
-
-}
+};

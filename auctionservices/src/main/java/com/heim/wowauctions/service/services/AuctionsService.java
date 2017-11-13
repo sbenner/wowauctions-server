@@ -16,7 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,9 +75,13 @@ public class AuctionsService {
         mongoService.saveFeedback(feedback);
     }
 
-    public String getLastAuctionDate(){
-        return Instant.ofEpochMilli(auctionsDao.getAuctionsUrl().getLastModified()).toString();
+    public Map<String,Long> getCurrentStatus(){
+        Map<String,Long> ret = new HashMap<>();
+        ret.put("auctions_date",auctionsDao.getAuctionsUrl().getLastModified());
+        ret.put("count",mongoService.getAuctionsCount());
+        return ret;
     }
+
 
     public Map<Long, Long> getItemChart(long id) {
         return mongoService.getItemStatistics(id);
