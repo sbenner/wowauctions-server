@@ -781,9 +781,10 @@ a.color-d1:hover, a.color-d2:hover, a.color-d3:hover, a.color-d4:hover, a.color-
     margin-top: 10px;
 }
 
-.item-specs li {
+.item-specs li ul {
     margin: 1px 0;
-    padding: 0;
+    padding-top: 2px;
+    padding-left: 2px;
 }
 
 .item-specs .indent {
