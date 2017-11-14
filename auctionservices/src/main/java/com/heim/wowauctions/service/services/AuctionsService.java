@@ -79,6 +79,7 @@ public class AuctionsService {
         Map<String,Long> ret = new HashMap<>();
         ret.put("auctions_date",auctionsDao.getAuctionsUrl().getLastModified());
         ret.put("count",mongoService.getAuctionsCount());
+        ret.put("total",mongoService.getTotal());
         return ret;
     }
 
