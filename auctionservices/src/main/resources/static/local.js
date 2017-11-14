@@ -186,7 +186,7 @@ window.onload = function () {
                         var prev = document.getElementById('prev');
                         prev.onclick = function () {
                             if (page > 0) {
-                                getItems(name, "&page=" + (parseInt(p - 1)));
+                                getItems(name, "&page=" + (parseInt(page - 1)));
                             }
                         };
                         var next = document.getElementById('next');
