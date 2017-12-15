@@ -55,7 +55,7 @@ public class AuctionsService {
 
         List<Long> itemIds = new ArrayList<Long>();
         for (Item item : items)
-            itemIds.add(item.getId());
+            itemIds.add(item.getItemId());
 
 
         Sort sort = new Sort(Sort.Direction.ASC, "buyout");

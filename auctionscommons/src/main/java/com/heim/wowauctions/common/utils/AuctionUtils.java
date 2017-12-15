@@ -109,7 +109,7 @@ public class AuctionUtils {
 
             for (Auction auction : auctions.getContent()) {
                 auction.setPpi();
-                if (reborn.getId() == auction.getItemId()) {
+                if (reborn.getItemId() == auction.getItemId()) {
                     auction.setItem(reborn);
                     auction.setOwner(auction.getOwner() + "-" + auction.getOwnerRealm());
                     foundAuctions.add(auction);
@@ -193,7 +193,7 @@ public class AuctionUtils {
         JSONObject obj = new JSONObject(in);
         Item item = new Item();
 
-        item.setId(obj.getLong("id"));
+        item.setItemId(obj.getLong("id"));
         item.setName(obj.getString("name"));
         item.setItemLevel(obj.getInt("itemLevel"));
         item.setQuality(obj.getInt("quality"));
@@ -218,7 +218,7 @@ public class AuctionUtils {
                 for (int i = 0; i < rebornsJSonArray.length(); i++) {
                     JSONObject obj = (JSONObject) rebornsJSonArray.get(i);
                     Item reborn = new Item();
-                    reborn.setId(obj.getLong("id"));
+                    reborn.setItemId(obj.getLong("id"));
                     reborn.setName(obj.getString("name"));
                     reborn.setItemLevel(obj.getInt("itemLevel"));
                     reborn.setQuality(obj.getInt("quality"));
