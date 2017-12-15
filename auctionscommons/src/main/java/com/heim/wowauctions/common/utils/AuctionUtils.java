@@ -201,15 +201,9 @@ public class AuctionUtils {
         return item;
     }
 
-    public static BlockingQueue<Long> createQueue(Set<Long> existingItems, List<Long> auctionItems) {
+    public static BlockingQueue<Long> createQueue(List<Long> auctionItems) {
         BlockingQueue<Long> newQueue = new LinkedBlockingQueue<Long>();
-
-        for (long auctionItem : auctionItems) {
-            if (!existingItems.contains(auctionItem)) {
-                newQueue.add(auctionItem);
-            }
-        }
-
+        newQueue.addAll(auctionItems);
         return newQueue;
     }
 

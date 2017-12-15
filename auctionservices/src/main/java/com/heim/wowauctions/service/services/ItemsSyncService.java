@@ -48,11 +48,10 @@ public class ItemsSyncService {
         try {
 
             if (context.getQueue().isEmpty()) {
+                //we just update the incoming items
                 List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
-                Set<Long> existingItemIds = getAuctionsDao().getAllItemIDs();
-                context.setQueue(AuctionUtils.createQueue(existingItemIds, allAuctionItemIds));
+                context.setQueue(AuctionUtils.createQueue(allAuctionItemIds));
                 allAuctionItemIds.clear();
-                existingItemIds.clear();
             } else {
                 logger.info("Queue is not empty we dont add any items!");
             }
