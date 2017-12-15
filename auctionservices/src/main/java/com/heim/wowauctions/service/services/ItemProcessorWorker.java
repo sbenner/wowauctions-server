@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -67,10 +68,12 @@ public class ItemProcessorWorker implements Runnable {
             }
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
-                List<Item> toDelete = itemRepository.findByItemId(item.getId());
-                itemRepository.delete(toDelete);
-                itemRepository.save(item);
-                logger.info("Thread #" + threadId + "  saved item #" + item.getId());
+                Item foundItem = itemRepository.findByItemId(item.getItemId());
+                foundItem.setName(item.getName());
+                foundItem.setItemLevel(item.getItemLevel());
+                foundItem.setQuality(item.getQuality());
+                itemRepository.save(foundItem);
+                logger.info("Thread #" + threadId + "  saved item #" + item.getItemId());
             }
         } else {
             logger.info("Thread #" + threadId + " is finished - NO REPLY");

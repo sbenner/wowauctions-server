@@ -21,7 +21,7 @@ import java.util.List;
 public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
 
     Page<Item> findByName(String name, Pageable pageable);
-    List<Item> findByItemId(long itemId);
+    Item findByItemId(long itemId);
 
     Page<Item> findByNameLike(String name, Pageable pageable);
 

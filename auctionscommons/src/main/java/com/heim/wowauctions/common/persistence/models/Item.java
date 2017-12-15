@@ -7,18 +7,12 @@ package com.heim.wowauctions.common.persistence.models;
  * Time: 1:01 AM
  */
 public class Item {
+
     private long itemId;
     private String name;
     private int itemLevel;
     private int quality;
 
-    public long getId() {
-        return itemId;
-    }
-
-    public void setId(Long id) {
-        this.itemId = id;
-    }
 
     public String getName() {
         return name;
@@ -43,6 +37,14 @@ public class Item {
 
     public void setQuality(int quality) {
         this.quality = quality;
+    }
+
+    public long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
     }
 }
 
