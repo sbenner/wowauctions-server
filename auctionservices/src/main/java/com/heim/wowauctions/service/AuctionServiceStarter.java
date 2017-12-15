@@ -79,8 +79,8 @@ public class AuctionServiceStarter {
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
+        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors()-2);
+        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors()-2);
         return taskExecutor;
     }
 
