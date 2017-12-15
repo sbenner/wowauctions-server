@@ -156,9 +156,9 @@ window.onload = function () {
                     $.each(data.content, function (d, results) {
 
                         $("#table tbody").append(
-                            "<tr >" +
-                            "<td >" +
-                            "<a name='" + results.auc + "' id='" + results.item.id +
+                            "<tr>" +
+                            "<td>" +
+                            "<a name='" + results.auc + "' id='" + results.item.itemId +
                             "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
                             "<div  id='tooltip' class='tooltip'></div></td>" +
                             "<td><span style='color: white;'>" + results.item.itemLevel + "</span></td>" +
@@ -198,11 +198,8 @@ window.onload = function () {
                                 getItems(name, "&page=" + (parseInt(page + 1)));
                             }
                         };
-
                     }
-
                 }
-
             },
             error: function (data) {
             }
