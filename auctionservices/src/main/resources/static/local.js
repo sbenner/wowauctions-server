@@ -240,12 +240,12 @@ window.onload = function () {
             $("#tbl").hide();
 
             $("#chartDiv").show();
-            runChart(results.item.id,results.item.name);
+            runChart(results.item.itemId,results.item.name);
         };
 
 
         ahref.onmouseenter = function () {
-            getItemFromWeb(results.item.id, tooltip);
+            getItemFromWeb(results.item.itemId, tooltip);
         };
 
         ahref.onmouseleave = function () {
