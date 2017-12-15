@@ -1,6 +1,7 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
 import com.heim.wowauctions.service.SyncServiceContext;
@@ -41,6 +42,9 @@ public class ItemsSyncService {
     @Autowired
     private HttpReqHandler httpReqHandler;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
     @Scheduled(fixedRate = 86400000)
     public void processItemsQueue() {
         logger.info("started");
@@ -58,7 +62,8 @@ public class ItemsSyncService {
             while (!context.getQueue().isEmpty()) {
                 logger.info("q size: " + context.getQueue().size());
                 semaphore.acquire();
-                taskExecutor.execute(new ItemProcessorWorker(this, context.getQueue().poll()));
+                taskExecutor.execute(
+                        new ItemProcessorWorker(this, context.getQueue().poll()));
             }
 
 
@@ -66,6 +71,11 @@ public class ItemsSyncService {
             logger.error(e.getMessage(), e);
         }
 
+    }
+
+
+    public ItemRepository getItemRepository() {
+        return itemRepository;
     }
 
     public void releaseSemaphore() {
