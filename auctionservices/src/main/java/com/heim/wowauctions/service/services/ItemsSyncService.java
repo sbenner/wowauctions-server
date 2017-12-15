@@ -41,8 +41,7 @@ public class ItemsSyncService {
     @Autowired
     private HttpReqHandler httpReqHandler;
 
-
-    @Scheduled(fixedRate = 120000)
+    @Scheduled(fixedRate = 86400000)
     public void processItemsQueue() {
         logger.info("started");
         try {
