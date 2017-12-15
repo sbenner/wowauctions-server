@@ -61,6 +61,11 @@ public class MongoService {
         return auctionRepository.count();
     }
 
+    public long getTotal() {
+        return archivedAuctionRepository.count();
+    }
+
+
     public List<Realm> getAllRealms() {
 
         return (ArrayList<Realm>) realmRepository.findAll();

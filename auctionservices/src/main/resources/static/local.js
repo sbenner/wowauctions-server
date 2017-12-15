@@ -36,7 +36,10 @@ window.onload = function () {
             async: true,
             crossDomain: true,
             success: function (data) {
-                $('#date_num').html('Current Auctions Date '+new Date(data.auctions_date).toUTCString()+" Count: "+data.count);
+                $('#date_num').html("Current Auctions Date:<b> "
+                    +new Date(data.auctions_date).toUTCString()
+                    +"</b><br> Count: <b>"+data.count
+                    +"</b><br> Total Auctions: <b>"+data.total+"</b>");
             },
             error: function (err) {
                 console.log(err);
@@ -186,7 +189,7 @@ window.onload = function () {
                         var prev = document.getElementById('prev');
                         prev.onclick = function () {
                             if (page > 0) {
-                                getItems(name, "&page=" + (parseInt(p - 1)));
+                                getItems(name, "&page=" + (parseInt(page - 1)));
                             }
                         };
                         var next = document.getElementById('next');
