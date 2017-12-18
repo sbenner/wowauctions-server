@@ -25,8 +25,6 @@ window.onload = function () {
         }
     });
 
-
-
     var loadCountAndDate= function ()
     {
         $.ajax({
@@ -111,6 +109,9 @@ window.onload = function () {
                 }
 
                 $('#avg_price').html('AVG Price for <u>'+name+'</u> : '+avg(pp));
+
+                $('#chartjs-0').remove();
+                $('#chartDiv').append('<canvas id="chartjs-0" height="600" width="800" class="chartjs"></canvas>');
                 new Chart(document.getElementById("chartjs-0"), {
                     "type": "line",
                     "data": {
