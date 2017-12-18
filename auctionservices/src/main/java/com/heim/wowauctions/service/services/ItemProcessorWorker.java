@@ -9,10 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,14 +66,14 @@ public class ItemProcessorWorker implements Runnable {
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
                 Item foundItem = itemRepository.findByItemId(item.getItemId());
-                if(foundItem!=null) {
+                if (foundItem != null) {
                     foundItem.setName(item.getName());
                     foundItem.setItemLevel(item.getItemLevel());
                     foundItem.setQuality(item.getQuality());
-                    itemRepository.save(foundItem);
-                }else {
-                    itemRepository.save(item);
+                } else {
+                    foundItem = item;
                 }
+                itemRepository.save(foundItem);
                 logger.info("Thread #" + threadId + "  saved item #" + item.getItemId());
             }
         } else {
