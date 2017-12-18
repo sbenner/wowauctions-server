@@ -69,10 +69,14 @@ public class ItemProcessorWorker implements Runnable {
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
                 Item foundItem = itemRepository.findByItemId(item.getItemId());
-                foundItem.setName(item.getName());
-                foundItem.setItemLevel(item.getItemLevel());
-                foundItem.setQuality(item.getQuality());
-                itemRepository.save(foundItem);
+                if(foundItem!=null) {
+                    foundItem.setName(item.getName());
+                    foundItem.setItemLevel(item.getItemLevel());
+                    foundItem.setQuality(item.getQuality());
+                    itemRepository.save(foundItem);
+                }else {
+                    itemRepository.save(item);
+                }
                 logger.info("Thread #" + threadId + "  saved item #" + item.getItemId());
             }
         } else {
