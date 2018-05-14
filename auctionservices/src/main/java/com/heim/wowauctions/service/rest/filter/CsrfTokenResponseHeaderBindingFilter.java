@@ -7,17 +7,16 @@ package com.heim.wowauctions.service.rest.filter;
  * Time: 4:43 AM
  */
 
-import java.io.IOException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
 @WebFilter
 public class CsrfTokenResponseHeaderBindingFilter extends OncePerRequestFilter {

@@ -1,7 +1,7 @@
 package com.heim.wowauctions.service.services;
 
-import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.models.Auction;
 
 /**
  * Created with IntelliJ IDEA.

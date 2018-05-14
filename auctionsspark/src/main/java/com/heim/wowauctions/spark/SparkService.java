@@ -59,6 +59,7 @@ public class SparkService {
         Dataset<Row> centenarians = sparkSession.
                 sql("SELECT itemId,buyout,quantity,timestamp from archive group by itemId,buyout,quantity,timestamp order by buyout");
 
+
         StructType schema =
                 new StructType()
                         .add("itemId", LongType)

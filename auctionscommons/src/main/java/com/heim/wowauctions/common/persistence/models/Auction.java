@@ -3,7 +3,6 @@ package com.heim.wowauctions.common.persistence.models;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 
-
 import java.util.Date;
 
 

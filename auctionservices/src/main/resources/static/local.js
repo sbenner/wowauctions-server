@@ -49,7 +49,7 @@ window.onload = function () {
         var sum = arr.reduce(function (a, b) {
             return a + b;
         });
-        var result = Math.round(sum / arr.length);
+        var result = Math.log(sum / arr.length);
 
         return formatPrice(result);
     };

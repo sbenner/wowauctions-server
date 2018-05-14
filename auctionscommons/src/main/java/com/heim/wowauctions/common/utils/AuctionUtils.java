@@ -82,7 +82,8 @@ public class AuctionUtils {
     
     public static Set<String> lookupRealmConnections(String lookupRealm, List<Realm> realmList) {
         Realm realm =
-                realmList.stream().collect(Collectors.toMap(Realm::getSlug, r -> r)).get(lookupRealm);
+                realmList.stream().collect(
+                        Collectors.toMap(Realm::getSlug, r -> r)).get(lookupRealm);
         if (realm != null) {
             Set<String> connectedRealms = realm.getConnectedRealms();
             System.out.println("Connections for the " + realm.getName() + " realm are :");
@@ -103,7 +104,7 @@ public class AuctionUtils {
 
     public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
 
-        List<Auction> foundAuctions = new ArrayList<Auction>();
+        List<Auction> foundAuctions = new ArrayList<>();
 
         for (Item reborn : rebornsList) {
 
