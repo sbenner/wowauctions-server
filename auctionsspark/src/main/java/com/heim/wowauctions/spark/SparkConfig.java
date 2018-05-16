@@ -26,11 +26,11 @@ public class SparkConfig {
     @Bean
     public SparkConf sparkConf() {
         SparkConf sc = new SparkConf()
-                .setMaster("local")
+                .setMaster("local[7]")
                 //.setMaster("spark://localhost:7077")
-                .set("spark.ui.port","8888")
+                //.set("spark.ui.port","8888")
                 .setAppName("WowAuctionsAggregator")
-                .set("spark.deploy.defaultCores", "10")
+                // .set("spark.deploy.defaultCores", "10")
 //                .set("spark.driver.memory","5g")
 //                .set("spark.executor.memory","4g")
                // .set("spark.executor.cores","7")
