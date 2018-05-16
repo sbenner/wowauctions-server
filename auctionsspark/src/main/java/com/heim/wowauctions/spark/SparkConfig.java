@@ -27,8 +27,7 @@ public class SparkConfig {
     public SparkConf sparkConf() {
         SparkConf sc = new SparkConf()
                 .setMaster("local[7]")
-                //.setMaster("spark://localhost:7077")
-                //.set("spark.ui.port","8888")
+                .set("spark.ui.enabled", "false")
                 .setAppName("WowAuctionsAggregator")
                 // .set("spark.deploy.defaultCores", "10")
 //                .set("spark.driver.memory","5g")
