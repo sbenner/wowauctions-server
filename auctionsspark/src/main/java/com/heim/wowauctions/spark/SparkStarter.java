@@ -19,7 +19,7 @@ public class SparkStarter {
 
     public static void main(String[] args) {
         Class cls = SparkStarter.class;
-        SpringApplication app = new SpringApplication(new Object[]{cls});
+        SpringApplication app = new SpringApplication(cls);
         app.run();
     }
 

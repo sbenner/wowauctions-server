@@ -25,8 +25,8 @@ public class SparkConfig {
 
     @Bean
     public SparkConf sparkConf() {
-        SparkConf sc = new SparkConf()
-                .setMaster("local[7]")
+        return new SparkConf()
+                .setMaster("local[4]")
                 .set("spark.ui.enabled", "false")
                 .setAppName("WowAuctionsAggregator")
                 // .set("spark.deploy.defaultCores", "10")
@@ -40,7 +40,6 @@ public class SparkConfig {
                 .set("spark.mongodb.input.partitioner","MongoSplitVectorPartitioner")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
-        return sc;
     }
 
     @Bean

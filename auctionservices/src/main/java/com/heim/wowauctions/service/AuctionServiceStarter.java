@@ -31,9 +31,8 @@ public class AuctionServiceStarter {
 
     public static void main(String[] args) {
         Class cls = AuctionServiceStarter.class;
-        SpringApplication app = new SpringApplication(new Object[]{cls});
+        SpringApplication app = new SpringApplication(cls);
         app.setDefaultProperties(getDefaultProperties(cls));
-
         app.run(args);
 
     }
@@ -46,7 +45,6 @@ public class AuctionServiceStarter {
         httpRequestFactory.setConnectionRequestTimeout(10000);
         httpRequestFactory.setConnectTimeout(10000);
         httpRequestFactory.setReadTimeout(10000);
-
         return new RestTemplate(httpRequestFactory);
     }
 
