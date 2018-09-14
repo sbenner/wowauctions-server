@@ -30,13 +30,9 @@ public class SparkConfig {
                 .set("spark.ui.enabled", "false")
                 .setAppName("WowAuctionsAggregator")
                 // .set("spark.deploy.defaultCores", "10")
-//                .set("spark.driver.memory","5g")
-//                .set("spark.executor.memory","4g")
+                .set("spark.driver.memory", "8g")
+                .set("spark.executor.memory", "8g")
                // .set("spark.executor.cores","7")
-                .set("spark.memory.offHeap.size","2147483648")
-                .set("spark.memory.offHeap.enabled","true")
-                .set("spark.mongodb.input.partitionerOptions.partitionSizeMB","512")
-                .set("spark.mongodb.input.partitionerOptions.partitionKey","itemId")
                 .set("spark.mongodb.input.partitioner","MongoSplitVectorPartitioner")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
@@ -44,7 +40,6 @@ public class SparkConfig {
 
     @Bean
     public JavaSparkContext javaSparkContext() {
-
         return new JavaSparkContext(sparkConf());
     }
 

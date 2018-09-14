@@ -5,7 +5,6 @@ import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.ItemChartData;
-import com.heim.wowauctions.common.persistence.repositories.ItemChartDataRepository;
 import com.mongodb.spark.MongoSpark;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.MapFunction;
@@ -32,23 +31,29 @@ public class SparkService {
 
 
     private final SparkSession sparkSession;
+
+
+    private final MongoAuctionsDao mongoAuctionsDao;
+
+    private final MongoService mongoService;
+
     private final JavaSparkContext javaSparkContext;
 
     @Autowired
-    private MongoAuctionsDao mongoAuctionsDao;
-
-    @Autowired
-    private MongoService mongoService;
-
-
-    @Autowired
-    public SparkService(SparkSession sparkSession, JavaSparkContext javaSparkContext, ItemChartDataRepository itemChartDataRepository) {
+    public SparkService(SparkSession sparkSession,
+                        JavaSparkContext javaSparkContext,
+                        MongoAuctionsDao mongoAuctionsDao,
+                        MongoService mongoService) {
         this.sparkSession = sparkSession;
         this.javaSparkContext = javaSparkContext;
+
+        this.mongoAuctionsDao = mongoAuctionsDao;
+        this.mongoService = mongoService;
     }
 
     @Scheduled(fixedRate = 3600000)
     public void count() {
+
 
         Dataset<ArchivedAuction> explicitDS =
                 MongoSpark.load(javaSparkContext).toDS(ArchivedAuction.class);
@@ -57,7 +62,10 @@ public class SparkService {
         explicitDS.createOrReplaceTempView("archive");
 
         Dataset<Row> centenarians = sparkSession.
-                sql("SELECT itemId,buyout,quantity,timestamp from archive group by itemId,buyout,quantity,timestamp order by buyout");
+                sql("SELECT itemId,buyout,quantity,timestamp " +
+                        "from archive group by itemId," +
+                        "buyout,quantity," +
+                        "timestamp order by buyout");
 
 
         StructType schema =
@@ -80,11 +88,10 @@ public class SparkService {
                             }
                         }, RowEncoder.apply(schema)
                 ).collectAsList();
-        //.write().option("collection", "archivedCharts").mode("overwrite").save();
-
 
         Map<Long, ItemChartData> map = new HashMap<>();
-        ItemChartData itemChartData = null;
+        ItemChartData itemChartData;
+
         for (Row r : modified) {
             Long id = r.getAs(0);
             if (id != null) {
@@ -108,10 +115,8 @@ public class SparkService {
         }
         long timestamp = mongoAuctionsDao.getAuctionsUrl().getLastModified();
         mongoService.deleteItemChartData();
-        map.forEach((key, value) -> {
-            value.setTimestamp(timestamp);
-            mongoService.saveItemChart(value);
-        });
+        map.values().forEach(i -> i.setTimestamp(timestamp));
+        mongoService.saveItemCharts(map.values());
 
         System.out.println("#################################################################");
     }
