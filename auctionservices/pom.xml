@@ -20,7 +20,15 @@
         <artifactId>slf4j-simple</artifactId>
         <version>1.7.25</version>
     </dependency>
- 
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
+    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client &ndash;&gt;-->
+    <!--<dependency>-->
+    <!--<groupId>org.springframework.security</groupId>-->
+    <!--<artifactId>spring-security-oauth2-client</artifactId>-->
+    <!--<version>5.1.3.RELEASE</version>-->
+    <!--</dependency>-->
+
 
     <dependency>
         <groupId>org.springframework.boot</groupId>

@@ -4,7 +4,7 @@ package com.heim.wowauctions.common.persistence.repositories;
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 3:00 AM
  */
 @Repository
-public interface ArchivedAuctionRepository extends PagingAndSortingRepository<ArchivedAuction, Long> {
+public interface ArchivedAuctionRepository extends SolrCrudRepository<ArchivedAuction, String> {
 
     Page<ArchivedAuction> findByItemId(Long itemId, Pageable pageable);
 

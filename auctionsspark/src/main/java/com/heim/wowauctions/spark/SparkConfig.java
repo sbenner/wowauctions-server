@@ -1,22 +1,23 @@
 package com.heim.wowauctions.spark;
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.mongodb.Mongo;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Created by sbenner on 30/05/2017.
  */
 @Configuration
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SparkConfig {
 
-    @Value("${spring.data.mongodb.database}")
+    //    @Value("${spring.data.mongodb.database}")
     String dbName;
 
     @Autowired
@@ -43,10 +44,10 @@ public class SparkConfig {
         return new JavaSparkContext(sparkConf());
     }
 
-    @Bean
-    public MongoAuctionsDao mongoTemplate() {
-        return new MongoAuctionsDao(mongo, dbName);
-    }
+//    @Bean
+//    public MongoAuctionsDao mongoTemplate() {
+//        return new MongoAuctionsDao(mongo, dbName);
+//    }
 
     @Bean
     public SparkSession sparkSession() {

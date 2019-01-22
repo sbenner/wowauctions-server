@@ -1,47 +1,33 @@
 package com.heim.wowauctions.common.persistence.models;
 
+import lombok.Data;
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.Dynamic;
+import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
+
 import java.util.Map;
 
 /**
  * Created by sbenner on 13/06/2017.
  */
-public class ItemChartData {
 
+@Data
+@SolrDocument(collection = "item_chart_data")
+public class ItemChartData {
+    @Id
+    String id;
+    @Indexed("item_id_l")
     private long itemId;
+
+    @Dynamic
+    @Field("*_l")
     private Map<Long,Long> valueTime;
+    @Field("qty_")
     private int quantity;
+    @Field("ts_l")
     private long timestamp;
 
 
-    public Map<Long, Long> getValueTime() {
-        return valueTime;
-    }
-
-    public void setValueTime(Map<Long, Long> valueTime) {
-        this.valueTime = valueTime;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public long getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 }

@@ -1,10 +1,10 @@
 package com.heim.wowauctions.service.services;
 
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.common.persistence.dao.MongoService;
+import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
+import com.heim.wowauctions.common.persistence.repositories.ArchivedAuctionRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
@@ -35,25 +34,27 @@ public class AuctionsSyncService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuctionsSyncService.class);
     private final Semaphore semaphore = new Semaphore(Runtime.getRuntime().availableProcessors());
-    private final MongoAuctionsDao auctionsDao;
+
     private final HttpReqHandler httpReqHandler;
     private final TaskExecutor taskExecutor;
-    private final String realm;
+    final
+    SolrAuctionsService solrAuctionsService;
+    @Autowired
+    ArchivedAuctionRepository archivedAuctionRepository;
+    //  private final String realm;
     @Value("${wow.auctions.url}")
     private String url;
 
-    final
-    MongoService mongoService;
-
     @Autowired
-    public AuctionsSyncService(MongoAuctionsDao auctionsDao,
-                               HttpReqHandler httpReqHandler,
-                               TaskExecutor taskExecutor, String realm, MongoService mongoService) {
-        this.auctionsDao = auctionsDao;
+    public AuctionsSyncService(HttpReqHandler httpReqHandler,
+                               TaskExecutor taskExecutor,
+                               //    String realm,
+                               SolrAuctionsService solrAuctionsService) {
+
         this.httpReqHandler = httpReqHandler;
         this.taskExecutor = taskExecutor;
-        this.realm = realm;
-        this.mongoService = mongoService;
+        //this.realm = realm;
+        this.solrAuctionsService = solrAuctionsService;
     }
 
     @Scheduled(fixedRate = 180000,initialDelay = 180000)
@@ -67,22 +68,25 @@ public class AuctionsSyncService {
             if(StringUtils.isEmpty(out))
                 return;
 
-            AuctionUrl local = auctionsDao.getAuctionsUrl();
+            AuctionUrl local = solrAuctionsService.getAuctionUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
-            logger.info("local " + local.toString());
-            logger.info("remote " + remote.toString());
-
-            if (local.getLastModified() == null ||
-                    local.getLastModified() < remote.getLastModified() ||
-                    mongoService.getAuctionsCount() == 0) {
+            if (local != null && remote != null) {
+                logger.info("local " + local.toString());
+                logger.info("remote " + remote.toString());
 
                 logger.info(format("local.getLastModified() %s", local.getLastModified()));
 
                 logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
 
                 logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
-                logger.info(format("auctionsDao.getAuctionsCount() %s", mongoService.getAuctionsCount()));
+                logger.info(format("auctionsDao.getAuctionsCount() %s", solrAuctionsService.getAuctionsCount()));
+
+            }
+            if (local == null || local.getLastModified() == null ||
+                    remote == null ||
+                    local.getLastModified() < remote.getLastModified() ||
+                    solrAuctionsService.getAuctionsCount() == 0) {
 
                 //get new auctions
                 String auctionsString = httpReqHandler.getData(remote.getUrl());
@@ -91,23 +95,26 @@ public class AuctionsSyncService {
                     List<Auction> auctions = AuctionUtils.
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
 
-                    auctionsDao.insertAll(auctions);
+                    solrAuctionsService.insertAllAuctions(auctions);
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
-                    queueToArchive.addAll(auctionsDao.findAuctionsToArchive(remote.getLastModified()));
+                    List<Auction> toArchive = solrAuctionsService
+                            .findAuctionsToArchive(remote.getLastModified());
+                    queueToArchive.addAll(toArchive);
 
-                    auctionsDao.removeArchivedAuctions(remote.getLastModified());
+                    // auctionsDao.removeArchivedAuctions(remote.getLastModified());
 
                     while (!queueToArchive.isEmpty()) {
                         logger.info("q size: " + queueToArchive.size());
                         getSemaphore().acquire();
                         taskExecutor.execute(
-                                new ArchiveSaver(this, queueToArchive.poll(),auctionsDao));
+                                new ArchiveSaver(this, queueToArchive.poll(), solrAuctionsService));
                     }
+                    solrAuctionsService.removeArchivedAuctions(toArchive);
 
-                    if (local.getUrl() == null) {
-                        auctionsDao.insertAuctionsUrlData(remote);
+                    if (local == null || local.getUrl() == null) {
+                        solrAuctionsService.saveUrl(remote);
                     } else {
-                        auctionsDao.updateAuctionsUrl(remote);
+                        solrAuctionsService.updateUrl(remote);
                     }
 
                 }

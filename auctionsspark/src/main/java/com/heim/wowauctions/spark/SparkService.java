@@ -1,8 +1,7 @@
 package com.heim.wowauctions.spark;
 
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-import com.heim.wowauctions.common.persistence.dao.MongoService;
+import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.ItemChartData;
 import com.mongodb.spark.MongoSpark;
@@ -33,22 +32,22 @@ public class SparkService {
     private final SparkSession sparkSession;
 
 
-    private final MongoAuctionsDao mongoAuctionsDao;
+    private final SolrAuctionsService mongoAuctionsDao;
 
-    private final MongoService mongoService;
+    private final SolrAuctionsService solrAuctionsService;
 
     private final JavaSparkContext javaSparkContext;
 
     @Autowired
     public SparkService(SparkSession sparkSession,
                         JavaSparkContext javaSparkContext,
-                        MongoAuctionsDao mongoAuctionsDao,
-                        MongoService mongoService) {
+                        SolrAuctionsService mongoAuctionsDao,
+                        SolrAuctionsService solrAuctionsService) {
         this.sparkSession = sparkSession;
         this.javaSparkContext = javaSparkContext;
 
         this.mongoAuctionsDao = mongoAuctionsDao;
-        this.mongoService = mongoService;
+        this.solrAuctionsService = solrAuctionsService;
     }
 
     @Scheduled(fixedRate = 3600000)
@@ -113,10 +112,8 @@ public class SparkService {
             }
 
         }
-        long timestamp = mongoAuctionsDao.getAuctionsUrl().getLastModified();
-        mongoService.deleteItemChartData();
-        map.values().forEach(i -> i.setTimestamp(timestamp));
-        mongoService.saveItemCharts(map.values());
+        //long timestamp = mongoAuctionsDao.getAuctionUrl().values().forEach(i -> i.setTimestamp(timestamp));
+        solrAuctionsService.saveItemCharts(map.values());
 
         System.out.println("#################################################################");
     }

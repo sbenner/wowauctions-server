@@ -1,6 +1,8 @@
 package com.heim.wowauctions.common.persistence.models;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 
 /**
@@ -10,34 +12,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Time: 11:47 PM
  */
 
-@Document
+@Data
+@SolrDocument(collection = "feedback")
 public class Feedback {
 
     private long timestamp;
     private String feedback;
     private String from;
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
+    @Id
+    String id;
 }

@@ -1,7 +1,11 @@
 package com.heim.wowauctions.common.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 
 /**
@@ -10,125 +14,39 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Date: 8/4/14
  * Time: 11:47 PM
  */
-
-@Document(collection = "auctionsArchive")
+@Data
+@SolrDocument(collection = "archived_auctions")
 public class ArchivedAuction {
+    @Id
+    String id;
 
     @JsonView(BaseView.class)
+    @Indexed(name = "auc_l")
     private long auc;
+    @Indexed(name = "item_id_l")
     private long itemId;
+    @Field("owner_s")
     private String owner;
+    @Field("owner_realm_s")
     private String ownerRealm;
+    @Indexed(name = "bid_l")
     private long bid;
+    @Indexed(name = "buyout_l")
     private long buyout;
+    @Indexed(name = "qty_d")
     private int quantity;
+    @Indexed(name = "time_left_s")
     private String timeLeft;
     @JsonView(BaseView.class)
+    @Indexed(name = "rand_d")
     private int rand;
     @JsonView(BaseView.class)
+    @Indexed(name = "seed_l")
     private long seed;
+    @Indexed(name = "timestamp_l")
     private long timestamp;
 
-    public long getItemId() {
-        return itemId;
-    }
 
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
-    }
-
-    public long getAuc() {
-        return auc;
-    }
-
-    public void setAuc(Long auc) {
-        this.auc = auc;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getOwnerRealm() {
-        return ownerRealm;
-    }
-
-    public void setOwnerRealm(String ownerRealm) {
-        this.ownerRealm = ownerRealm;
-    }
-
-    public long getBid() {
-        return this.bid;
-    }
-
-    public void setBid(Long bid) {
-        this.bid = bid;
-    }
-
-    public long getBuyout() {
-        return this.buyout;
-    }
-
-    public void setBuyout(Long buyout) {
-        this.buyout = buyout;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getTimeLeft() {
-        return timeLeft;
-    }
-
-    public void setTimeLeft(String timeLeft) {
-        this.timeLeft = timeLeft;
-    }
-
-    public int getRand() {
-        return rand;
-    }
-
-    public void setRand(int rand) {
-        this.rand = rand;
-    }
-
-    public long getSeed() {
-        return seed;
-    }
-
-    public void setSeed(Long seed) {
-        this.seed = seed;
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{ auc: ").append(this.getAuc()).
-                append(", owner: ").append(this.getOwner()).
-                append("-").append(this.getOwnerRealm()).
-                append(", bid: ").append(this.getBid()).
-                append(", buyout: ").append(this.getBuyout()).
-                append(", timeleft: ").append(this.getTimeLeft())
-                .append("}");
-
-        return sb.toString();
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public interface BaseView {
     }

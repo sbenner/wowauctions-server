@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MongoService {
+public class SolrAuctionsService {
 
 
     @Autowired
@@ -36,27 +36,41 @@ public class MongoService {
 
     @Autowired
     private
+    AuctionUrlRepository auctionUrlRepository;
+
+
+    @Autowired
+    private
     ArchivedAuctionRepository archivedAuctionRepository;
 
     @Autowired
     private ItemChartDataRepository itemChartDataRepository;
 
 
-    public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {
-        return auctionRepository.findByItemIdIn(ids, pageable);
+    public List<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {
+        return auctionRepository.findByItemIdIn(ids);
     }
 
     //todo: build auctions with timestamp and ownerRealm if we go beyond 3 realms
 
 
-    public List<Item> findItemByName(String name) {
-        return itemRepository.findItemsByNameRegex(name);
+    public AuctionUrl getAuctionUrl() {
+        return auctionUrlRepository.findAll().stream().findFirst().orElse(null);
     }
 
-
-    public List<Item> findItemByExactName(String name) {
-        return itemRepository.findItemsByNameRegexExactMatch(name);
+    public void saveUrl(AuctionUrl url) {
+        auctionUrlRepository.save(url);
     }
+
+    public void updateUrl(AuctionUrl url) {
+
+        auctionUrlRepository.save(url);
+    }
+
+    public Iterable<Item> findAllItems() {
+        return itemRepository.findAll();
+    }
+
 
     public long getAuctionsCount() {
         return auctionRepository.count();
@@ -73,6 +87,10 @@ public class MongoService {
 
     }
 
+    public void removeArchivedAuctions(List<Auction> auctions) {
+        auctionRepository.deleteAll(auctions);
+    }
+
     public void saveFeedback(Feedback feedback){
         feedback.setTimestamp(System.currentTimeMillis());
         feedbackRepository.save(feedback);
@@ -84,18 +102,38 @@ public class MongoService {
 
     }
 
+    public List<Auction> findAuctionsToArchive(long timestamp) {
+        return auctionRepository.findAuctionByTimestampBefore(timestamp);
+    }
+
+    public void saveAuction(Auction auction) {
+        auctionRepository.save(auction);
+    }
+
+    public void insertAllAuctions(List<Auction> auctions) {
+        auctionRepository.saveAll(auctions);
+    }
 
     public Map<Long, Long> getItemStatistics(long itemId) {
         ItemChartData
                 item =
-        itemChartDataRepository.findByItemId(itemId);
+                itemChartDataRepository.findByItemId(itemId);
         if (item != null)
             return item.getValueTime();
         else
             return null;
 
+    }
+
+    public Page<Item> findItemByName(String name, Pageable pageable) {
+
+        return itemRepository.findByName(name, pageable);
 
     }
+
+//    public List<Item >findItemByExactName(String name){
+//
+//    }
 
     public void deleteItemChartData() {
         itemChartDataRepository.deleteAll();
@@ -106,12 +144,12 @@ public class MongoService {
     }
 
     public void saveItemCharts(Collection<ItemChartData> data) {
-        itemChartDataRepository.save(data);
+        itemChartDataRepository.saveAll(data);
     }
 
 
     public void saveRealms(List<Realm> realmList) {
-        realmRepository.save(realmList);
+        realmRepository.saveAll(realmList);
     }
 
 }
