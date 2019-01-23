@@ -17,12 +17,12 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 @Data
 @SolrDocument(collection = "archived_auctions")
 public class ArchivedAuction {
+
     @Id
     String id;
-
-    @JsonView(BaseView.class)
     @Indexed(name = "auc_l")
     private long auc;
+
     @Indexed(name = "item_id_l")
     private long itemId;
     @Field("owner_s")

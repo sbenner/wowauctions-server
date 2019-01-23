@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SolrAuctionsService {
@@ -55,7 +57,7 @@ public class SolrAuctionsService {
 
 
     public AuctionUrl getAuctionUrl() {
-        return auctionUrlRepository.findAll().stream().findFirst().orElse(null);
+        return auctionUrlRepository.findAll().getContent().stream().findFirst().orElse(null);
     }
 
     public void saveUrl(AuctionUrl url) {
@@ -69,6 +71,10 @@ public class SolrAuctionsService {
 
     public Iterable<Item> findAllItems() {
         return itemRepository.findAll();
+    }
+
+    public Iterable<Auction> findAllAuctions() {
+        return auctionRepository.findAll();
     }
 
 
@@ -104,6 +110,26 @@ public class SolrAuctionsService {
 
     public List<Auction> findAuctionsToArchive(long timestamp) {
         return auctionRepository.findAuctionByTimestampBefore(timestamp);
+    }
+
+
+    public void saveToArchive(List<Auction> auc) {
+        List<ArchivedAuction> archivedAuctions =
+                auc.stream().map(i->{
+                    ArchivedAuction archivedAuction = new ArchivedAuction();
+                    archivedAuction.setAuc(i.getAuc());
+                    archivedAuction.setBid(i.getBid());
+                    archivedAuction.setBuyout(i.getBuyout());
+                  //  archivedAuction.setId(i.getId());
+                    archivedAuction.setItemId(i.getItemId());
+                    archivedAuction.setOwner(i.getOwner());
+                    archivedAuction.setOwnerRealm(i.getOwnerRealm());
+                    archivedAuction.setTimeLeft(i.getTimeLeft());
+                    archivedAuction.setTimestamp(i.getTimestamp());
+                    return archivedAuction;
+                }).collect(Collectors.toList());
+
+        archivedAuctionRepository.saveAll(archivedAuctions);
     }
 
     public void saveAuction(Auction auction) {

@@ -22,9 +22,12 @@ import java.util.Date;
 @SolrDocument(collection = "auctions")
 public class Auction implements Comparable<Auction> {
 
+
+    //String id;
+    @JsonView(ArchivedAuction.BaseView.class)
     @Id
     String id;
-    @JsonView(ArchivedAuction.BaseView.class)
+
     @Indexed(name = "auc_l")
     private long auc;
     @Indexed(name = "item_id_l")

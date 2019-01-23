@@ -44,16 +44,16 @@ public class ItemsSyncService {
     @Autowired
     private AuctionsService auctionsService;
 
-    @Scheduled(fixedRate = 7200000,initialDelay = 1800000)
+    @Scheduled(fixedRate = 400000,initialDelay = 180000)
     public void processItemsQueue() {
         logger.info("started");
         try {
 
             if (context.getQueue().isEmpty()) {
                 //we just update the incoming items
-                List<Long> allAuctionItemIds = auctionsService.findAllItemIds();
-                context.setQueue(AuctionUtils.createQueue(allAuctionItemIds));
-                allAuctionItemIds.clear();
+              //  List<Long> allAuctionItemIds = auctionsService.findAllItemIds();
+                context.setQueue(AuctionUtils.createQueue(auctionsService.findAllItemIds()));
+
             } else {
                 logger.info("Queue is not empty we dont add any items!");
             }

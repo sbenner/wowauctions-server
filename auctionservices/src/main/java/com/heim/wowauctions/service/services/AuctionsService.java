@@ -84,12 +84,21 @@ public class AuctionsService {
         return ret;
     }
 
-    public List<Long> findAllItemIds() {
-        Iterator i = auctionsService.findAllItems().iterator();
-        List<Long> ids = new ArrayList<>();
+    public Set<Long> findAllItemIds() {
+        Iterator i =auctionsService.findAllAuctions().iterator();
+        Set<Long> ids = new HashSet<>();
         while (i.hasNext()) {
-            Item item = (Item) i.next();
+            Auction item = (Auction) i.next();
             ids.add(item.getItemId());
+        }
+        Iterator itemsIterator = auctionsService.findAllItems().iterator();
+        Set<Long> itemIds = new HashSet<>();
+        while (itemsIterator.hasNext()) {
+            Item item = (Item) itemsIterator.next();
+            if (ids.contains(item.getItemId())) {
+                ids.remove(item.getItemId());
+            }
+
         }
         return ids;
     }

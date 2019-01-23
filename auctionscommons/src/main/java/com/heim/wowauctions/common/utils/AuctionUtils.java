@@ -192,20 +192,23 @@ public class AuctionUtils {
     public static Item buildItemFromString(String in) throws JSONException {
 
         JSONObject obj = new JSONObject(in);
+        Item item = getItem(obj);
+
+        return item;
+    }
+
+    private static Item getItem(JSONObject obj) {
         Item item = new Item();
 
         item.setItemId(obj.getLong("id"));
         item.setName(obj.getString("name"));
         item.setItemLevel(obj.getInt("itemLevel"));
         item.setQuality(obj.getInt("quality"));
-
         return item;
     }
 
-    public static BlockingQueue<Long> createQueue(List<Long> auctionItems) {
-        BlockingQueue<Long> newQueue = new LinkedBlockingQueue<Long>();
-        newQueue.addAll(auctionItems);
-        return newQueue;
+    public static BlockingQueue<Long> createQueue(Set<Long> auctionItems) {
+       return new LinkedBlockingQueue<Long>(auctionItems);
     }
 
     @Deprecated
@@ -218,11 +221,7 @@ public class AuctionUtils {
                 JSONArray rebornsJSonArray = new JSONArray(contents);
                 for (int i = 0; i < rebornsJSonArray.length(); i++) {
                     JSONObject obj = (JSONObject) rebornsJSonArray.get(i);
-                    Item reborn = new Item();
-                    reborn.setItemId(obj.getLong("id"));
-                    reborn.setName(obj.getString("name"));
-                    reborn.setItemLevel(obj.getInt("itemLevel"));
-                    reborn.setQuality(obj.getInt("quality"));
+                    Item reborn = getItem(obj);
                     reborns.add(reborn);
                 }
 

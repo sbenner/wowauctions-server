@@ -2,6 +2,7 @@ package com.heim.wowauctions.common.persistence.repositories;
 
 
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
+import org.springframework.data.domain.Page;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,6 @@ import java.util.List;
 @Repository
 public interface AuctionUrlRepository extends SolrCrudRepository<AuctionUrl, String> {
 
-    List<AuctionUrl> findAll();
+    Page<AuctionUrl> findAll();
 
 }

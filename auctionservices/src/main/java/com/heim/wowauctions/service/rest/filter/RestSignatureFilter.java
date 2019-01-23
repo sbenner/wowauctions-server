@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebFilter
+//@WebFilter
 public class RestSignatureFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(RestSignatureFilter.class);
 

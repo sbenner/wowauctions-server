@@ -84,11 +84,12 @@ public class AuctionsSyncService {
 
             }
             if (local == null || local.getLastModified() == null ||
-                    remote == null ||
-                    local.getLastModified() < remote.getLastModified() ||
+                    (remote!=null &&
+                    local.getLastModified() < remote.getLastModified()) ||
                     solrAuctionsService.getAuctionsCount() == 0) {
 
                 //get new auctions
+
                 String auctionsString = httpReqHandler.getData(remote.getUrl());
 
                 if (auctionsString != null) {
@@ -96,20 +97,23 @@ public class AuctionsSyncService {
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
 
                     solrAuctionsService.insertAllAuctions(auctions);
-                    BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
+
                     List<Auction> toArchive = solrAuctionsService
                             .findAuctionsToArchive(remote.getLastModified());
-                    queueToArchive.addAll(toArchive);
 
                     // auctionsDao.removeArchivedAuctions(remote.getLastModified());
 
-                    while (!queueToArchive.isEmpty()) {
-                        logger.info("q size: " + queueToArchive.size());
-                        getSemaphore().acquire();
+//                    while (!queueToArchive.isEmpty()) {
+  //                      logger.info("q size: " + queueToArchive.size());
+    //                    getSemaphore().acquire();
                         taskExecutor.execute(
-                                new ArchiveSaver(this, queueToArchive.poll(), solrAuctionsService));
-                    }
-                    solrAuctionsService.removeArchivedAuctions(toArchive);
+                        //        new ArchiveSaver(this, queueToArchive.poll(), solrAuctionsService)
+                                ()-> solrAuctionsService.saveToArchive(toArchive)
+
+                        );
+                    //}
+                    if(toArchive.size()>0)
+                        solrAuctionsService.removeArchivedAuctions(toArchive);
 
                     if (local == null || local.getUrl() == null) {
                         solrAuctionsService.saveUrl(remote);

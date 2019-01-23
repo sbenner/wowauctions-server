@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter
+//@WebFilter
 public class CsrfTokenResponseHeaderBindingFilter extends OncePerRequestFilter {
      private static final String REQUEST_ATTRIBUTE_NAME = "_csrf";
      private static final String RESPONSE_HEADER_NAME = "X-CSRF-HEADER";
