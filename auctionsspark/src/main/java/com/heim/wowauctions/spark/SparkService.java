@@ -49,6 +49,7 @@ public class SparkService {
         this.sparkSession = sparkSession;
         this.javaSparkContext = javaSparkContext;
 
+        this.mongoService = mongoService;
         this.mongoAuctionsDao = mongoAuctionsDao;
     }
 
