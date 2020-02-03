@@ -1,7 +1,7 @@
 package com.heim.wowauctions.common.persistence.repositories;
 
 
-import com.heim.wowauctions.common.persistence.models.Auction;
+import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +14,8 @@ import java.util.List;
  * Time: 3:00 AM
  */
 @Repository
-public interface AuctionRepository extends SolrCrudRepository<Auction, String> {
+public interface AuctionUrlRepository extends SolrCrudRepository<AuctionUrl, String> {
 
-    List<Auction> findByItemId(Long itemId);
-
-    List<Auction> findByItemIdIn(List<Long> itemIDsList);
-
-
-    List<Auction> findAuctionByTimestampBefore(Long ts);
+    List<AuctionUrl> findAll();
 
 }

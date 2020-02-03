@@ -1,7 +1,7 @@
 package com.heim.wowauctions.service.services;
 
 
-import com.heim.wowauctions.common.persistence.dao.MongoService;
+import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
 import com.heim.wowauctions.common.persistence.models.Realm;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
@@ -32,7 +32,7 @@ public class AuctionMasterServerSyncService {
     @Autowired
     HttpReqHandler httpReqHandler;
     @Autowired
-    private MongoService mongoService;
+    private SolrAuctionsService solrAuctionsService;
 
     @Scheduled(fixedRate = 3600000)
     public void retrieveServerAuction() {
@@ -42,7 +42,7 @@ public class AuctionMasterServerSyncService {
             String realms = httpReqHandler.getData(url);
 
             List<Realm> realmList = AuctionUtils.parseRealms(realms);
-            mongoService.saveRealms(realmList);
+            solrAuctionsService.saveRealms(realmList);
 
             PriorityQueue<Realm>
                     queueToArchive = new PriorityQueue<>();

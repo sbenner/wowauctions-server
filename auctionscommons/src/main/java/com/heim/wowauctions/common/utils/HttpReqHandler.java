@@ -12,12 +12,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +44,26 @@ public class HttpReqHandler {
     private RestTemplate customRestTemplate;
     @Value("${apikey}")
     private String apikey;
+
+
+    @Value("${token.url}")
+    String tokenUrl;
+
+    @Value("${client.id}")
+    String clientId;
+    @Value("${client.secret}")
+    String clientSecret;
+
+    OAuth2AccessToken token;
+
+
+    //String token;
+
+    @PostConstruct
+    void initToken() {
+        //    this.token=getToken();
+        this.token = obtainToken();
+    }
 
 
     public static Map<String, Integer> getServers() {
@@ -79,7 +106,7 @@ public class HttpReqHandler {
             HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
 
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(url).queryParam("apikey", apikey);
+                    UriComponentsBuilder.fromHttpUrl(url).queryParam("access_token", token.getValue());
 
             return
                     customRestTemplate.
@@ -92,6 +119,79 @@ public class HttpReqHandler {
         }
         return null;
 
+    }
+
+
+    public OAuth2AccessToken obtainToken() {
+
+        ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
+        resourceDetails.setClientSecret(clientSecret);
+        resourceDetails.setClientId(clientId);
+        resourceDetails.setAccessTokenUri(tokenUrl);
+        resourceDetails.setGrantType("client_credentials");
+        //resourceDetails.setScope(Arrays.asList("client_credentials"));
+
+//        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+//        headers.setContentType( MediaType.APPLICATION_JSON );
+//        headers.add(HttpHeaders.AUTHORIZATION, Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes()));
+
+        OAuth2RestTemplate oAuthRestTemplate = new OAuth2RestTemplate(resourceDetails);
+
+
+        return oAuthRestTemplate.getAccessToken();
+
+
+//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "client_credentials");
+//        params.add("client_id", clientId);
+//        params.add("client_secret", clientSecret);
+//
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        String enc = clientId+":"+clientSecret;
+//        String encoded = Base64.getEncoder().encodeToString(enc.getBytes());
+//        headers.add( HttpHeaders.AUTHORIZATION, "Basic " + encoded);
+//
+//        UriComponentsBuilder builder =
+//                UriComponentsBuilder.fromHttpUrl(checkTokenUrl);
+//
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+//
+//        return
+//                customRestTemplate.
+//                        exchange(builder.build().encode().toUri(),
+//                                HttpMethod.POST,
+//                                request,
+//                                String.class).getBody();
+        //params.add("password", password);
+    }
+
+    private String getToken() {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "client_credentials");
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        String enc = clientId + ":" + clientSecret;
+        String encoded = Base64.getEncoder().encodeToString(enc.getBytes());
+        headers.add(HttpHeaders.AUTHORIZATION, "Basic " + encoded);
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(tokenUrl);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        return
+                customRestTemplate.
+                        exchange(builder.build().encode().toUri(),
+                                HttpMethod.POST,
+                                request,
+                                String.class).getBody();
     }
 
 

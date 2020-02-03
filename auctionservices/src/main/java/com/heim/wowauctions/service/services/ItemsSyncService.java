@@ -5,8 +5,6 @@ import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
 import com.heim.wowauctions.service.SyncServiceContext;
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 
@@ -37,13 +34,15 @@ public class ItemsSyncService {
     private SyncServiceContext context;
     @Autowired
     private TaskExecutor taskExecutor;
-    @Autowired
-    private MongoAuctionsDao auctionsDao;
+
     @Autowired
     private HttpReqHandler httpReqHandler;
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private AuctionsService auctionsService;
 
     @Scheduled(fixedRate = 7200000,initialDelay = 1800000)
     public void processItemsQueue() {
@@ -52,7 +51,7 @@ public class ItemsSyncService {
 
             if (context.getQueue().isEmpty()) {
                 //we just update the incoming items
-                List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
+                List<Long> allAuctionItemIds = auctionsService.findAllItemIds();
                 context.setQueue(AuctionUtils.createQueue(allAuctionItemIds));
                 allAuctionItemIds.clear();
             } else {
@@ -83,13 +82,6 @@ public class ItemsSyncService {
         this.semaphore.release();
     }
 
-    public MongoAuctionsDao getAuctionsDao() {
-        return auctionsDao;
-    }
-
-    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
-        this.auctionsDao = auctionsDao;
-    }
 
     public HttpReqHandler getHttpReqHandler() {
         return httpReqHandler;

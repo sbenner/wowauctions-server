@@ -69,7 +69,7 @@ public class AuctionUtils {
                         crs.add(r);
                     }
                 }
-                realm.setConnectedRealms(crs);
+                realm.setConnectedRealms(new ArrayList<>(crs));
             }
 
             realms.add(realm);
@@ -85,7 +85,7 @@ public class AuctionUtils {
                 realmList.stream().collect(
                         Collectors.toMap(Realm::getSlug, r -> r)).get(lookupRealm);
         if (realm != null) {
-            Set<String> connectedRealms = realm.getConnectedRealms();
+            Set<String> connectedRealms = new HashSet<>(realm.getConnectedRealms());
             System.out.println("Connections for the " + realm.getName() + " realm are :");
             connectedRealms.forEach(System.out::println);
             return connectedRealms;
@@ -102,16 +102,16 @@ public class AuctionUtils {
     }
 
 
-    public static Page<Auction> buildPagedAuctions(Page<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
+    public static Page<Auction> buildPagedAuctions(List<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
 
         List<Auction> foundAuctions = new ArrayList<>();
 
         for (Item reborn : rebornsList) {
 
-            for (Auction auction : auctions.getContent()) {
-                auction.setPpi();
+            for (Auction auction : auctions) {
+                //auction.setPpi();
                 if (reborn.getItemId() == auction.getItemId()) {
-                    auction.setItem(reborn);
+                    auction.setItemId(reborn.getItemId());
                     auction.setOwner(auction.getOwner() + "-" + auction.getOwnerRealm());
                     foundAuctions.add(auction);
                 }
@@ -119,7 +119,7 @@ public class AuctionUtils {
             }
         }
         Collections.sort(foundAuctions);
-        return new PageImpl<Auction>(foundAuctions, pageable, auctions.getTotalElements());
+        return new PageImpl<Auction>(foundAuctions, pageable, auctions.size());
     }
 
     public static String buildPrice(long price) {

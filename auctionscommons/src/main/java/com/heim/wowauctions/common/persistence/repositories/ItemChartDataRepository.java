@@ -2,7 +2,7 @@ package com.heim.wowauctions.common.persistence.repositories;
 
 
 import com.heim.wowauctions.common.persistence.models.ItemChartData;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Time: 3:00 AM
  */
 @Repository
-public interface ItemChartDataRepository extends PagingAndSortingRepository<ItemChartData, Long> {
+public interface ItemChartDataRepository extends SolrCrudRepository<ItemChartData, String> {
 
    // ItemChartData findByItemId(Long itemId, Pageable pageable);
 

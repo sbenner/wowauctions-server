@@ -1,6 +1,6 @@
 package com.heim.wowauctions.service.services;
 
-import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+
 import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
@@ -25,12 +25,11 @@ public class ItemProcessorWorker implements Runnable {
     private long itemId;
     private ItemsSyncService service;
     private HttpReqHandler httpReqHandler;
-    private MongoAuctionsDao mongoAuctionsDao;
+
     private ItemRepository itemRepository;
 
     ItemProcessorWorker(ItemsSyncService service, long itemId) {
         setService(service);
-        setMongoAuctionsDao(service.getAuctionsDao());
         setHttpReqHandler(service.getHttpReqHandler());
         setItemId(itemId);
         setItemRepository(service.getItemRepository());
@@ -107,13 +106,6 @@ public class ItemProcessorWorker implements Runnable {
         this.httpReqHandler = httpReqHandler;
     }
 
-    private MongoAuctionsDao getMongoAuctionsDao() {
-        return mongoAuctionsDao;
-    }
-
-    private void setMongoAuctionsDao(MongoAuctionsDao mongoAuctionsDao) {
-        this.mongoAuctionsDao = mongoAuctionsDao;
-    }
 
     public ItemRepository getItemRepository() {
         return itemRepository;

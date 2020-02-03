@@ -1,8 +1,9 @@
 package com.heim.wowauctions.common.persistence.models;
 
-import org.bson.types.ObjectId;
+import lombok.Data;
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Persistable;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,62 +11,23 @@ import org.springframework.data.domain.Persistable;
  * Date: 8/5/14
  * Time: 1:01 AM
  */
-public class Item implements Persistable {
+@Data
+@SolrDocument(collection = "item")
+public class Item {
 
     @Id
-    private ObjectId id;
-
+    private String id;
+    @Field("item_id_l")
     private long itemId;
+    @Field("name_s")
     private String name;
+    @Field("item_level_i")
     private int itemLevel;
+    @Field("quality_i")
     private int quality;
 
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getItemLevel() {
-        return itemLevel;
-    }
-
-    public void setItemLevel(int itemLevel) {
-        this.itemLevel = itemLevel;
-    }
-
-
-    public int getQuality() {
-        return quality;
-    }
-
-    public void setQuality(int quality) {
-        this.quality = quality;
-    }
-
-    public long getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    @Override
-    public boolean isNew() {
-        return (getId()==null);
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 }
 
 

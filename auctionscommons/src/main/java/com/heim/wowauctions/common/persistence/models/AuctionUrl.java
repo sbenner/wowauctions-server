@@ -1,42 +1,26 @@
 package com.heim.wowauctions.common.persistence.models;
 
+import lombok.Data;
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.SolrDocument;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sbenner
  * Date: 8/4/14
  * Time: 11:42 PM
  */
+@Data
+@SolrDocument(collection = "auction_url")
 public class AuctionUrl {
+    @Id
+    String id;
+    @Field("last_modified_l")
     private Long lastModified;
+    @Field("url_s")
     private String url;
+    @Field("realm_s")
     private String realm;
 
-    public Long getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Long lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String toString() {
-        return "lastModified: " + getLastModified() + " url: " + getUrl();
-    }
-
-    public String getRealm() {
-        return realm;
-    }
-
-    public void setRealm(String realm) {
-        this.realm = realm;
-    }
 }
