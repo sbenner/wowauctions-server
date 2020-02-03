@@ -1,13 +1,8 @@
 package com.heim.wowauctions.common.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Data;
-import org.apache.solr.client.solrj.beans.Field;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.Indexed;
-import org.springframework.data.solr.core.mapping.SolrDocument;
+import com.heim.wowauctions.common.utils.AuctionUtils;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -18,49 +13,163 @@ import java.util.Date;
  * Time: 11:47 PM
  */
 
-@Data
-@SolrDocument(collection = "auctions")
-public class Auction implements Comparable<Auction> {
 
-    @Id
-    String id;
-    @JsonView(ArchivedAuction.BaseView.class)
-    @Indexed(name = "auc_l")
+public class Auction implements Comparable<Auction> {
+    @JsonView(BaseView.class)
     private long auc;
-    @Indexed(name = "item_id_l")
+    private Item item;
+    @JsonView(BaseView.class)
     private long itemId;
-    @Field("owner_s")
     private String owner;
-    @Field("owner_realm_s")
+    @JsonView(BaseView.class)
     private String ownerRealm;
-    @Indexed(name = "bid_l")
     private long bid;
-    @Indexed(name = "buyout_l")
     private long buyout;
-    @Indexed(name = "qty_d")
     private int quantity;
-    @Indexed(name = "time_left_s")
     private String timeLeft;
-    @JsonView(ArchivedAuction.BaseView.class)
-    @Indexed(name = "rand_d")
+    @JsonView(BaseView.class)
     private int rand;
-    @JsonView(ArchivedAuction.BaseView.class)
-    @Indexed(name = "seed_l")
+    @JsonView(BaseView.class)
     private long seed;
-    @Indexed(name = "timestamp_l")
-    private long timestamp;
-    @Indexed(name = "date_d")
+    private double ppi;
     private Date date;
-    @Indexed(name = "ppi_l")
-    private BigDecimal ppi;
+    private long timestamp;
+
+    public String getDate() {
+        return new Date(this.timestamp).toString();
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getPpi() {
+        return AuctionUtils.buildPrice((long) (this.ppi * 10000));
+    }
+
+    public void setPpi() {
+        this.ppi = (double) this.buyout / 10000 / this.quantity;
+    }
+
+    public long getAuc() {
+        return auc;
+    }
+
+    public void setAuc(Long auc) {
+        this.auc = auc;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getOwnerRealm() {
+        return ownerRealm;
+    }
+
+    public void setOwnerRealm(String ownerRealm) {
+        this.ownerRealm = ownerRealm;
+    }
+
+    public String getBid() {
+        return AuctionUtils.buildPrice(this.bid);
+    }
+
+    public void setBid(Long bid) {
+        this.bid = bid;
+    }
+
+    public String getBuyout() {
+        return AuctionUtils.buildPrice(this.buyout);
+    }
+
+    public void setBuyout(Long buyout) {
+        this.buyout = buyout;
+    }
+
+    public long getLongBuyout() {
+        return this.buyout;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(String timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public int getRand() {
+        return rand;
+    }
+
+    public void setRand(int rand) {
+        this.rand = rand;
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+
+    public void setSeed(Long seed) {
+        this.seed = seed;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ auc: ").append(this.getAuc()).
+                append(", owner: ").append(this.getOwner()).
+                append("-").append(this.getOwnerRealm()).
+                append(", bid: ").append(this.getBid()).
+                append(", buyout: ").append(this.getBuyout()).
+                append(", timeleft: ").append(this.getTimeLeft())
+                .append("}");
+
+        return sb.toString();
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public int compareTo(Auction compareAuction) {
 
-        BigDecimal compare = compareAuction.ppi;
+        double compare = compareAuction.ppi;
         //ascending order
         //return this.quantity - compareQuantity;
-        return this.ppi.compareTo(compare);
-        //return (int) (this.ppi - compare);
+        return (int) (this.ppi - compare);
 
         //descending order
         //return (int)(compare - this.ppi);
@@ -72,3 +181,4 @@ public class Auction implements Comparable<Auction> {
 
 
 }
+

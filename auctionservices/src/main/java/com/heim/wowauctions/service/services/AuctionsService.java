@@ -1,7 +1,7 @@
 package com.heim.wowauctions.service.services;
 
-
-import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.Feedback;
 import com.heim.wowauctions.common.persistence.models.Item;
@@ -14,7 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,72 +33,57 @@ public class AuctionsService {
     private static ConcurrentHashMap<Long, String> cache = new ConcurrentHashMap<>();
     @Autowired
     HttpReqHandler httpReqHandler;
-
+    @Autowired
+    private MongoService mongoService;
 
     @Autowired
-    private SolrAuctionsService auctionsService;
-//
-//    @Autowired
-//    private MongoAuctionsDao auctionsDao;
+    private MongoAuctionsDao auctionsDao;
 
     @Value("${wow.tooltip.url}")
     private String tooltipUrl;
 
-    public List<Auction> getAuctions(String name, int pageSize, boolean exact, int page) {
+    public Page<Auction> getAuctions(String name, int pageSize, boolean exact, int page) {
         //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
-        Page<Item> items;
+        List<Item> items;
+        if (!exact)
+            items = mongoService.findItemByName(name);
+        else
+            items = mongoService.findItemByExactName(name);
+
+        List<Long> itemIds = new ArrayList<Long>();
+        for (Item item : items)
+            itemIds.add(item.getItemId());
 
 
-//        if (page == 0)
-//            pageRequest = new PageRequest(0, pageSize, sort);
-//        else
-//            pageRequest = new PageRequest(page, pageSize, sort);
-        //if (!exact)
-        items = auctionsService.findItemByName(name, PageRequest.of(page, pageSize));
-//        else
-//            items = auctionsService.findItemByExactName(name);
+        Sort sort = Sort.by(Sort.Direction.ASC, "buyout");
 
-        List<Long> itemIds =
-                (List<Long>) items.getContent().stream().mapToLong(i -> i.getItemId());
+        PageRequest pageRequest;
+        if (page == 0)
+            pageRequest = PageRequest.of(0, pageSize, sort);
+        else
+            pageRequest = PageRequest.of(page, pageSize, sort);
 
-
-        Sort sort = new Sort(Sort.Direction.ASC, "buyout");
-
-        PageRequest pageRequest = PageRequest.of(page, pageSize, sort);
-//        if (page == 0)
-//            pageRequest = new PageRequest(0, pageSize, sort);
-//        else
-//            pageRequest = new PageRequest(page, pageSize, sort);
-
-        List<Auction> auctions = auctionsService.getAuctionsByItemIDs(itemIds, pageRequest);
+        Page<Auction> auctions = mongoService.getAuctionsByItemIDs(itemIds, pageRequest);
 
         return auctions;
+        //  return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
     }
 
     public void saveFeedback(Feedback feedback){
-        auctionsService.saveFeedback(feedback);
+        mongoService.saveFeedback(feedback);
     }
 
-    public Map<String,Long> getCurrentStatus(){
-        Map<String,Long> ret = new HashMap<>();
-        ret.put("auctions_date", auctionsService.getAuctionUrl().getLastModified());
-        ret.put("count", auctionsService.getAuctionsCount());
-        ret.put("total", auctionsService.getTotal());
+    public Map<String,Long> getCurrentStatus() {
+        Map<String, Long> ret = new HashMap<>();
+        ret.put("auctions_date", auctionsDao.getAuctionsUrl().getLastModified());
+        ret.put("count", mongoService.getAuctionsCount());
+        ret.put("total", mongoService.getTotal());
         return ret;
     }
 
-    public List<Long> findAllItemIds() {
-        Iterator i = auctionsService.findAllItems().iterator();
-        List<Long> ids = new ArrayList<>();
-        while (i.hasNext()) {
-            Item item = (Item) i.next();
-            ids.add(item.getItemId());
-        }
-        return ids;
-    }
 
     public Map<Long, Long> getItemChart(long id) {
-        return auctionsService.getItemStatistics(id);
+        return mongoService.getItemStatistics(id);
     }
 
     public String getTooltip(long id) {

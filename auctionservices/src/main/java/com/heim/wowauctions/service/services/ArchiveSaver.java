@@ -1,7 +1,6 @@
 package com.heim.wowauctions.service.services;
 
-
-import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.models.Auction;
 
 /**
@@ -18,15 +17,13 @@ public class ArchiveSaver implements Runnable {
 
 
     private Auction auction;
-
+    private MongoAuctionsDao mongoAuctionsDao;
     private AuctionsSyncService service;
 
-    SolrAuctionsService auctionsService;
-
-    public ArchiveSaver(AuctionsSyncService service, Auction auction, SolrAuctionsService auctionsService) {
-        this.auctionsService = auctionsService;
-        this.service=service;
-        this.auction=auction;
+    public ArchiveSaver(AuctionsSyncService service, Auction auction, MongoAuctionsDao mongoAuctionsDao) {
+        this.mongoAuctionsDao = mongoAuctionsDao;
+        this.service = service;
+        this.auction = auction;
     }
 
     public void run() {
@@ -35,7 +32,7 @@ public class ArchiveSaver implements Runnable {
     }
 
     private void processItem() {
-        auctionsService.saveAuction(auction);
+        mongoAuctionsDao.archiveAuctions(auction);
         service.getSemaphore().release();
     }
 

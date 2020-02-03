@@ -1,6 +1,7 @@
 package com.heim.wowauctions.service.services;
 
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
@@ -34,24 +35,22 @@ public class ItemsSyncService {
     private SyncServiceContext context;
     @Autowired
     private TaskExecutor taskExecutor;
-
+    @Autowired
+    private MongoAuctionsDao auctionsDao;
     @Autowired
     private HttpReqHandler httpReqHandler;
 
     @Autowired
     private ItemRepository itemRepository;
 
-    @Autowired
-    private AuctionsService auctionsService;
-
-    @Scheduled(fixedRate = 7200000,initialDelay = 1800000)
+    @Scheduled(fixedRate = 7200000, initialDelay = 1800000)
     public void processItemsQueue() {
         logger.info("started");
         try {
 
             if (context.getQueue().isEmpty()) {
                 //we just update the incoming items
-                List<Long> allAuctionItemIds = auctionsService.findAllItemIds();
+                List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
                 context.setQueue(AuctionUtils.createQueue(allAuctionItemIds));
                 allAuctionItemIds.clear();
             } else {
@@ -63,7 +62,7 @@ public class ItemsSyncService {
                 semaphore.acquire();
                 taskExecutor.execute(
                         new ItemProcessorWorker(this, context.getQueue().poll()));
-		Thread.sleep(100);
+                Thread.sleep(100);
             }
 
 
@@ -82,6 +81,13 @@ public class ItemsSyncService {
         this.semaphore.release();
     }
 
+    public MongoAuctionsDao getAuctionsDao() {
+        return auctionsDao;
+    }
+
+    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
+        this.auctionsDao = auctionsDao;
+    }
 
     public HttpReqHandler getHttpReqHandler() {
         return httpReqHandler;

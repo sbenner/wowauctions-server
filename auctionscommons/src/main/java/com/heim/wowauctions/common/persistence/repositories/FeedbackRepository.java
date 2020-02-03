@@ -2,7 +2,7 @@ package com.heim.wowauctions.common.persistence.repositories;
 
 
 import com.heim.wowauctions.common.persistence.models.Feedback;
-import org.springframework.data.solr.repository.SolrCrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Time: 3:00 AM
  */
 @Repository
-public interface FeedbackRepository extends SolrCrudRepository<Feedback, String> {
+public interface FeedbackRepository extends PagingAndSortingRepository<Feedback, Long> {
 
 
 }

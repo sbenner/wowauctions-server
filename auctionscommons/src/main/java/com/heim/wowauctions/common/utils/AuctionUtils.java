@@ -69,7 +69,7 @@ public class AuctionUtils {
                         crs.add(r);
                     }
                 }
-                realm.setConnectedRealms(new ArrayList<>(crs));
+                realm.setConnectedRealms(crs);
             }
 
             realms.add(realm);

@@ -2,9 +2,7 @@ package com.heim.wowauctions.service;
 
 
 import com.heim.wowauctions.common.persistence.solr.DateToTsConverter;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.springframework.beans.factory.annotation.Value;
+import com.mongodb.MongoClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -14,8 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -27,7 +25,7 @@ import java.util.Properties;
 @SpringBootApplication
 @ServletComponentScan
 @EnableScheduling
-@EnableSolrRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
+//@EnableSolrRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
 @ComponentScan(basePackages = {"com.heim.wowauctions.service","com.heim.wowauctions.common"})
 @EnableCaching
 public class AuctionServiceStarter {
@@ -76,8 +74,18 @@ public class AuctionServiceStarter {
 
 
     @Bean
-    public RestTemplate customRestTemplate()
-    {
+    public MongoClient mongo() {
+        return new MongoClient("localhost");
+    }
+
+    @Bean
+    public MongoDbFactory mongoDbFactory() {
+        return new SimpleMongoClientDbFactory((com.mongodb.client.MongoClient) mongo(), "wowauctions");
+    }
+
+
+    @Bean
+    public RestTemplate customRestTemplate() {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         httpRequestFactory.setConnectionRequestTimeout(10000);
         httpRequestFactory.setConnectTimeout(10000);
@@ -85,15 +93,15 @@ public class AuctionServiceStarter {
         return new RestTemplate(httpRequestFactory);
     }
 
-
-    @Value("${spring.data.solr.hosts}")
-    String solrHosts;
-
-    @Bean
-    public SolrClient solrClient() {
-        return new HttpSolrClient.Builder(
-                solrHosts).build();
-    }
+//
+//    @Value("${spring.data.solr.hosts}")
+//    String solrHosts;
+//
+//    @Bean
+//    public SolrClient solrClient() {
+//        return new HttpSolrClient.Builder(
+//                solrHosts).build();
+//    }
 
     @Bean
     public ConversionService conversionService() {
@@ -102,24 +110,6 @@ public class AuctionServiceStarter {
         return service;
     }
 
-    @Bean
-    public SolrTemplate solrTemplate(SolrClient client) throws Exception {
-        SolrTemplate solrTemplate = new SolrTemplate(client);
-        //   MappingContext mappingContext = new SimpleSolrMappingContext();
-        //   MappingSolrConverter converter = new MappingSolrConverter(mappingContext);
-        //   List<Converter> converters = new ArrayList<>();
-        //converters.add(DateToTsConverter.INSTANCE);
-        //converters.add(TemporalConverters.StringToLocalDateConverter.INSTANCE);
-        // SolrCustomConversions conversions = new SolrCustomConversions(converters);
-
-
-        // converter.setCustomConversions(conversions);
-//        conver
-        // solrTemplate.setSolrConverter(converter);
-
-
-        return solrTemplate;
-    }
 
 //    public HttpComponentsClientHttpRequestFactory httpRequestFactory(){
 //                HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
