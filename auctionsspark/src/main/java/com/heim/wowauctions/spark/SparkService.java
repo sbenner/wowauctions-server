@@ -1,7 +1,8 @@
 package com.heim.wowauctions.spark;
 
 
-import com.heim.wowauctions.common.persistence.dao.SolrAuctionsService;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.heim.wowauctions.common.persistence.dao.MongoService;
 import com.heim.wowauctions.common.persistence.models.ArchivedAuction;
 import com.heim.wowauctions.common.persistence.models.ItemChartData;
 import com.mongodb.spark.MongoSpark;
@@ -32,22 +33,23 @@ public class SparkService {
     private final SparkSession sparkSession;
 
 
-    private final SolrAuctionsService mongoAuctionsDao;
+    private final MongoAuctionsDao mongoAuctionsDao;
 
-    private final SolrAuctionsService solrAuctionsService;
+    private final MongoService mongoService;
+
 
     private final JavaSparkContext javaSparkContext;
 
     @Autowired
     public SparkService(SparkSession sparkSession,
                         JavaSparkContext javaSparkContext,
-                        SolrAuctionsService mongoAuctionsDao,
-                        SolrAuctionsService solrAuctionsService) {
+                        MongoAuctionsDao mongoAuctionsDao,
+                        MongoService mongoService
+    ) {
         this.sparkSession = sparkSession;
         this.javaSparkContext = javaSparkContext;
 
         this.mongoAuctionsDao = mongoAuctionsDao;
-        this.solrAuctionsService = solrAuctionsService;
     }
 
     @Scheduled(fixedRate = 3600000)
@@ -89,7 +91,7 @@ public class SparkService {
                 ).collectAsList();
 
         Map<Long, ItemChartData> map = new HashMap<>();
-        ItemChartData itemChartData;
+        ItemChartData itemChartData = null;
 
         for (Row r : modified) {
             Long id = r.getAs(0);
@@ -113,7 +115,8 @@ public class SparkService {
 
         }
         //long timestamp = mongoAuctionsDao.getAuctionUrl().values().forEach(i -> i.setTimestamp(timestamp));
-        solrAuctionsService.saveItemCharts(map.values());
+        if (itemChartData != null)
+            mongoService.saveItemChart(itemChartData);
 
         System.out.println("#################################################################");
     }
