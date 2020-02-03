@@ -1,5 +1,6 @@
 package com.heim.wowauctions.spark;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.mongodb.Mongo;
 import org.apache.spark.SparkConf;
@@ -9,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.context.annotation.Scope;
 /**
  * Created by sbenner on 30/05/2017.
  */
 @Configuration
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SparkConfig {
 
     @Value("${spring.data.mongodb.database}")
@@ -26,25 +28,18 @@ public class SparkConfig {
     @Bean
     public SparkConf sparkConf() {
         return new SparkConf()
-                .setMaster("local[4]")
+                .setMaster("local[2]")
                 .set("spark.ui.enabled", "false")
                 .setAppName("WowAuctionsAggregator")
-                // .set("spark.deploy.defaultCores", "10")
-//                .set("spark.driver.memory","5g")
-//                .set("spark.executor.memory","4g")
-               // .set("spark.executor.cores","7")
-                .set("spark.memory.offHeap.size","2147483648")
-                .set("spark.memory.offHeap.enabled","true")
-                .set("spark.mongodb.input.partitionerOptions.partitionSizeMB","512")
-                .set("spark.mongodb.input.partitionerOptions.partitionKey","itemId")
-                .set("spark.mongodb.input.partitioner","MongoSplitVectorPartitioner")
+                .set("spark.driver.memory","2g")
+                .set("spark.executor.memory","1g")
+               .set("spark.mongodb.input.partitioner","MongoSplitVectorPartitioner")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
     }
 
     @Bean
     public JavaSparkContext javaSparkContext() {
-
         return new JavaSparkContext(sparkConf());
     }
 
