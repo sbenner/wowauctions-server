@@ -63,6 +63,7 @@ public class ItemsSyncService {
                 semaphore.acquire();
                 taskExecutor.execute(
                         new ItemProcessorWorker(this, context.getQueue().poll()));
+		Thread.sleep(100);
             }
 
 
