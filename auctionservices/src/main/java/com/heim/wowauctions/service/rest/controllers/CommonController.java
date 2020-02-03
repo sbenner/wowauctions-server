@@ -2,6 +2,9 @@ package com.heim.wowauctions.service.rest.controllers;
 
 import com.heim.wowauctions.common.persistence.models.Feedback;
 import com.heim.wowauctions.service.services.AuctionsService;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,19 +52,23 @@ public class CommonController {
     }
 
 
+    private static Logger logger = LoggerFactory.getLogger(CommonController.class);
     @RequestMapping(method = RequestMethod.GET, value = "/item/{id}", produces = "application/json"
     )
     public
     @ResponseBody
     ResponseEntity<String> getItem(@PathVariable(value = "id") long id
     ) throws IOException {
-
         if (id != 0) {
-            return new ResponseEntity<>(service.getTooltip(id), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
+            try {
+                JSONObject tooltip = new JSONObject(service.getTooltip(id));
+                return new ResponseEntity<>(tooltip.getString("tooltip"), HttpStatus.OK);
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 
     }
 
