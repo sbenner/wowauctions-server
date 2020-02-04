@@ -157,18 +157,28 @@ window.onload = function () {
                     $.each(data.content, function (d, results) {
 
                         $("#table tbody").append(
+
                             "<tr>" +
                             "<td>" +
                             "<a name='" + results.auc + "' id='" + results.item.itemId +
                             "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
-                            "<div  id='tooltip' class='wow-tooltip' ></div></td>" +
-                            "<td><span style='color: white;'>" + results.item.itemLevel + "</span></td>" +
+                            "<div  id='tooltip' class='wowhead-tooltip' ></div>"+
+                            "</td>" +
+
+                            // "<div  id='"+ results.auc +"-tooltip' " +
+                            // //"<div  id='tooltip' " +
+                            // " class='wowhead-tooltip'  ></div></td>" +
+
+                            "<td><span style='color: white;'>" + results.item.itemLevel + "</span>" +
+
+                            "</td>" +
                             "<td><span style='color: white;'>" + results.ownerRealm + "</span></td>" +
                             "<td><span style='color: white;'>" + results.bid + "</span></td>" +
                             "<td><span style='color: white;'>" + results.buyout + "</span></td>" +
                             "<td><span style='color: white;'>" + results.ppi + "</span></td>" +
                             "<td><span style='color: white;'>" + results.quantity + "</span></td>" +
                             "</tr>"
+
                         );
                         setAhrefColor(results);
 
@@ -219,7 +229,8 @@ window.onload = function () {
             dataType: 'text',
             success: function (result) {
                 //var tooltip = ele.firstChild;
-                $('.wow-tooltip').remove();
+               //$('.tooltip').remove();
+                ele.innerHTML='';
                 ele.innerHTML = result;
 
             },
@@ -239,7 +250,6 @@ window.onload = function () {
 
         ahref.onclick = function () {
             $("#tbl").hide();
-
             $("#chartDiv").show();
             runChart(results.item.itemId,results.item.name);
         };
@@ -250,10 +260,10 @@ window.onload = function () {
         };
 
         ahref.onmouseleave = function () {
-            $('.wiki-tooltip').remove();
+           tooltip.innerHTML='';
         };
 
-        if (ahref && ahref !== null) {
+        if (ahref) {
             ahref.className = 'color-q' + quality;
         }
     }
