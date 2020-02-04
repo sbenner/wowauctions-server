@@ -3,7 +3,6 @@ package com.heim.wowauctions.common.persistence.dao;
 import com.heim.wowauctions.common.persistence.models.*;
 import com.heim.wowauctions.common.persistence.repositories.*;
 import com.heim.wowauctions.common.utils.AuctionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,29 +15,35 @@ import java.util.Map;
 public class MongoService {
 
 
-    @Autowired
-    private
+    private final
     RealmRepository realmRepository;
 
-    @Autowired
-    private
+    private final
     FeedbackRepository feedbackRepository;
 
-    @Autowired
-    private
+    private final
     ItemRepository itemRepository;
 
-    @Autowired
-    private
+    private final
     AuctionRepository auctionRepository;
 
-
-    @Autowired
-    private
+    private final
     ArchivedAuctionRepository archivedAuctionRepository;
 
-    @Autowired
-    private ItemChartDataRepository itemChartDataRepository;
+    private final ItemChartDataRepository itemChartDataRepository;
+
+    public MongoService(RealmRepository realmRepository, FeedbackRepository feedbackRepository,
+                        ItemRepository itemRepository, AuctionRepository auctionRepository, ArchivedAuctionRepository archivedAuctionRepository,
+                        ItemChartDataRepository itemChartDataRepository
+    ) {
+        this.realmRepository = realmRepository;
+        this.feedbackRepository = feedbackRepository;
+        this.itemRepository = itemRepository;
+        this.auctionRepository = auctionRepository;
+        this.archivedAuctionRepository = archivedAuctionRepository;
+        this.itemChartDataRepository = itemChartDataRepository;
+
+    }
 
 
     public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {

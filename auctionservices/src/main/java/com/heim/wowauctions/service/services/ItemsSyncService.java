@@ -34,9 +34,9 @@ public class ItemsSyncService {
     @Autowired
     private SyncServiceContext context;
     @Autowired
-    private TaskExecutor taskExecutor;
+    private TaskExecutor itemSyncTaskExecutor;
     @Autowired
-    private MongoAuctionsDao auctionsDao;
+    private MongoAuctionsDao mongoTemplate;
     @Autowired
     private HttpReqHandler httpReqHandler;
 
@@ -50,7 +50,7 @@ public class ItemsSyncService {
 
             if (context.getQueue().isEmpty()) {
                 //we just update the incoming items
-                List<Long> allAuctionItemIds = getAuctionsDao().findAllAuctionItemIds(0);
+                List<Long> allAuctionItemIds = getMongoTemplate().findAllAuctionItemIds(0);
                 context.setQueue(AuctionUtils.createQueue(allAuctionItemIds));
                 allAuctionItemIds.clear();
             } else {
@@ -60,7 +60,7 @@ public class ItemsSyncService {
             while (!context.getQueue().isEmpty()) {
                 logger.info("q size: " + context.getQueue().size());
                 semaphore.acquire();
-                taskExecutor.execute(
+                itemSyncTaskExecutor.execute(
                         new ItemProcessorWorker(this, context.getQueue().poll()));
                 Thread.sleep(100);
             }
@@ -81,12 +81,12 @@ public class ItemsSyncService {
         this.semaphore.release();
     }
 
-    public MongoAuctionsDao getAuctionsDao() {
-        return auctionsDao;
+    public MongoAuctionsDao getMongoTemplate() {
+        return mongoTemplate;
     }
 
-    public void setAuctionsDao(MongoAuctionsDao auctionsDao) {
-        this.auctionsDao = auctionsDao;
+    public void setMongoTemplate(MongoAuctionsDao mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
     }
 
     public HttpReqHandler getHttpReqHandler() {

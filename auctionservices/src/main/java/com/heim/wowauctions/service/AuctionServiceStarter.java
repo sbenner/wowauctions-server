@@ -1,8 +1,11 @@
 package com.heim.wowauctions.service;
 
 
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
 import com.heim.wowauctions.common.persistence.solr.DateToTsConverter;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -14,6 +17,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -25,8 +29,8 @@ import java.util.Properties;
 @SpringBootApplication
 @ServletComponentScan
 @EnableScheduling
-//@EnableSolrRepositories(basePackages = {"com.heim.wowauctions.common.persistence"})
-@ComponentScan(basePackages = {"com.heim.wowauctions.service","com.heim.wowauctions.common"})
+@EnableMongoRepositories(basePackages = {"com.heim.wowauctions.common.persistence.repositories"})
+@ComponentScan(basePackages = {"com.heim.wowauctions.service", "com.heim.wowauctions.common"})
 @EnableCaching
 public class AuctionServiceStarter {
 
@@ -72,15 +76,22 @@ public class AuctionServiceStarter {
 //        return jsonParser.parseMap(resultString).get("access_token").toString();
 //    }
 
-
-    @Bean
-    public MongoClient mongo() {
-        return new MongoClient("localhost");
+    public @Bean
+    MongoAuctionsDao mongoTemplate() {
+        return new MongoAuctionsDao(mongoDbFactory());
     }
+
+
+    public @Bean
+    MongoClient mongoClient() {
+        return MongoClients.create("mongodb://localhost:27017");
+    }
+
 
     @Bean
     public MongoDbFactory mongoDbFactory() {
-        return new SimpleMongoClientDbFactory((com.mongodb.client.MongoClient) mongo(), "wowauctions");
+        return new SimpleMongoClientDbFactory(
+                mongoClient(), "wowauctions");
     }
 
 
@@ -154,10 +165,20 @@ public class AuctionServiceStarter {
 
 
     @Bean
-    public TaskExecutor taskExecutor() {
+    @Qualifier("syncTaskExecutor")
+    public TaskExecutor syncTaskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors()-2);
-        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors()-2);
+        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors() - 2);
+        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() - 2);
+        return taskExecutor;
+    }
+
+    @Bean
+    @Qualifier("itemSyncTaskExecutor")
+    public TaskExecutor itemSyncTaskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors() - 2);
+        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() - 2);
         return taskExecutor;
     }
 

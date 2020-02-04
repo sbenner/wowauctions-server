@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -29,7 +30,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  * Date: 8/6/14
  * Time: 10:41 PM
  */
-@Component
+@Component()
+@Qualifier("mongoTemplate")
 public class MongoAuctionsDao extends MongoTemplate {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoAuctionsDao.class);

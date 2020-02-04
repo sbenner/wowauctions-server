@@ -33,11 +33,12 @@ public class AuctionsService {
     private static ConcurrentHashMap<Long, String> cache = new ConcurrentHashMap<>();
     @Autowired
     HttpReqHandler httpReqHandler;
+
     @Autowired
     private MongoService mongoService;
 
     @Autowired
-    private MongoAuctionsDao auctionsDao;
+    private MongoAuctionsDao mongoTemplate;
 
     @Value("${wow.tooltip.url}")
     private String tooltipUrl;
@@ -75,7 +76,7 @@ public class AuctionsService {
 
     public Map<String,Long> getCurrentStatus() {
         Map<String, Long> ret = new HashMap<>();
-        ret.put("auctions_date", auctionsDao.getAuctionsUrl().getLastModified());
+        ret.put("auctions_date", mongoTemplate.getAuctionsUrl().getLastModified());
         ret.put("count", mongoService.getAuctionsCount());
         ret.put("total", mongoService.getTotal());
         return ret;

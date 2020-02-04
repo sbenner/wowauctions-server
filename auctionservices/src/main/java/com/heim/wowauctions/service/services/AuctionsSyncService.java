@@ -37,22 +37,22 @@ public class AuctionsSyncService {
     final
     MongoService mongoService;
     private final HttpReqHandler httpReqHandler;
-    private final TaskExecutor taskExecutor;
-    private final MongoAuctionsDao auctionsDao;
+    private final TaskExecutor syncTaskExecutor;
+    private final MongoAuctionsDao mongoTemplate;
     @Value("${wow.auctions.url}")
     private String url;
-    private final String realm;
+
+    @Value("${application.realm}")
+    private String realm;
 
     @Autowired
-    public AuctionsSyncService(MongoAuctionsDao auctionsDao,
+    public AuctionsSyncService(MongoAuctionsDao mongoTemplate,
                                HttpReqHandler httpReqHandler,
-                               TaskExecutor taskExecutor,
-                               String realm,
+                               TaskExecutor syncTaskExecutor,
                                MongoService mongoService) {
-        this.auctionsDao = auctionsDao;
+        this.mongoTemplate = mongoTemplate;
         this.httpReqHandler = httpReqHandler;
-        this.taskExecutor = taskExecutor;
-        this.realm = realm;
+        this.syncTaskExecutor = syncTaskExecutor;
         this.mongoService = mongoService;
     }
 
@@ -67,7 +67,7 @@ public class AuctionsSyncService {
             if (StringUtils.isEmpty(out))
                 return;
 
-            AuctionUrl local = auctionsDao.getAuctionsUrl();
+            AuctionUrl local = mongoTemplate.getAuctionsUrl();
             AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
             logger.info("local " + local.toString());
@@ -91,23 +91,23 @@ public class AuctionsSyncService {
                     List<Auction> auctions = AuctionUtils.
                             buildAuctionsFromString(auctionsString, remote.getLastModified());
 
-                    auctionsDao.insertAll(auctions);
+                    mongoTemplate.insertAll(auctions);
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
-                    queueToArchive.addAll(auctionsDao.findAuctionsToArchive(remote.getLastModified()));
+                    queueToArchive.addAll(mongoTemplate.findAuctionsToArchive(remote.getLastModified()));
 
-                    auctionsDao.removeArchivedAuctions(remote.getLastModified());
+                    mongoTemplate.removeArchivedAuctions(remote.getLastModified());
 
                     while (!queueToArchive.isEmpty()) {
                         logger.info("q size: " + queueToArchive.size());
                         getSemaphore().acquire();
-                        taskExecutor.execute(
-                                new ArchiveSaver(this, queueToArchive.poll(), auctionsDao));
+                        syncTaskExecutor.execute(
+                                new ArchiveSaver(this, queueToArchive.poll(), mongoTemplate));
                     }
 
                     if (local.getUrl() == null) {
-                        auctionsDao.insertAuctionsUrlData(remote);
+                        mongoTemplate.insertAuctionsUrlData(remote);
                     } else {
-                        auctionsDao.updateAuctionsUrl(remote);
+                        mongoTemplate.updateAuctionsUrl(remote);
                     }
 
                 }
