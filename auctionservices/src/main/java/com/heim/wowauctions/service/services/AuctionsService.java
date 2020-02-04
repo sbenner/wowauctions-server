@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,9 +53,13 @@ public class AuctionsService {
         else
             items = mongoService.findItemByExactName(name);
 
+
         List<Long> itemIds = new ArrayList<Long>();
-        for (Item item : items)
-            itemIds.add(item.getItemId());
+        Map<Long, Item> m =
+                items.stream().collect(Collectors.toMap(
+                        Item::getItemId,
+                        Function.identity(), (a, b) -> a = b
+                ));
 
 
         Sort sort = Sort.by(Sort.Direction.ASC, "buyout");
@@ -64,10 +70,10 @@ public class AuctionsService {
         else
             pageRequest = PageRequest.of(page, pageSize, sort);
 
-        Page<Auction> auctions = mongoService.getAuctionsByItemIDs(itemIds, pageRequest);
+        Page<Auction> auctions = mongoService.getAuctionsByItemIDs(m, pageRequest);
 
         return auctions;
-        //  return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
+//          return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
     }
 
     public void saveFeedback(Feedback feedback){

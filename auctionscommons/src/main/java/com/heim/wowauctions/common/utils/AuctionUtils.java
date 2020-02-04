@@ -92,7 +92,7 @@ public class AuctionUtils {
         }
         return Collections.emptySet();
     }
-    
+
 
     public static boolean lookupRealmConnections(String realmIn, String lookupRealm, List<Realm> realmList) {
         Realm realm =
@@ -102,7 +102,8 @@ public class AuctionUtils {
     }
 
 
-    public static Page<Auction> buildPagedAuctions(List<Auction> auctions, Pageable pageable, List<Item> rebornsList) {
+    public static Page<Auction> buildPagedAuctions(List<Auction> auctions, Pageable pageable,
+                                                   List<Item> rebornsList) {
 
         List<Auction> foundAuctions = new ArrayList<>();
 
@@ -175,7 +176,7 @@ public class AuctionUtils {
             auction.setItemId(obj.getLong("item"));
             auction.setBid(obj.getLong("bid"));
             auction.setBuyout(obj.getLong("buyout"));
-            auction.setOwner(obj.getString("owner"));
+            //auction.setOwner(obj.getString("owner"));
             auction.setOwnerRealm(obj.getString("ownerRealm"));
             auction.setQuantity(obj.getInt("quantity"));
             auction.setTimeLeft(obj.getString("timeLeft"));

@@ -4,12 +4,14 @@ import com.heim.wowauctions.common.persistence.models.*;
 import com.heim.wowauctions.common.persistence.repositories.*;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MongoService {
@@ -46,8 +48,16 @@ public class MongoService {
     }
 
 
-    public Page<Auction> getAuctionsByItemIDs(List<Long> ids, Pageable pageable) {
-        return auctionRepository.findByItemIdIn(ids, pageable);
+    public Page<Auction> getAuctionsByItemIDs(Map<Long, Item> ids, Pageable pageable) {
+        Page<Auction> p = auctionRepository.findByItemIdIn(ids.keySet(), pageable);
+        List<Auction> auctions = p.getContent().
+                stream().map(o -> {
+            o.setItem(ids.get(o.getItemId()));
+            return o;
+        }).collect(Collectors.toList());
+
+        return new PageImpl<Auction>(auctions, pageable, auctions.size());
+
     }
 
     //todo: build auctions with timestamp and ownerRealm if we go beyond 3 realms

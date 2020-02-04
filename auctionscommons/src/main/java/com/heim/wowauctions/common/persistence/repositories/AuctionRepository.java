@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +20,7 @@ public interface AuctionRepository extends PagingAndSortingRepository<Auction, L
 
     Page<Auction> findByItemId(Long itemId, Pageable pageable);
 
-    Page<Auction> findByItemIdIn(List<Long> itemIDsList, Pageable pageable);
+    Page<Auction> findByItemIdIn(Set<Long> itemIDsList, Pageable pageable);
 
 
 }

@@ -3,7 +3,7 @@ window.onload = function () {
     $('#chartDiv').hide();
     $.ajax({
         type: "OPTIONS",
-        url: "http://localhost:8080/",
+        url: "http://wow.ooktioneer.com/",
         cache: false,
         async: true,
         success: function (data, opts, xhr) {
@@ -29,15 +29,15 @@ window.onload = function () {
     {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/current_status",
+            url: "http://wow.ooktioneer.com/wow/v1/web/current_status",
             cache: false,
             async: true,
             crossDomain: true,
             success: function (data) {
                 $('#date_num').html("Current Auctions Date:<b> "
-                    +new Date(data.auctions_date).toUTCString()
-                    +"</b><br> Count: <b>"+data.count
-                    +"</b><br> Total Auctions: <b>"+data.total+"</b>");
+                    + new Date(data.auctions_date).toUTCString()
+                    + "</b><br> Count: <b>" + data.count
+                    + "</b><br> Total Auctions: <b>" + data.total + "</b>");
             },
             error: function (err) {
                 console.log(err);
@@ -76,7 +76,7 @@ window.onload = function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/itemchart?id=" + id,
+            url: "http://wow.ooktioneer.com/wow/v1/web/itemchart?id=" + id,
             cache: false,
             async: true,
             success: function (data) {
@@ -145,7 +145,7 @@ window.onload = function () {
         name = name.trim();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/items?name=" + name + params,
+            url: "http://wow.ooktioneer.com/wow/v1/web/items?name=" + name + params,
             cache: false,
             async: true,
             crossDomain: true,
@@ -163,7 +163,7 @@ window.onload = function () {
                             "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
                             "<div  id='tooltip' class='tooltip'></div></td>" +
                             "<td><span style='color: white;'>" + results.item.itemLevel + "</span></td>" +
-                            "<td><span style='color: white;'>" + results.owner + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.ownerRealm + "</span></td>" +
                             "<td><span style='color: white;'>" + results.bid + "</span></td>" +
                             "<td><span style='color: white;'>" + results.buyout + "</span></td>" +
                             "<td><span style='color: white;'>" + results.ppi + "</span></td>" +
@@ -212,7 +212,7 @@ window.onload = function () {
 
         $.ajax({
             type: 'GET',
-            url: "http://localhost:8080/wow/v1/web/item/" + id,
+            url: "http://wow.ooktioneer.com/wow/v1/web/item/" + id,
             crossDomain: true,
             cache: false,
             async: true,
