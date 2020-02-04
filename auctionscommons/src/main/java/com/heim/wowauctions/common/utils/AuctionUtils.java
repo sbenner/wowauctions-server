@@ -177,7 +177,10 @@ public class AuctionUtils {
             auction.setBid(obj.getLong("bid"));
             auction.setBuyout(obj.getLong("buyout"));
             //auction.setOwner(obj.getString("owner"));
-            auction.setOwnerRealm(obj.getString("ownerRealm"));
+            try {
+                auction.setOwnerRealm(obj.getString("ownerRealm"));
+            } catch (Exception e) {
+            }
             auction.setQuantity(obj.getInt("quantity"));
             auction.setTimeLeft(obj.getString("timeLeft"));
 
