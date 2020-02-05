@@ -230,8 +230,11 @@
 }
 
 .wowhead-tooltip {
+
+    background: url(https://wow.zamimg.com/images/wow/tooltip.png);
+    font-family: Verdana, "Open Sans", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
     display: block;
-    background-color: black;
     border-radius: 5px;
     color: white;
     text-align-all: left;
@@ -261,6 +264,15 @@
     width: auto
 }
 
+.wowhead-tooltip th, .wowhead-tooltip td {
+
+    font-family: Verdana, "Open Sans", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff
+
+}
+
 .wowhead-tooltip td {
     max-width: 500px
 }
@@ -286,16 +298,17 @@
 }
 
 .wowhead-tooltip td table td table {
-    width: 99.5%
+    width: 100%
 }
 
-.wowhead-tooltip td, .wowhead-tooltip th {
-    background: url(/images/wow/tooltip.png);
-    font-family: Verdana, "Open Sans", Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 12px;
-    line-height: 17px;
-    color: #fff
-}
+/*.wowhead-tooltip td, .wowhead-tooltip th {*/
+/*.wowhead-tooltip th,.wowhead-tooltip td {*/
+/*    background: url(https://wow.zamimg.com/images/wow/tooltip.png);*/
+/*    font-family: Verdana, "Open Sans", Arial, "Helvetica Neue", Helvetica, sans-serif;*/
+/*    font-size: 12px;*/
+/*    line-height: 20px;*/
+/*    color: #fff*/
+/*}*/
 
 .wowhead-tooltip th {
     padding: 3px;
@@ -352,7 +365,7 @@
 .wowhead-tooltip p div {
     width: 44px;
     height: 44px;
-    background-image: url(/images/Icon/medium/border/default.png)
+    background-image: url(https://wow.zamimg.com/images/Icon/medium/border/default.png)
 }
 
 .wowhead-tooltip table.shrink b {
@@ -466,7 +479,7 @@
 .wowhead-follower-container.abilities img.threat {
     vertical-align: middle;
     padding: 4px;
-    background: url(/images/Icon/small/border/garrisonability.png) -2px -2px/27px 27px no-repeat
+    background: url(https://wow.zamimg.com/images/Icon/small/border/garrisonability.png) -2px -2px/27px 27px no-repeat
 }
 
 .wowhead-follower-container.follower-header {
@@ -491,7 +504,7 @@
 .wowhead-follower {
     height: 64px;
     width: 64px;
-    background: url(/images/garrisons/garrison-mission-sprite.png?1) 0 -136px
+    background: url(https://wow.zamimg.com/images/garrisons/garrison-mission-sprite.png?1) 0 -136px
 }
 
 .wowhead-follower-container .wowhead-follower {
@@ -501,7 +514,7 @@
 }
 
 .wowhead-follower.class-image[data-class] {
-    background: url(/images/garrisons/GarrisonFollowerClassIcons.png);
+    background: url(https://wow.zamimg.com/images/garrisons/GarrisonFollowerClassIcons.png);
     display: block;
     height: 49px;
     opacity: .25;
@@ -556,7 +569,7 @@
 }
 
 .wowhead-follower[data-quality] .avatar-portrait:before {
-    background: url(/images/garrisons/garrison-mission-sprite.png?1) -64px -136px;
+    background: url(https://wow.zamimg.com/images/garrisons/garrison-mission-sprite.png?1) -64px -136px;
     content: ' ';
     display: block;
     height: 64px;
@@ -604,7 +617,7 @@
 }
 
 .wowhead-follower[data-quality] .avatar-level:before {
-    background: url(/images/garrisons/garrison-mission-sprite.png?1) 0 -264px;
+    background: url(https://wow.zamimg.com/images/garrisons/garrison-mission-sprite.png?1) 0 -264px;
     content: ' ';
     display: block;
     height: 32px;
@@ -644,7 +657,7 @@
 }
 
 .wowhead-tooltip-powered {
-    background: url(/images/logos/wh-logo-54.png) left bottom no-repeat;
+    background: url(https://wow.zamimg.com/images/logos/wh-logo-54.png) left bottom no-repeat;
     display: none;
     font-size: 8px;
     left: 100%;
@@ -660,7 +673,7 @@
 
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
     .wowhead-tooltip-powered {
-        background-image: url(/images/logos/wh-logo-81.png);
+        background-image: url(https://wow.zamimg.com/images/logos/wh-logo-81.png);
         background-size: 54px auto
     }
 }
@@ -691,47 +704,47 @@
 
 .moneygold {
     padding-right: 15px;
-    background-image: url(/images/icons/money-gold.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/money-gold.gif)
 }
 
 .moneysilver {
     padding-right: 15px;
-    background-image: url(/images/icons/money-silver.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/money-silver.gif)
 }
 
 .moneycopper {
     padding-right: 15px;
-    background-image: url(/images/icons/money-copper.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/money-copper.gif)
 }
 
 .moneyachievement {
     padding-right: 13px;
-    background-image: url(/images/icons/achievement.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/achievement.gif)
 }
 
 .moneysocketmeta {
     padding-right: 18px;
-    background-image: url(/images/icons/socket-meta.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/socket-meta.gif)
 }
 
 .moneysocketred {
     padding-right: 18px;
-    background-image: url(/images/icons/socket-red.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/socket-red.gif)
 }
 
 .moneysocketyellow {
     padding-right: 18px;
-    background-image: url(/images/icons/socket-yellow.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/socket-yellow.gif)
 }
 
 .moneysocketblue {
     padding-right: 18px;
-    background-image: url(/images/icons/socket-blue.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/socket-blue.gif)
 }
 
 .moneysocketprismatic {
     padding-right: 18px;
-    background-image: url(/images/icons/socket-prismatic.gif)
+    background-image: url(https://wow.zamimg.com/images/icons/socket-prismatic.gif)
 }
 
 a.moneyitem, a.moneyachievement, a.moneysocketmeta, a.moneysocketred, a.moneysocketyellow, a.moneysocketblue, a.moneysocketprismatic {
@@ -1370,92 +1383,92 @@ a span.moneyitem, a span.moneyachievement, a span.moneysocketmeta, a span.moneys
 
 .socket-meta {
     padding-left: 19px;
-    background: url(/images/icons/socket-meta.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-meta.gif) no-repeat left center
 }
 
 .socket-red {
     padding-left: 19px;
-    background: url(/images/icons/socket-red.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-red.gif) no-repeat left center
 }
 
 .socket-yellow {
     padding-left: 19px;
-    background: url(/images/icons/socket-yellow.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-yellow.gif) no-repeat left center
 }
 
 .socket-blue {
     padding-left: 19px;
-    background: url(/images/icons/socket-blue.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-blue.gif) no-repeat left center
 }
 
 .socket-prismatic {
     padding-left: 19px;
-    background: url(/images/icons/socket-prismatic.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-prismatic.gif) no-repeat left center
 }
 
 .socket-hydraulic {
     padding-left: 19px;
-    background: url(/images/icons/socket-hydraulic.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-hydraulic.gif) no-repeat left center
 }
 
 .socket-cogwheel {
     padding-left: 19px;
-    background: url(/images/icons/socket-cogwheel.gif) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/socket-cogwheel.gif) no-repeat left center
 }
 
 .socket-relic-blood {
     padding-left: 19px;
-    background: url(/images/icons/relic-blood.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-blood.png) no-repeat left center
 }
 
 .socket-relic-arcane {
     padding-left: 19px;
-    background: url(/images/icons/relic-arcane.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-arcane.png) no-repeat left center
 }
 
 .socket-relic-fel {
     padding-left: 19px;
-    background: url(/images/icons/relic-fel.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-fel.png) no-repeat left center
 }
 
 .socket-relic-iron {
     padding-left: 19px;
-    background: url(/images/icons/relic-iron.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-iron.png) no-repeat left center
 }
 
 .socket-relic-shadow {
     padding-left: 19px;
-    background: url(/images/icons/relic-shadow.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-shadow.png) no-repeat left center
 }
 
 .socket-relic-frost {
     padding-left: 19px;
-    background: url(/images/icons/relic-frost.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-frost.png) no-repeat left center
 }
 
 .socket-relic-fire {
     padding-left: 19px;
-    background: url(/images/icons/relic-fire.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-fire.png) no-repeat left center
 }
 
 .socket-relic-water {
     padding-left: 19px;
-    background: url(/images/icons/relic-water.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-water.png) no-repeat left center
 }
 
 .socket-relic-life {
     padding-left: 19px;
-    background: url(/images/icons/relic-life.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-life.png) no-repeat left center
 }
 
 .socket-relic-storm {
     padding-left: 19px;
-    background: url(/images/icons/relic-storm.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-storm.png) no-repeat left center
 }
 
 .socket-relic-holy {
     padding-left: 19px;
-    background: url(/images/icons/relic-holy.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/relic-holy.png) no-repeat left center
 }
 
 .wowhead-newsfeed {
@@ -1477,7 +1490,7 @@ a span.moneyitem, a span.moneyachievement, a span.moneysocketmeta, a span.moneys
 .wowhead-newsfeed .wowhead-header a {
     color: #fff !important;
     padding: 0 0 0 21px;
-    background: url(/images/logos/favicon-16.png) 0 center no-repeat !important;
+    background: url(https://wow.zamimg.com/images/logos/favicon-16.png) 0 center no-repeat !important;
     font-size: 16px;
     font-weight: bold;
     text-decoration: none !important
@@ -1485,7 +1498,7 @@ a span.moneyitem, a span.moneyachievement, a span.moneysocketmeta, a span.moneys
 
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
     .wowhead-newsfeed .wowhead-header a {
-        background-image: url(/images/logos/favicon-32.png);
+        background-image: url(https://wow.zamimg.com/images/logos/favicon-32.png);
         background-size: 16px 16px
     }
 }
@@ -1520,7 +1533,7 @@ span.tooltip-pet-strongweak {
     vertical-align: middle;
     display: inline-block;
     background-repeat: no-repeat;
-    background-image: url(/images/wow/icons/battlepets/battlepetstrongweak.png)
+    background-image: url(https://wow.zamimg.com/images/wow/icons/battlepets/battlepetstrongweak.png)
 }
 
 hr.tooltip-pet-hr {
@@ -1567,13 +1580,13 @@ span.tooltip-multiskill-icon {
     height: 16px;
     vertical-align: middle;
     display: inline-block;
-    background: url(/images/icons/multiskill.png) no-repeat left center
+    background: url(https://wow.zamimg.com/images/icons/multiskill.png) no-repeat left center
 }
 
 span.tooltip-heroic-icon {
     padding-left: 13px;
     margin-left: 2px;
-    background: url(/images/icons/heroic.gif) left center no-repeat;
+    background: url(https://wow.zamimg.com/images/icons/heroic.gif) left center no-repeat;
     background-size: 14px 17px;
     vertical-align: middle
 }
