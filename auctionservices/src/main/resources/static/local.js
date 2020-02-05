@@ -157,13 +157,12 @@ window.onload = function () {
                     $.each(data.content, function (d, results) {
 
                         $("#table tbody").append(
-                            "<tr>" +
-                            "<td id='name-td'>" +
-
+                            "<tr >" +
+                            "<td id='name-td' style='display: block;' >" +
                             "<a  name='" + results.auc + "' id='" + results.item.itemId +
                             "' href='#' class='tooltip' onclick='return false;'>" + results.item.name + "</a>" +
-                            "<div id='" + results.auc + "-tooltip'><div/>" +
-                            "</div></td>" +
+                            "<div id='" + results.auc + "-tooltip' style='display: block;'><div/>" +
+                            "</td>" +
 
 
                             // "<div  id='"+ results.auc +"-tooltip' " +
@@ -230,6 +229,7 @@ window.onload = function () {
             dataType: 'text',
             success: function (result) {
                 //var tooltip = ele.firstChild;
+
                 ele.html(result);
                 ele.css('margin-left', $("#name-td").width() + 'px')
             },
@@ -257,13 +257,15 @@ window.onload = function () {
 
 
         $('.tooltip').hover(function() {
-            var offset = $(this).offset();
+           // var offset = $(this).offset();
             //var tpoffset= offset.left+56+$("#"+results.item.itemId).width();
-
+            $('.wowdb-tooltip').remove();
             getItemFromWeb(results.item.itemId, tooltip);
-            tooltip.fadeIn(300);
+            tooltip.fadeIn(200);
 
         }, function() {
+            $('.wowdb-tooltip').remove();
+            tooltip.innerHTML='';
             tooltip.fadeOut(200);
         });
 

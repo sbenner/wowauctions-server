@@ -52,7 +52,9 @@
 }
 
 .wowdb-tooltip .db-tooltip .db-image {
+    pointer-events: none;
     position: fixed;
+    display: block;
     margin-left: -57px;
     -moz-box-shadow: #000 0 0 5px;
     -webkit-box-shadow: #000 0 0 5px;
@@ -70,7 +72,7 @@
 
 .wowdb-tooltip .db-tooltip .db-description {
     position: fixed;
-
+    display: block;
     background: #112;
     background: rgba(17, 17, 34, 0.9);
     border-top: 1px solid #CCC;
@@ -475,9 +477,9 @@
     padding: 0
 }
 
-table td.old, table td.new {
-    vertical-align: top
-}
+/*table td.old, table td.new {*/
+/*    vertical-align: top*/
+/*}*/
 
 .wowdb-tooltip .db-tooltip .db-description a {
     color: inherit;
@@ -797,110 +799,3 @@ table td.old, table td.new {
     color: #8788ee !important
 }
 
-.wowhead-tooltip .q, .wowhead-tooltip .q a, .wowhead-tooltip .color-q, .wowhead-tooltip .wowhead-tooltip .q a, .wowhead-tooltip .q.fa:before, .iconsmall .q, .iconsmall .q a, .iconsmall .color-q, .iconsmall .wowhead-tooltip .q a, .iconsmall .q.fa:before, .iconmedium .q, .iconmedium .q a, .iconmedium .color-q, .iconmedium .wowhead-tooltip .q a, .iconmedium .q.fa:before, .iconlarge .q, .iconlarge .q a, .iconlarge .color-q, .iconlarge .wowhead-tooltip .q a, .iconlarge .q.fa:before {
-    color: #ffd100 !important
-}
-
-.wowhead-tooltip .q-alt, .wowhead-tooltip .q-alt a, .wowhead-tooltip .q-alt.fa:before, .iconsmall .q-alt, .iconsmall .q-alt a, .iconsmall .q-alt.fa:before, .iconmedium .q-alt, .iconmedium .q-alt a, .iconmedium .q-alt.fa:before, .iconlarge .q-alt, .iconlarge .q-alt a, .iconlarge .q-alt.fa:before {
-    color: #ffd100 !important
-}
-
-.wowhead-tooltip .q0, .wowhead-tooltip .q0 a, .wowhead-tooltip .color-q0, .wowhead-tooltip .wowhead-tooltip .q0 a, .wowhead-tooltip .q0.fa:before, .iconsmall .q0, .iconsmall .q0 a, .iconsmall .color-q0, .iconsmall .wowhead-tooltip .q0 a, .iconsmall .q0.fa:before, .iconmedium .q0, .iconmedium .q0 a, .iconmedium .color-q0, .iconmedium .wowhead-tooltip .q0 a, .iconmedium .q0.fa:before, .iconlarge .q0, .iconlarge .q0 a, .iconlarge .color-q0, .iconlarge .wowhead-tooltip .q0 a, .iconlarge .q0.fa:before {
-    color: #9d9d9d !important
-}
-
-.wowhead-tooltip .q0-alt, .wowhead-tooltip .q0-alt a, .wowhead-tooltip .q0-alt.fa:before, .iconsmall .q0-alt, .iconsmall .q0-alt a, .iconsmall .q0-alt.fa:before, .iconmedium .q0-alt, .iconmedium .q0-alt a, .iconmedium .q0-alt.fa:before, .iconlarge .q0-alt, .iconlarge .q0-alt a, .iconlarge .q0-alt.fa:before {
-    color: #9d9d9d !important
-}
-
-.wowhead-tooltip .q1, .wowhead-tooltip .q1 a, .wowhead-tooltip .color-q1, .wowhead-tooltip .wowhead-tooltip .q1 a, .wowhead-tooltip .q1.fa:before, .iconsmall .q1, .iconsmall .q1 a, .iconsmall .color-q1, .iconsmall .wowhead-tooltip .q1 a, .iconsmall .q1.fa:before, .iconmedium .q1, .iconmedium .q1 a, .iconmedium .color-q1, .iconmedium .wowhead-tooltip .q1 a, .iconmedium .q1.fa:before, .iconlarge .q1, .iconlarge .q1 a, .iconlarge .color-q1, .iconlarge .wowhead-tooltip .q1 a, .iconlarge .q1.fa:before {
-    color: #fff !important
-}
-
-.wowhead-tooltip .q1-alt, .wowhead-tooltip .q1-alt a, .wowhead-tooltip .q1-alt.fa:before, .iconsmall .q1-alt, .iconsmall .q1-alt a, .iconsmall .q1-alt.fa:before, .iconmedium .q1-alt, .iconmedium .q1-alt a, .iconmedium .q1-alt.fa:before, .iconlarge .q1-alt, .iconlarge .q1-alt a, .iconlarge .q1-alt.fa:before {
-    color: #fff !important
-}
-
-.wowhead-tooltip .q2, .wowhead-tooltip .q2 a, .wowhead-tooltip .color-q2, .wowhead-tooltip .wowhead-tooltip .q2 a, .wowhead-tooltip .q2.fa:before, .iconsmall .q2, .iconsmall .q2 a, .iconsmall .color-q2, .iconsmall .wowhead-tooltip .q2 a, .iconsmall .q2.fa:before, .iconmedium .q2, .iconmedium .q2 a, .iconmedium .color-q2, .iconmedium .wowhead-tooltip .q2 a, .iconmedium .q2.fa:before, .iconlarge .q2, .iconlarge .q2 a, .iconlarge .color-q2, .iconlarge .wowhead-tooltip .q2 a, .iconlarge .q2.fa:before {
-    color: #1eff00 !important
-}
-
-.wowhead-tooltip .q2-alt, .wowhead-tooltip .q2-alt a, .wowhead-tooltip .q2-alt.fa:before, .iconsmall .q2-alt, .iconsmall .q2-alt a, .iconsmall .q2-alt.fa:before, .iconmedium .q2-alt, .iconmedium .q2-alt a, .iconmedium .q2-alt.fa:before, .iconlarge .q2-alt, .iconlarge .q2-alt a, .iconlarge .q2-alt.fa:before {
-    color: #1eff00 !important
-}
-
-.wowhead-tooltip .q3, .wowhead-tooltip .q3 a, .wowhead-tooltip .color-q3, .wowhead-tooltip .wowhead-tooltip .q3 a, .wowhead-tooltip .q3.fa:before, .iconsmall .q3, .iconsmall .q3 a, .iconsmall .color-q3, .iconsmall .wowhead-tooltip .q3 a, .iconsmall .q3.fa:before, .iconmedium .q3, .iconmedium .q3 a, .iconmedium .color-q3, .iconmedium .wowhead-tooltip .q3 a, .iconmedium .q3.fa:before, .iconlarge .q3, .iconlarge .q3 a, .iconlarge .color-q3, .iconlarge .wowhead-tooltip .q3 a, .iconlarge .q3.fa:before {
-    color: #0070dd !important
-}
-
-.wowhead-tooltip .q3-alt, .wowhead-tooltip .q3-alt a, .wowhead-tooltip .q3-alt.fa:before, .iconsmall .q3-alt, .iconsmall .q3-alt a, .iconsmall .q3-alt.fa:before, .iconmedium .q3-alt, .iconmedium .q3-alt a, .iconmedium .q3-alt.fa:before, .iconlarge .q3-alt, .iconlarge .q3-alt a, .iconlarge .q3-alt.fa:before {
-    color: #0070dd !important
-}
-
-.wowhead-tooltip .q4, .wowhead-tooltip .q4 a, .wowhead-tooltip .color-q4, .wowhead-tooltip .wowhead-tooltip .q4 a, .wowhead-tooltip .q4.fa:before, .iconsmall .q4, .iconsmall .q4 a, .iconsmall .color-q4, .iconsmall .wowhead-tooltip .q4 a, .iconsmall .q4.fa:before, .iconmedium .q4, .iconmedium .q4 a, .iconmedium .color-q4, .iconmedium .wowhead-tooltip .q4 a, .iconmedium .q4.fa:before, .iconlarge .q4, .iconlarge .q4 a, .iconlarge .color-q4, .iconlarge .wowhead-tooltip .q4 a, .iconlarge .q4.fa:before {
-    color: #a335ee !important
-}
-
-.wowhead-tooltip .q4-alt, .wowhead-tooltip .q4-alt a, .wowhead-tooltip .q4-alt.fa:before, .iconsmall .q4-alt, .iconsmall .q4-alt a, .iconsmall .q4-alt.fa:before, .iconmedium .q4-alt, .iconmedium .q4-alt a, .iconmedium .q4-alt.fa:before, .iconlarge .q4-alt, .iconlarge .q4-alt a, .iconlarge .q4-alt.fa:before {
-    color: #9345ff !important
-}
-
-.wowhead-tooltip .q5, .wowhead-tooltip .q5 a, .wowhead-tooltip .color-q5, .wowhead-tooltip .wowhead-tooltip .q5 a, .wowhead-tooltip .q5.fa:before, .iconsmall .q5, .iconsmall .q5 a, .iconsmall .color-q5, .iconsmall .wowhead-tooltip .q5 a, .iconsmall .q5.fa:before, .iconmedium .q5, .iconmedium .q5 a, .iconmedium .color-q5, .iconmedium .wowhead-tooltip .q5 a, .iconmedium .q5.fa:before, .iconlarge .q5, .iconlarge .q5 a, .iconlarge .color-q5, .iconlarge .wowhead-tooltip .q5 a, .iconlarge .q5.fa:before {
-    color: #ff8000 !important
-}
-
-.wowhead-tooltip .q5-alt, .wowhead-tooltip .q5-alt a, .wowhead-tooltip .q5-alt.fa:before, .iconsmall .q5-alt, .iconsmall .q5-alt a, .iconsmall .q5-alt.fa:before, .iconmedium .q5-alt, .iconmedium .q5-alt a, .iconmedium .q5-alt.fa:before, .iconlarge .q5-alt, .iconlarge .q5-alt a, .iconlarge .q5-alt.fa:before {
-    color: #ff8000 !important
-}
-
-.wowhead-tooltip .q6, .wowhead-tooltip .q6 a, .wowhead-tooltip .color-q6, .wowhead-tooltip .wowhead-tooltip .q6 a, .wowhead-tooltip .q6.fa:before, .iconsmall .q6, .iconsmall .q6 a, .iconsmall .color-q6, .iconsmall .wowhead-tooltip .q6 a, .iconsmall .q6.fa:before, .iconmedium .q6, .iconmedium .q6 a, .iconmedium .color-q6, .iconmedium .wowhead-tooltip .q6 a, .iconmedium .q6.fa:before, .iconlarge .q6, .iconlarge .q6 a, .iconlarge .color-q6, .iconlarge .wowhead-tooltip .q6 a, .iconlarge .q6.fa:before {
-    color: #e5cc80 !important
-}
-
-.wowhead-tooltip .q6-alt, .wowhead-tooltip .q6-alt a, .wowhead-tooltip .q6-alt.fa:before, .iconsmall .q6-alt, .iconsmall .q6-alt a, .iconsmall .q6-alt.fa:before, .iconmedium .q6-alt, .iconmedium .q6-alt a, .iconmedium .q6-alt.fa:before, .iconlarge .q6-alt, .iconlarge .q6-alt a, .iconlarge .q6-alt.fa:before {
-    color: #e5cc80 !important
-}
-
-.wowhead-tooltip .q7, .wowhead-tooltip .q7 a, .wowhead-tooltip .color-q7, .wowhead-tooltip .wowhead-tooltip .q7 a, .wowhead-tooltip .q7.fa:before, .iconsmall .q7, .iconsmall .q7 a, .iconsmall .color-q7, .iconsmall .wowhead-tooltip .q7 a, .iconsmall .q7.fa:before, .iconmedium .q7, .iconmedium .q7 a, .iconmedium .color-q7, .iconmedium .wowhead-tooltip .q7 a, .iconmedium .q7.fa:before, .iconlarge .q7, .iconlarge .q7 a, .iconlarge .color-q7, .iconlarge .wowhead-tooltip .q7 a, .iconlarge .q7.fa:before {
-    color: #0cf !important
-}
-
-.wowhead-tooltip .q7-alt, .wowhead-tooltip .q7-alt a, .wowhead-tooltip .q7-alt.fa:before, .iconsmall .q7-alt, .iconsmall .q7-alt a, .iconsmall .q7-alt.fa:before, .iconmedium .q7-alt, .iconmedium .q7-alt a, .iconmedium .q7-alt.fa:before, .iconlarge .q7-alt, .iconlarge .q7-alt a, .iconlarge .q7-alt.fa:before {
-    color: #0cf !important
-}
-
-.wowhead-tooltip .q8, .wowhead-tooltip .q8 a, .wowhead-tooltip .color-q8, .wowhead-tooltip .wowhead-tooltip .q8 a, .wowhead-tooltip .q8.fa:before, .iconsmall .q8, .iconsmall .q8 a, .iconsmall .color-q8, .iconsmall .wowhead-tooltip .q8 a, .iconsmall .q8.fa:before, .iconmedium .q8, .iconmedium .q8 a, .iconmedium .color-q8, .iconmedium .wowhead-tooltip .q8 a, .iconmedium .q8.fa:before, .iconlarge .q8, .iconlarge .q8 a, .iconlarge .color-q8, .iconlarge .wowhead-tooltip .q8 a, .iconlarge .q8.fa:before {
-    color: #0cf !important
-}
-
-.wowhead-tooltip .q8-alt, .wowhead-tooltip .q8-alt a, .wowhead-tooltip .q8-alt.fa:before, .iconsmall .q8-alt, .iconsmall .q8-alt a, .iconsmall .q8-alt.fa:before, .iconmedium .q8-alt, .iconmedium .q8-alt a, .iconmedium .q8-alt.fa:before, .iconlarge .q8-alt, .iconlarge .q8-alt a, .iconlarge .q8-alt.fa:before {
-    color: #0cf !important
-}
-
-.wowhead-tooltip .q9, .wowhead-tooltip .q9 a, .wowhead-tooltip .color-q9, .wowhead-tooltip .wowhead-tooltip .q9 a, .wowhead-tooltip .q9.fa:before, .iconsmall .q9, .iconsmall .q9 a, .iconsmall .color-q9, .iconsmall .wowhead-tooltip .q9 a, .iconsmall .q9.fa:before, .iconmedium .q9, .iconmedium .q9 a, .iconmedium .color-q9, .iconmedium .wowhead-tooltip .q9 a, .iconmedium .q9.fa:before, .iconlarge .q9, .iconlarge .q9 a, .iconlarge .color-q9, .iconlarge .wowhead-tooltip .q9 a, .iconlarge .q9.fa:before {
-    color: #71d5ff !important
-}
-
-.wowhead-tooltip .q9-alt, .wowhead-tooltip .q9-alt a, .wowhead-tooltip .q9-alt.fa:before, .iconsmall .q9-alt, .iconsmall .q9-alt a, .iconsmall .q9-alt.fa:before, .iconmedium .q9-alt, .iconmedium .q9-alt a, .iconmedium .q9-alt.fa:before, .iconlarge .q9-alt, .iconlarge .q9-alt a, .iconlarge .q9-alt.fa:before {
-    color: #71d5ff !important
-}
-
-.wowhead-tooltip .q10, .wowhead-tooltip .q10 a, .wowhead-tooltip .color-q10, .wowhead-tooltip .wowhead-tooltip .q10 a, .wowhead-tooltip .q10.fa:before, .iconsmall .q10, .iconsmall .q10 a, .iconsmall .color-q10, .iconsmall .wowhead-tooltip .q10 a, .iconsmall .q10.fa:before, .iconmedium .q10, .iconmedium .q10 a, .iconmedium .color-q10, .iconmedium .wowhead-tooltip .q10 a, .iconmedium .q10.fa:before, .iconlarge .q10, .iconlarge .q10 a, .iconlarge .color-q10, .iconlarge .wowhead-tooltip .q10 a, .iconlarge .q10.fa:before {
-    color: #ff4040 !important
-}
-
-.wowhead-tooltip .q10-alt, .wowhead-tooltip .q10-alt a, .wowhead-tooltip .q10-alt.fa:before, .iconsmall .q10-alt, .iconsmall .q10-alt a, .iconsmall .q10-alt.fa:before, .iconmedium .q10-alt, .iconmedium .q10-alt a, .iconmedium .q10-alt.fa:before, .iconlarge .q10-alt, .iconlarge .q10-alt a, .iconlarge .q10-alt.fa:before {
-    color: #ff4040 !important
-}
-
-.wowhead-tooltip .q13, .wowhead-tooltip .q13 a, .wowhead-tooltip .color-q13, .wowhead-tooltip .wowhead-tooltip .q13 a, .wowhead-tooltip .q13.fa:before, .iconsmall .q13, .iconsmall .q13 a, .iconsmall .color-q13, .iconsmall .wowhead-tooltip .q13 a, .iconsmall .q13.fa:before, .iconmedium .q13, .iconmedium .q13 a, .iconmedium .color-q13, .iconmedium .wowhead-tooltip .q13 a, .iconmedium .q13.fa:before, .iconlarge .q13, .iconlarge .q13 a, .iconlarge .color-q13, .iconlarge .wowhead-tooltip .q13 a, .iconlarge .q13.fa:before {
-    color: #ffff98 !important
-}
-
-.wowhead-tooltip .q13-alt, .wowhead-tooltip .q13-alt a, .wowhead-tooltip .q13-alt.fa:before, .iconsmall .q13-alt, .iconsmall .q13-alt a, .iconsmall .q13-alt.fa:before, .iconmedium .q13-alt, .iconmedium .q13-alt a, .iconmedium .q13-alt.fa:before, .iconlarge .q13-alt, .iconlarge .q13-alt a, .iconlarge .q13-alt.fa:before {
-    color: #ffff98 !important
-}
-
-.wowhead-tooltip .q14, .wowhead-tooltip .q14 a, .wowhead-tooltip .color-q14, .wowhead-tooltip .wowhead-tooltip .q14 a, .wowhead-tooltip .q14.fa:before, .iconsmall .q14, .iconsmall .q14 a, .iconsmall .color-q14, .iconsmall .wowhead-tooltip .q14 a, .iconsmall .q14.fa:before, .iconmedium .q14, .iconmedium .q14 a, .iconmedium .color-q14, .iconmedium .wowhead-tooltip .q14 a, .iconmedium .q14.fa:before, .iconlarge .q14, .iconlarge .q14 a, .iconlarge .color-q14, .iconlarge .wowhead-tooltip .q14 a, .iconlarge .q14.fa:before {
-    color: #8788ee !important
-}

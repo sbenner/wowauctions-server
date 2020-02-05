@@ -63,6 +63,7 @@ public class CommonController {
             try {
                 JSONObject tooltip = new JSONObject(service.getTooltip(id)
                         .replaceAll("[\\(\\)]", "")
+                        .replaceAll("\\\\r|\\\\n","")
                         .replaceAll("\\s\\s+", "")
 
                 );
