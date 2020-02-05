@@ -158,11 +158,13 @@ window.onload = function () {
 
                         $("#table tbody").append(
                             "<tr>" +
-                            "<td>" +
-                            "<a name='" + results.auc + "' id='" + results.item.itemId +
+                            "<td id='name-td'>" +
+
+                            "<a  name='" + results.auc + "' id='" + results.item.itemId +
                             "' href='#' class='tooltip' onclick='return false;'>" + results.item.name + "</a>" +
-                            "<div id='tooltip'><div/>" +
-                            "</td>" +
+                            "<div id='" + results.auc + "-tooltip'><div/>" +
+                            "</div></td>" +
+
 
                             // "<div  id='"+ results.auc +"-tooltip' " +
                             // //"<div  id='tooltip' " +
@@ -228,9 +230,8 @@ window.onload = function () {
             dataType: 'text',
             success: function (result) {
                 //var tooltip = ele.firstChild;
-                //$('.tooltip').remove();
                 ele.html(result);
-
+                ele.css('margin-left', $("#name-td").width() + 'px')
             },
             error: function (result, a, err) {
 
@@ -245,7 +246,7 @@ window.onload = function () {
     function setAhrefColor(results) {
         var quality = results.item.quality;
         var ahref = document.getElementsByName(results.auc)[0];//$("a[name=\'"+results.auc+"\']");
-        var tooltip = document.getElementById('tooltip');
+        var tooltip = $('#' + results.auc + '-tooltip');
 
 
         ahref.onclick = function () {
@@ -257,11 +258,13 @@ window.onload = function () {
 
         $('.tooltip').hover(function() {
             var offset = $(this).offset();
-            getItemFromWeb(results.item.itemId, $(this).next('div'));
-            $(this).next('div').fadeIn(200).addClass('wowhead-tooltip');
-            $(this).next('div').css('left', offset.left + 'px');
+            //var tpoffset= offset.left+56+$("#"+results.item.itemId).width();
+
+            getItemFromWeb(results.item.itemId, tooltip);
+            tooltip.fadeIn(300);
+
         }, function() {
-            $(this).next('div').fadeOut(200);
+            tooltip.fadeOut(200);
         });
 
 

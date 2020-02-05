@@ -61,8 +61,12 @@ public class CommonController {
 
         if (id != 0) {
             try {
-                JSONObject tooltip = new JSONObject(service.getTooltip(id));
-                return new ResponseEntity<>(tooltip.getString("tooltip"), HttpStatus.OK);
+                JSONObject tooltip = new JSONObject(service.getTooltip(id)
+                        .replaceAll("[\\(\\)]", "")
+                        .replaceAll("\\s\\s+", "")
+
+                );
+                return new ResponseEntity<>(tooltip.getString("Tooltip"), HttpStatus.OK);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
