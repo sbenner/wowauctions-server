@@ -3,7 +3,7 @@ window.onload = function () {
     $('#chartDiv').hide();
     $.ajax({
         type: "OPTIONS",
-        url: "http://localhost:8080/",
+        url: "http://wow.ooktioneer.com/",
         cache: false,
         async: true,
         success: function (data, opts, xhr) {
