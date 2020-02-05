@@ -238,8 +238,8 @@
     text-align: left;
     max-width: 250px;
     box-shadow: 1px 1px 3px gray;
-
-    position: relative;
+    position: fixed;
+    white-space: normal;
 }
 
 .main-contents .wowhead-tooltip-width-restriction td:first-child > b {

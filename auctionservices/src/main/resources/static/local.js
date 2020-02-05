@@ -3,7 +3,7 @@ window.onload = function () {
     $('#chartDiv').hide();
     $.ajax({
         type: "OPTIONS",
-        url: "http://localhost:8080/",
+        url: "http://wow.ooktioneer.com/",
         cache: false,
         async: true,
         success: function (data, opts, xhr) {
@@ -29,7 +29,7 @@ window.onload = function () {
     {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/current_status",
+            url: "http://wow.ooktioneer.com/wow/v1/web/current_status",
             cache: false,
             async: true,
             crossDomain: true,
@@ -76,7 +76,7 @@ window.onload = function () {
 
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/itemchart?id=" + id,
+            url: "http://wow.ooktioneer.com/wow/v1/web/itemchart?id=" + id,
             cache: false,
             async: true,
             success: function (data) {
@@ -145,7 +145,7 @@ window.onload = function () {
         name = name.trim();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/wow/v1/web/items?name=" + name + params,
+            url: "http://wow.ooktioneer.com/wow/v1/web/items?name=" + name + params,
             cache: false,
             async: true,
             crossDomain: true,
@@ -161,8 +161,8 @@ window.onload = function () {
                             "<tr>" +
                             "<td>" +
                             "<a name='" + results.auc + "' id='" + results.item.itemId +
-                            "' href='#' onclick='return false;'>" + results.item.name + "</a>" +
-                            "<div  id='tooltip' class='wowhead-tooltip' ></div>"+
+                            "' href='#' class='tooltip' onclick='return false;'>" + results.item.name + "</a>" +
+                             "<div><div/>"+
                             "</td>" +
 
                             // "<div  id='"+ results.auc +"-tooltip' " +
@@ -222,7 +222,7 @@ window.onload = function () {
 
         $.ajax({
             type: 'GET',
-            url: "http://localhost:8080/wow/v1/web/item/" + id,
+            url: "http://wow.ooktioneer.com/wow/v1/web/item/" + id,
             crossDomain: true,
             cache: false,
             async: true,
@@ -230,11 +230,11 @@ window.onload = function () {
             success: function (result) {
                 //var tooltip = ele.firstChild;
                //$('.tooltip').remove();
-                ele.innerHTML='';
-                ele.innerHTML = result;
+                ele.html(result);
 
             },
             error: function (result, a, err) {
+
                 // ele.setAttribute('title', result.responseText);
 
             }
@@ -248,6 +248,7 @@ window.onload = function () {
         var ahref = document.getElementsByName(results.auc)[0];//$("a[name=\'"+results.auc+"\']");
         var tooltip = document.getElementById('tooltip');
 
+
         ahref.onclick = function () {
             $("#tbl").hide();
             $("#chartDiv").show();
@@ -255,13 +256,23 @@ window.onload = function () {
         };
 
 
-        ahref.onmouseenter = function () {
-            getItemFromWeb(results.item.itemId, tooltip);
-        };
+        $('.tooltip').hover(function() {
+            var offset = $(this).offset();
+            getItemFromWeb(results.item.itemId, $(this).next('div'));
+            $(this).next('div').fadeIn(200).addClass('wowhead-tooltip');
+            $(this).next('div').css('left', offset.left + 'px');
+        }, function() {
+            $(this).next('div').fadeOut(200);
+        });
 
-        ahref.onmouseleave = function () {
-           tooltip.innerHTML='';
-        };
+
+        // ahref.onmouseenter = function () {
+        //     getItemFromWeb(results.item.itemId, tooltip);
+        // };
+        //
+        // ahref.onmouseleave = function () {
+        //    tooltip.innerHTML='';
+        // };
 
         if (ahref) {
             ahref.className = 'color-q' + quality;
