@@ -120,6 +120,10 @@ public class SparkService {
             mongoService.saveItemChart(itemChartData);
 
         System.out.println("#################################################################");
+
+        sparkSession.stop();
+
+
     }
 }
 
