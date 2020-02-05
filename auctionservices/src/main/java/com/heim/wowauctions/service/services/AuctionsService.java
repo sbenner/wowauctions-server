@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,6 @@ public class AuctionsService {
             items = mongoService.findItemByExactName(name);
 
 
-        List<Long> itemIds = new ArrayList<Long>();
         Map<Long, Item> m =
                 items.stream().collect(Collectors.toMap(
                         Item::getItemId,

@@ -4,7 +4,6 @@ import com.heim.wowauctions.common.persistence.models.*;
 import com.heim.wowauctions.common.persistence.repositories.*;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +55,8 @@ public class MongoService {
             return o;
         }).collect(Collectors.toList());
 
-        return new PageImpl<Auction>(auctions, pageable, auctions.size());
+        return p;
+        //return new PageImpl<Auction>(auctions, p.getPageable(), auctions.size());
 
     }
 
