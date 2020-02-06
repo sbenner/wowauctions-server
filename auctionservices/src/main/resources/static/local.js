@@ -49,9 +49,10 @@ window.onload = function () {
         var sum = arr.reduce(function (a, b) {
             return a + b;
         });
-        var result = Math.log(sum / arr.length);
+        var result = (sum / arr.length);
 
-        return formatPrice(result);
+        var r = result / 10000;
+        return formatPrice(r);
     };
 
     var formatPrice = function(result){
@@ -161,14 +162,7 @@ window.onload = function () {
                             "<td id='name-td' style='display: block;' >" +
                             "<a  name='" + results.auc + "' id='" + results.item.itemId +
                             "' href='#' class='tooltip' onclick='return false;'>" + results.item.name + "</a>" +
-                            "<div id='" + results.auc + "-tooltip' style='display: block;'><div/>" +
                             "</td>" +
-
-
-                            // "<div  id='"+ results.auc +"-tooltip' " +
-                            // //"<div  id='tooltip' " +
-                            // " class='wowhead-tooltip'  ></div></td>" +
-
                             "<td><span style='color: white;'>" + results.item.itemLevel + "</span>" +
 
                             "</td>" +
@@ -228,15 +222,9 @@ window.onload = function () {
             async: true,
             dataType: 'text',
             success: function (result) {
-                //var tooltip = ele.firstChild;
-
                 ele.html(result);
-                ele.css('margin-left', $("#name-td").width() + 'px')
             },
             error: function (result, a, err) {
-
-                // ele.setAttribute('title', result.responseText);
-
             }
         });
 
@@ -246,37 +234,23 @@ window.onload = function () {
     function setAhrefColor(results) {
         var quality = results.item.quality;
         var ahref = document.getElementsByName(results.auc)[0];//$("a[name=\'"+results.auc+"\']");
-        var tooltip = $('#' + results.auc + '-tooltip');
+        var tooltip = $('#tooltip');
 
 
         ahref.onclick = function () {
             $("#tbl").hide();
             $("#chartDiv").show();
-            runChart(results.item.itemId,results.item.name);
+            runChart(results.item.itemId, results.item.name);
         };
+        ahref.onmouseenter = function () {
 
-
-        $('.tooltip').hover(function() {
-           // var offset = $(this).offset();
-            //var tpoffset= offset.left+56+$("#"+results.item.itemId).width();
-            $('.wowdb-tooltip').remove();
             getItemFromWeb(results.item.itemId, tooltip);
             tooltip.fadeIn(200);
+        };
 
-        }, function() {
-            $('.wowdb-tooltip').remove();
-            tooltip.innerHTML='';
-            tooltip.fadeOut(200);
-        });
-
-
-        // ahref.onmouseenter = function () {
-        //     getItemFromWeb(results.item.itemId, tooltip);
-        // };
-        //
-        // ahref.onmouseleave = function () {
-        //    tooltip.innerHTML='';
-        // };
+        ahref.onmouseleave = function () {
+            tooltip.html('');
+        };
 
         if (ahref) {
             ahref.className = 'color-q' + quality;

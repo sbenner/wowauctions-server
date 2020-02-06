@@ -251,31 +251,31 @@
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Yellow] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-yellow.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_yellow.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Red] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-red.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_red.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Blue] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-blue.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_blue.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Meta] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-meta.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_meta.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Prismatic] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-prismatic.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_meta.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=Cogwheel] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-cogwheel.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_meta.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .db-description .socket[data-socket=ShaTouched] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/socket-hydraulic.png') left 2px no-repeat
+    background: url('http://www.wowdb.net/images/socket_meta.gif') left 2px no-repeat
 }
 
 .wowdb-tooltip .db-tooltip span.money {
@@ -288,15 +288,15 @@
 }
 
 .wowdb-tooltip .db-tooltip span.money > .money-gold {
-    background-image: url(http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/gold.png)
+    background-image: url(http://www.wowdb.net/images/money_gold.gif)
 }
 
 .wowdb-tooltip .db-tooltip span.money > .money-silver {
-    background-image: url(http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/silver.png)
+    background-image: url(http://www.wowdb.net/images/money_silver.gif)
 }
 
 .wowdb-tooltip .db-tooltip span.money > .money-copper {
-    background-image: url(http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/wow/copper.png)
+    background-image: url(http://www.wowdb.net/images/money_copper.gif)
 }
 
 .wowdb-tooltip .db-tooltip .tooltip-table {
@@ -376,7 +376,7 @@
     height: 41px;
     line-height: 41px;
     padding-left: 45px;
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/battle-pet-icons.png') no-repeat;
+    background: url('http://www.wowdb.net/images/battle-pet-icons.png') no-repeat;
     font-size: 130%;
     white-space: nowrap
 }
@@ -434,19 +434,19 @@
 }
 
 .wowdb-tooltip .db-tooltip .pet-effectiveness[data-type=down] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/pet-weak.png') no-repeat
+    background: url('http://www.wowdb.net/images/pet-weak.png') no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .pet-effectiveness[data-type=up] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/pet-strong.png') no-repeat
+    background: url('http://www.wowdb.net/images/pet-strong.png') no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .pet-effectiveness-small[data-type=down] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/pet-weak-small.png') no-repeat
+    background: url('http://www.wowdb.net/images/pet-weak-small.png') no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .pet-effectiveness-small[data-type=up] {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/pet-strong-small.png') no-repeat
+    background: url('http://www.wowdb.net/images/pet-strong-small.png') no-repeat
 }
 
 .wowdb-tooltip .db-tooltip .pet-effectiveness-block {
@@ -608,7 +608,7 @@
 }
 
 .wowdb-tooltip .db-tooltip .multi-skill {
-    background: url('http://static-azeroth.cursecdn.com/1-0-5346-22260/Skins/Azeroth/images/multiskill.png') no-repeat scroll left center;
+    background: url('http://www.wowdb.net/images/multiskill.png') no-repeat scroll left center;
     display: inline-block;
     width: 16px;
     height: 16px;
