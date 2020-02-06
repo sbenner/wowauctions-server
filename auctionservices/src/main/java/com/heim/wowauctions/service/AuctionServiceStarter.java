@@ -100,7 +100,7 @@ public class AuctionServiceStarter {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         httpRequestFactory.setConnectionRequestTimeout(10000);
         httpRequestFactory.setConnectTimeout(10000);
-        httpRequestFactory.setReadTimeout(10000);
+        httpRequestFactory.setReadTimeout(1200000);
         return new RestTemplate(httpRequestFactory);
     }
 
