@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -62,7 +63,7 @@ public class HttpReqHandler {
     @PostConstruct
     void initToken() {
         //    this.token=getToken();
-        this.token = obtainToken();
+        obtainToken();
     }
 
 
@@ -121,25 +122,27 @@ public class HttpReqHandler {
 
     }
 
+    @Scheduled(fixedRate = 180000, initialDelay = 180000)
+    public void obtainToken() {
 
-    public OAuth2AccessToken obtainToken() {
+        if (token == null || token.isExpired()) {
 
-        ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
-        resourceDetails.setClientSecret(clientSecret);
-        resourceDetails.setClientId(clientId);
-        resourceDetails.setAccessTokenUri(tokenUrl);
-        resourceDetails.setGrantType("client_credentials");
-        //resourceDetails.setScope(Arrays.asList("client_credentials"));
+            ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
+            resourceDetails.setClientSecret(clientSecret);
+            resourceDetails.setClientId(clientId);
+            resourceDetails.setAccessTokenUri(tokenUrl);
+            resourceDetails.setGrantType("client_credentials");
+            //resourceDetails.setScope(Arrays.asList("client_credentials"));
 
 //        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
 //        headers.setContentType( MediaType.APPLICATION_JSON );
 //        headers.add(HttpHeaders.AUTHORIZATION, Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes()));
 
-        OAuth2RestTemplate oAuthRestTemplate = new OAuth2RestTemplate(resourceDetails);
+            OAuth2RestTemplate oAuthRestTemplate = new OAuth2RestTemplate(resourceDetails);
 
 
-        return oAuthRestTemplate.getAccessToken();
-
+            this.token = oAuthRestTemplate.getAccessToken();
+        }
 
 //        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 //        params.add("grant_type", "client_credentials");
