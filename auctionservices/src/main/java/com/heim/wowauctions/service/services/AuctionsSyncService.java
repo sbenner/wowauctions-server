@@ -56,7 +56,7 @@ public class AuctionsSyncService {
         this.mongoService = mongoService;
     }
 
-    @Scheduled(fixedRate = 180000,initialDelay = 180000)
+    @Scheduled(fixedRate = 3600000,initialDelay = 180000)
     public synchronized void retrieveAuctions() {
         logger.debug("started");
         try {

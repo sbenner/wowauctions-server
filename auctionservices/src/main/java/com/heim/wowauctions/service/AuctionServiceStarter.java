@@ -97,7 +97,8 @@ public class AuctionServiceStarter {
 
     @Bean
     public RestTemplate customRestTemplate() {
-        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        HttpComponentsClientHttpRequestFactory httpRequestFactory =
+                new HttpComponentsClientHttpRequestFactory();
         httpRequestFactory.setConnectionRequestTimeout(10000);
         httpRequestFactory.setConnectTimeout(10000);
         httpRequestFactory.setReadTimeout(1200000);

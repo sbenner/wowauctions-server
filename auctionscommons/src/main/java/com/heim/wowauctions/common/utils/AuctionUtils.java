@@ -33,10 +33,11 @@ public class AuctionUtils {
     private static final Logger logger = Logger.getLogger(AuctionUtils.class);
 
     public static AuctionUrl parseAuctionFile(String contents) {
-        logger.info("remote url: " + contents);
+     //   logger.info("remote url: " + contents);
         AuctionUrl auctionUrl = new AuctionUrl();
         JSONObject jsonObject = new JSONObject(contents);
-        JSONArray files = jsonObject.getJSONArray("files");
+        JSONArray files = jsonObject.getJSONArray("auctions");
+
         auctionUrl.setLastModified(((JSONObject) files.get(0)).getLong("lastModified"));
         auctionUrl.setUrl(((JSONObject) files.get(0)).getString("url"));
 
@@ -58,23 +59,25 @@ public class AuctionUtils {
         for (int i = 0; i < jsonRealmsArray.length(); i++) {
             JSONObject object = (JSONObject) jsonRealmsArray.get(i);
             Realm realm = new Realm();
+            realm.setId(object.getInt("id"));
             realm.setSlug(object.getString("slug"));
-            realm.setName(object.getString("name"));
-            JSONArray connectedRealms = object.getJSONArray("connected_realms");
-            if (connectedRealms.length() > 0) {
-                Set<String> crs = new HashSet<>();
-                for (int j = 0; j < connectedRealms.length(); j++) {
-                    String r = connectedRealms.getString(j);
-                    if (!r.equals(realm.getSlug())) {
-                        crs.add(r);
-                    }
-                }
-                realm.setConnectedRealms(crs);
-            }
+            realm.setName(object.getJSONObject("name").getString("en_US"));
+            realm.setConnectedRealmUrl(object.getJSONObject("connected_realm").getString("href"));
+
 
             realms.add(realm);
         }
-
+//
+//        if (connectedRealms.length() > 0) {
+//            Set<String> crs = new HashSet<>();
+//            for (int j = 0; j < connectedRealms.length(); j++) {
+//                String r = connectedRealms.getString(j);
+//                if (!r.equals(realm.getSlug())) {
+//                    crs.add(r);
+//                }
+//            }
+//            realm.setConnectedRealms(crs);
+//        }
 
         return realms;
     }

@@ -34,7 +34,7 @@ public class AuctionMasterServerSyncService {
     @Autowired
     private MongoService mongoService;
 
-    @Scheduled(fixedRate = 3600000)
+
     public void retrieveServerAuction() {
         logger.debug("started");
         try {

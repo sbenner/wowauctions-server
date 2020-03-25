@@ -101,7 +101,7 @@ public class HttpReqHandler {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            //headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            //headers.setContentType(MediaTypte.APPLICATION_FORM_URLENCODED);
             headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
             headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
             HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
