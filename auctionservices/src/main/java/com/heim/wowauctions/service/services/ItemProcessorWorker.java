@@ -52,7 +52,7 @@ public class ItemProcessorWorker implements Runnable {
         logger.info("Thread #" + threadId + " is processing item #" + getItemId());
         String url = getHttpReqHandler().getItemsUrl(getItemId());
 
-        String itemReply = getHttpReqHandler().getData(url);
+        String itemReply = getHttpReqHandler().getData(url).getBody().toString();
 
         logger.info("got " + itemReply);
         String context = null;
@@ -60,7 +60,7 @@ public class ItemProcessorWorker implements Runnable {
             JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
             context = jsonArray.getString(0);
             if (context != null && !context.isEmpty()) {
-                itemReply = getHttpReqHandler().getData(url + "/" + context);
+                itemReply = getHttpReqHandler().getData(String.format(url, context)).getBody().toString();
             }
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {

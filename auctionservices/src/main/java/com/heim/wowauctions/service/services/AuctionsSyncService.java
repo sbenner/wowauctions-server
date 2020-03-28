@@ -7,15 +7,21 @@ import com.heim.wowauctions.common.persistence.models.Auction;
 import com.heim.wowauctions.common.persistence.models.AuctionUrl;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -56,40 +62,52 @@ public class AuctionsSyncService {
         this.mongoService = mongoService;
     }
 
-    @Scheduled(fixedRate = 3600000,initialDelay = 180000)
+    @Scheduled(fixedRate = 3600000, initialDelay = 10000)
     public synchronized void retrieveAuctions() {
         logger.debug("started");
         try {
 
 
-            String out =
+            ResponseEntity res =
                     httpReqHandler.getData(url);
-            if (StringUtils.isEmpty(out))
+
+            if (!res.getStatusCode().is2xxSuccessful())
                 return;
 
+            DateTimeFormatter FMT = new DateTimeFormatterBuilder()
+                    .appendPattern("EEE, dd MMM yyyy HH:mm:ss zzz")
+                    .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
+                    .toFormatter()
+                    .withZone(ZoneId.of("Europe/Paris"));
+
+            Instant lastModified = FMT.parse(res.getHeaders().get("Last-Modified").toString().substring(1, 30), Instant::from);
+            String out = res.getBody().toString();
+
+            JSONObject object = new JSONObject(out);
+            AuctionUrl remote = AuctionUtils.parseAuctionFile(object, lastModified);
             AuctionUrl local = mongoTemplate.getAuctionsUrl();
-            AuctionUrl remote = AuctionUtils.parseAuctionFile(out);
 
-            logger.info("local " + local.toString());
-            logger.info("remote " + remote.toString());
-
-            if (local.getLastModified() == null ||
+//            logger.info("local " + local.toString());
+//            logger.info("remote " + remote.toString());
+//
+            if ((local == null || local.getLastModified() == null) ||
                     local.getLastModified() < remote.getLastModified() ||
                     mongoService.getAuctionsCount() == 0) {
 
-                logger.info(format("local.getLastModified() %s", local.getLastModified()));
-
+                if (local != null && local.getLastModified() != null) {
+                    logger.info(format("local.getLastModified() %s", local.getLastModified()));
+                    logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
+                }
                 logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
 
-                logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
                 logger.info(format("auctionsDao.getAuctionsCount() %s", mongoService.getAuctionsCount()));
 
                 //get new auctions
-                String auctionsString = httpReqHandler.getData(remote.getUrl());
+                //String auctionsString = httpReqHandler.getData(remote.getUrl());
 
-                if (auctionsString != null) {
+                if (out != null) {
                     List<Auction> auctions = AuctionUtils.
-                            buildAuctionsFromString(auctionsString, remote.getLastModified());
+                            buildAuctionsFromString(object, remote.getLastModified());
 
                     mongoTemplate.insertAll(auctions);
                     BlockingQueue<Auction> queueToArchive = new LinkedBlockingQueue<Auction>();
@@ -104,7 +122,7 @@ public class AuctionsSyncService {
                                 new ArchiveSaver(this, queueToArchive.poll(), mongoTemplate));
                     }
 
-                    if (local.getUrl() == null) {
+                    if (local == null || local.getUrl() == null) {
                         mongoTemplate.insertAuctionsUrlData(remote);
                     } else {
                         mongoTemplate.updateAuctionsUrl(remote);

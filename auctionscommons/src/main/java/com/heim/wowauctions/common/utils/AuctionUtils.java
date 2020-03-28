@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,14 +33,13 @@ public class AuctionUtils {
 
     private static final Logger logger = Logger.getLogger(AuctionUtils.class);
 
-    public static AuctionUrl parseAuctionFile(String contents) {
-     //   logger.info("remote url: " + contents);
-        AuctionUrl auctionUrl = new AuctionUrl();
-        JSONObject jsonObject = new JSONObject(contents);
-        JSONArray files = jsonObject.getJSONArray("auctions");
+    public static AuctionUrl parseAuctionFile(JSONObject contents, Instant lastModified) {
 
-        auctionUrl.setLastModified(((JSONObject) files.get(0)).getLong("lastModified"));
-        auctionUrl.setUrl(((JSONObject) files.get(0)).getString("url"));
+        AuctionUrl auctionUrl = new AuctionUrl();
+
+
+        auctionUrl.setLastModified(lastModified.toEpochMilli());
+        auctionUrl.setUrl(contents.getJSONObject("connected_realm").getString("href"));
 
 
         return auctionUrl;
@@ -165,27 +165,36 @@ public class AuctionUtils {
         return cal.getTimeInMillis();
     }
 
-    public static List<Auction> buildAuctionsFromString(String contents, long timestamp) {
+    public static List<Auction> buildAuctionsFromString(JSONObject contents, long timestamp) {
         List<Auction> auctions = new ArrayList<Auction>();
 
-        JSONObject jsonObject = new JSONObject(contents);
         //   JSONObject alliance = jsonObject.getJSONObject("auctions");
-        JSONArray auctionsArray = jsonObject.getJSONArray("auctions");
+        JSONArray auctionsArray = contents.getJSONArray("auctions");
 
         for (int i = 0; i < auctionsArray.length(); i++) {
             JSONObject obj = (JSONObject) auctionsArray.get(i);
             Auction auction = new Auction();
-            auction.setAuc(obj.getLong("auc"));
-            auction.setItemId(obj.getLong("item"));
-            auction.setBid(obj.getLong("bid"));
-            auction.setBuyout(obj.getLong("buyout"));
+            auction.setAuc(obj.getLong("id"));
+            auction.setItemId(obj.getJSONObject("item").getLong("id"));
+            try {
+                auction.setBid(obj.getLong("unit_price"));
+            } catch (Exception e) {
+            }
+
+
+            try {
+                auction.setBuyout(obj.getLong("buyout"));
+            } catch (Exception e) {
+            }
+
+
             //auction.setOwner(obj.getString("owner"));
             try {
                 auction.setOwnerRealm(obj.getString("ownerRealm"));
             } catch (Exception e) {
             }
             auction.setQuantity(obj.getInt("quantity"));
-            auction.setTimeLeft(obj.getString("timeLeft"));
+            auction.setTimeLeft(obj.getString("time_left"));
 
 
             auction.setTimestamp(timestamp);

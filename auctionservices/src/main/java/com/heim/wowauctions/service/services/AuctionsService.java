@@ -95,7 +95,7 @@ public class AuctionsService {
         String localurl = String.format(tooltipUrl, id);
         String out = cache.get(id);
         if (StringUtils.isEmpty(out)) {
-            out = httpReqHandler.getData(localurl).replaceAll("[\n\t\r]", "");
+            out = httpReqHandler.getData(localurl).getBody().toString().replaceAll("[\n\t\r]", "");
             cache.put(id, out.trim());
         }
         return out;

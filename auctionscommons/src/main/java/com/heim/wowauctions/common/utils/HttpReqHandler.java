@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
@@ -92,11 +89,11 @@ public class HttpReqHandler {
     }
 
     public String getItemsUrl(long itemId) {
-        return  itemsUrl + "/" + itemId;
+        return String.format(itemsUrl, itemId);
     }
 
     @SuppressWarnings("unchecked")
-    public String getData(String url) {
+    public ResponseEntity<?> getData(String url) {
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -114,7 +111,31 @@ public class HttpReqHandler {
                             exchange(builder.build().encode().toUri(),
                                     HttpMethod.GET,
                                     requestEntity,
-                                    String.class).getBody();
+                                    String.class);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public HttpHeaders getHeadData(String url) {
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+            //headers.setContentType(MediaTypte.APPLICATION_FORM_URLENCODED);
+            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
+            HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(url).queryParam("access_token", token.getValue());
+
+            return
+                    customRestTemplate.
+                            headForHeaders(builder.build().encode().toUri());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
