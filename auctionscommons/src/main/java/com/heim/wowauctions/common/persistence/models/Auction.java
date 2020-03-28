@@ -63,8 +63,12 @@ public class Auction implements Comparable<Auction> {
         return AuctionUtils.buildPrice((long) (this.ppi * 10000));
     }
 
-    public void setPpi() {
-        this.ppi = (double) this.buyout / 10000 / this.quantity;
+    public void setPpi(long ppi) {
+        if (this.buyout != 0) {
+            this.ppi = (double) this.buyout / 10000 / this.quantity;
+        } else {
+            this.ppi = ppi;
+        }
     }
 
     public long getAuc() {

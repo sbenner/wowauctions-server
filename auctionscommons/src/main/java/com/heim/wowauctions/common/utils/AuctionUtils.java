@@ -176,14 +176,20 @@ public class AuctionUtils {
             Auction auction = new Auction();
             auction.setAuc(obj.getLong("id"));
             auction.setItemId(obj.getJSONObject("item").getLong("id"));
+
             try {
-                auction.setBid(obj.getLong("unit_price"));
+                auction.setBuyout(obj.getLong("buyout"));
             } catch (Exception e) {
             }
 
 
             try {
-                auction.setBuyout(obj.getLong("buyout"));
+                auction.setPpi(obj.getLong("unit_price"));
+            } catch (Exception e) {
+            }
+
+            try {
+                auction.setBid(obj.getLong("bid"));
             } catch (Exception e) {
             }
 
