@@ -64,11 +64,11 @@ public class Auction implements Comparable<Auction> {
     }
 
     public void setPpi(long ppi) {
-        if (this.buyout != 0) {
-            this.ppi = (double) this.buyout / 10000 / this.quantity;
-        } else {
-            this.ppi = ppi;
-        }
+//        if (this.buyout != 0) {
+//            this.ppi = (double) this.buyout / 10000 / this.quantity;
+//        } else {
+        this.ppi = ppi;
+//        }
     }
 
     public long getAuc() {

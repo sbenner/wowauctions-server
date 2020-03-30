@@ -248,13 +248,10 @@ public class AuctionUtils {
                     reborns.add(reborn);
                 }
 
-
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
-
             }
         }
-
         return reborns;
     }
 
