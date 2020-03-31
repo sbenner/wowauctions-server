@@ -60,7 +60,7 @@ public class Auction implements Comparable<Auction> {
     }
 
     public String getPpi() {
-        return AuctionUtils.buildPrice((long) (this.ppi * 10000));
+        return AuctionUtils.buildPrice((long) (this.ppi));
     }
 
     public void setPpi(long ppi) {

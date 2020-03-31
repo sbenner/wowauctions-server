@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -55,8 +56,15 @@ public class MongoAuctionsDao extends MongoTemplate {
         List<Long> coll = new ArrayList<>();
 
         if (timestamp == 0) {
+            Set<Long> existingItems = getAllItemIDs();
+
             this.getCollection("auction").distinct("itemId", Long.class)
                     .iterator().forEachRemaining(coll::add);
+            coll = coll.parallelStream().filter(
+                    itemId -> !existingItems.contains(itemId)
+            ).collect(Collectors.toList());
+
+
         } else {
 //            Map<String, Long> m = new HashMap<>();
 //            m.put("timestamp", timestamp);

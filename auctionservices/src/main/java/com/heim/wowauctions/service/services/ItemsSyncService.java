@@ -43,7 +43,7 @@ public class ItemsSyncService {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Scheduled(fixedRate = 7200000, initialDelay = 60000)
+    @Scheduled(fixedRate = 7200000, initialDelay = 160000)
     public void processItemsQueue() {
         logger.info("started");
         try {

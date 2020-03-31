@@ -5,8 +5,6 @@ import com.heim.wowauctions.common.persistence.models.Item;
 import com.heim.wowauctions.common.persistence.repositories.ItemRepository;
 import com.heim.wowauctions.common.utils.AuctionUtils;
 import com.heim.wowauctions.common.utils.HttpReqHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -56,12 +54,12 @@ public class ItemProcessorWorker implements Runnable {
 
         logger.info("got " + itemReply);
         String context = null;
-        if (!StringUtils.isEmpty(itemReply) && itemReply.contains("availableContexts")) {
-            JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
-            context = jsonArray.getString(0);
-            if (context != null && !context.isEmpty()) {
-                itemReply = getHttpReqHandler().getData(String.format(url, context)).getBody().toString();
-            }
+        if (!StringUtils.isEmpty(itemReply)) {
+//            JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
+//            context = jsonArray.getString(0);
+//            if (context != null && !context.isEmpty()) {
+//                itemReply = getHttpReqHandler().getData(String.format(url, context)).getBody().toString();
+//            }
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
                 Item foundItem = itemRepository.findByItemId(item.getItemId());

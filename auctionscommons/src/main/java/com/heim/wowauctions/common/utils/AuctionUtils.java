@@ -218,8 +218,8 @@ public class AuctionUtils {
 
         item.setItemId(obj.getLong("id"));
         item.setName(obj.getString("name"));
-        item.setItemLevel(obj.getInt("itemLevel"));
-        item.setQuality(obj.getInt("quality"));
+        item.setItemLevel(obj.getInt("level"));
+        item.setQuality(QualityType.valueOf(obj.getJSONObject("quality").getString("type")).type);
 
         return item;
     }

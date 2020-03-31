@@ -169,7 +169,7 @@ window.onload = function () {
                             "<td><span style='color: white;'>" + results.ownerRealm + "</span></td>" +
                             "<td><span style='color: white;'>" + results.bid + "</span></td>" +
                             "<td><span style='color: white;'>" + results.buyout + "</span></td>" +
-                            "<td><span style='color: white;'>" + formatPrice(results.ppi) + "</span></td>" +
+                            "<td><span style='color: white;'>" + results.ppi + "</span></td>" +
                             "<td><span style='color: white;'>" + results.quantity + "</span></td>" +
                             "</tr>"
 
