@@ -75,12 +75,13 @@ public class AuctionsSyncService {
                 return;
 
             DateTimeFormatter FMT = new DateTimeFormatterBuilder()
-                    .appendPattern("EEE, dd MMM yyyy HH:mm:ss zzz")
+                    .appendPattern("EEE, d MMM yyyy HH:mm:ss zzz")
                     .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
                     .toFormatter()
                     .withZone(ZoneId.of("Europe/Paris"));
 
-            Instant lastModified = FMT.parse(res.getHeaders().get("Last-Modified").toString().substring(1, 30), Instant::from);
+            String lm = res.getHeaders().get("Last-Modified").toString();
+            Instant lastModified = FMT.parse(lm.substring(1, lm.length() - 1), Instant::from);
             String out = res.getBody().toString();
 
             JSONObject object = new JSONObject(out);
