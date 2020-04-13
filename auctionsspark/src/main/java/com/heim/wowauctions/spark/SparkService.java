@@ -32,7 +32,7 @@ public class SparkService {
 
     private final SparkSession sparkSession;
 
-
+    @Autowired
     private final MongoAuctionsDao mongoAuctionsDao;
 
     private final MongoService mongoService;

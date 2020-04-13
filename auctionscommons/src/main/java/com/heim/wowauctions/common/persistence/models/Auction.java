@@ -2,6 +2,7 @@ package com.heim.wowauctions.common.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.heim.wowauctions.common.utils.AuctionUtils;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * Time: 11:47 PM
  */
 
-
+@Data
 public class Auction implements Comparable<Auction> {
     @JsonView(BaseView.class)
     private long auc;
@@ -31,45 +32,15 @@ public class Auction implements Comparable<Auction> {
     private int rand;
     @JsonView(BaseView.class)
     private long seed;
-    private double ppi;
+    private long ppi;
     private Date date;
     private long timestamp;
 
-    public String getDate() {
-        return new Date(this.timestamp).toString();
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public long getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
-    }
 
     public String getPpi() {
         return AuctionUtils.buildPrice((long) (this.ppi));
     }
 
-    public void setPpi(long ppi) {
-//        if (this.buyout != 0) {
-//            this.ppi = (double) this.buyout / 10000 / this.quantity;
-//        } else {
-        this.ppi = ppi;
-//        }
-    }
 
     public long getAuc() {
         return auc;

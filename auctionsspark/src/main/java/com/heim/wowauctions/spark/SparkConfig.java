@@ -1,14 +1,18 @@
 package com.heim.wowauctions.spark;
 
-import com.mongodb.Mongo;
+import com.heim.wowauctions.common.persistence.dao.MongoAuctionsDao;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
+
 /**
  * Created by sbenner on 30/05/2017.
  */
@@ -17,12 +21,6 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 
 public class SparkConfig {
-
-    //    @Value("${spring.data.mongodb.database}")
-    String dbName;
-
-    @Autowired
-    private Mongo mongo;
 
 
     @Bean
@@ -35,7 +33,7 @@ public class SparkConfig {
                 .set("spark.driver.memory","2g")
                 .set("spark.executor.memory","1g")
                .set("spark.mongodb.input.partitioner","MongoSplitVectorPartitioner")
-               // .set("spark.executor.cores","7")
+                // .set("spark.executor.cores","7")
                 .set("spark.mongodb.input.uri", "mongodb://127.0.0.1/wowauctions.auctionsArchive")
                 .set("spark.mongodb.output.uri", "mongodb://127.0.0.1/wowauctions.archivedCharts");
     }
@@ -45,10 +43,25 @@ public class SparkConfig {
         return new JavaSparkContext(sparkConf());
     }
 
-//    @Bean
-//    public MongoAuctionsDao mongoTemplate() {
-//        return new MongoAuctionsDao(mongo, dbName);
-//    }
+
+    public @Bean
+    MongoAuctionsDao mongoTemplate() {
+        return new MongoAuctionsDao(mongoDbFactory());
+    }
+
+
+    public @Bean
+    MongoClient mongoClient() {
+        return MongoClients.create("mongodb://localhost:27017");
+    }
+
+
+    @Bean
+    public MongoDbFactory mongoDbFactory() {
+        return new SimpleMongoClientDbFactory(
+                mongoClient(), "wowauctions");
+    }
+
 
     @Bean
     public SparkSession sparkSession() {
