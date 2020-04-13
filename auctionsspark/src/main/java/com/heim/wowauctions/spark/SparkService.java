@@ -64,7 +64,13 @@ public class SparkService {
         explicitDS.createOrReplaceTempView("archive");
 
         Dataset<Row> centenarians = sparkSession.
-                sql("SELECT itemId,buyout,quantity,timestamp " +
+                sql("SELECT itemId,case when buyout=0 " +
+                        "  then ppi " +
+                        " else buyout " +
+                        "  end " +
+                        " end as buyout," +
+                        " quantity," +
+                        " timestamp " +
                         "from archive group by itemId," +
                         "buyout,quantity," +
                         "timestamp order by buyout");
