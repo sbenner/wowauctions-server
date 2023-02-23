@@ -42,39 +42,6 @@ public class AuctionServiceStarter {
         app.run(args);
 
     }
-//
-//    @Bean
-//    @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
-//    public OAuth2RestOperations restTemplate() {
-//        OAuth2RestTemplate template = new OAuth2RestTemplate(resource(), new DefaultOAuth2ClientContext(accessTokenRequest));
-//        AccessTokenProviderChain provider = new AccessTokenProviderChain(Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
-//        provider.setClientTokenServices(clientTokenServices());
-//        return template;
-//    }
-
-//
-//
-//    private String obtainAccessToken(String username, String password) throws Exception {
-//
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "password");
-//        params.add("client_id", "fooClientIdPassword");
-//        params.add("username", username);
-//        params.add("password", password);
-//
-//        ResultActions result
-//                = mockMvc.perform(post("/oauth/token")
-//                .params(params)
-//                .with(httpBasic("fooClientIdPassword","secret"))
-//                .accept("application/json;charset=UTF-8"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType("application/json;charset=UTF-8"));
-//
-//        String resultString = result.andReturn().getResponse().getContentAsString();
-//
-//        JacksonJsonParser jsonParser = new JacksonJsonParser();
-//        return jsonParser.parseMap(resultString).get("access_token").toString();
-//    }
 
     public @Bean
     MongoAuctionsDao mongoTemplate() {
@@ -105,65 +72,12 @@ public class AuctionServiceStarter {
         return new RestTemplate(httpRequestFactory);
     }
 
-//
-//    @Value("${spring.data.solr.hosts}")
-//    String solrHosts;
-//
-//    @Bean
-//    public SolrClient solrClient() {
-//        return new HttpSolrClient.Builder(
-//                solrHosts).build();
-//    }
-
     @Bean
     public ConversionService conversionService() {
         DefaultConversionService service = new DefaultConversionService();
         service.addConverter(new DateToTsConverter());
         return service;
     }
-
-
-//    public HttpComponentsClientHttpRequestFactory httpRequestFactory(){
-//                HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-//        httpRequestFactory.setConnectionRequestTimeout(10000);
-//        httpRequestFactory.setConnectTimeout(10000);
-//        httpRequestFactory.setReadTimeout(10000);
-//        return httpRequestFactory;
-//    }
-//
-//    public RemoteTokenServices tokenService() {
-//    //public ClientTokenServices tokenService() {
-//        RemoteTokenServices tokenService = new RemoteTokenServices();
-//        tokenService.setCheckTokenEndpointUrl(
-//                checkTokenUrl);
-//        tokenService.setClientId("fooClientIdPassword");
-//        tokenService.setClientSecret("secret");
-//        return tokenService;
-//    }
-//
-//    public OAuth2RestOperations restTemplate() {
-////        OAuth2RestTemplate template = new OAuth2RestTemplate(resource(),
-////                new DefaultOAuth2ClientContext(accessTokenRequest));
-//        AccessTokenProviderChain provider =
-//                new AccessTokenProviderChain(Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
-//        provider.setClientTokenServices(tokenService());
-//        provider.setRequestFactory(httpRequestFactory());
-//        return template;
-//    }
-
-
-//    @Value("${spring.data.mongodb.database}")
-//    private String database;
-//    @Bean
-//    String database() {
-//        return database;
-//    }
-
-//    @Bean
-//    RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
-
 
     @Bean
     @Qualifier("syncTaskExecutor")

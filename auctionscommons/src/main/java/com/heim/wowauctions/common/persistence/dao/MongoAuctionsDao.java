@@ -43,12 +43,6 @@ public class MongoAuctionsDao extends MongoTemplate {
     }
 
 
-//    @Autowired
-//    public MongoAuctionsDao(Mongo mongo,String databaseName) {
-//        super(mongo,databaseName);
-//    }
-
-
     //todo we will build up a queue from this list of ids to retrieve from external web service
     @SuppressWarnings("Unchecked")
     public List<Long> findAllAuctionItemIds(long timestamp) {
@@ -66,9 +60,6 @@ public class MongoAuctionsDao extends MongoTemplate {
 
 
         } else {
-//            Map<String, Long> m = new HashMap<>();
-//            m.put("timestamp", timestamp);
-//            DBObject q = new BasicDBObject(m);
 
             this.getCollection("auction")
                     .distinct("itemId", Filters.eq("timestamp", timestamp), Long.class)

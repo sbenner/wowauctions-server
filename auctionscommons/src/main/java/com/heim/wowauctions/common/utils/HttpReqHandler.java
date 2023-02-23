@@ -21,10 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,9 +38,6 @@ public class HttpReqHandler {
     String itemsUrl;
     @Autowired
     private RestTemplate customRestTemplate;
-    @Value("${apikey}")
-    private String apikey;
-
 
     @Value("${token.url}")
     String tokenUrl;
@@ -52,24 +47,24 @@ public class HttpReqHandler {
     @Value("${client.secret}")
     String clientSecret;
 
-    OAuth2AccessToken token;
+    @Value("${server.list.url}")
+    String serverListUrl;
 
+    volatile OAuth2AccessToken token;
 
-    //String token;
 
     @PostConstruct
     void initToken() {
-        //    this.token=getToken();
         obtainToken();
     }
 
 
-    public static Map<String, Integer> getServers() {
-        Map<String, Integer> serverList = new HashMap<String, Integer>();
+    public Map<String, Integer> getServers() {
+        Map<String, Integer> serverList = new HashMap<>();
 
         Document doc = null;
         try {
-            doc = Jsoup.connect("http://www.wowprogress.com/realms/rank/us").get();
+            doc = Jsoup.connect(serverListUrl).get();
 
             Elements usServers = doc.select("#realm_list_table").select("tr");
 
@@ -77,7 +72,7 @@ public class HttpReqHandler {
                 if (!e.select("td").isEmpty()) {
 
                     String realm = e.select("a.realm").text().toLowerCase();
-                    int population = Integer.valueOf(e.select("span[class=num]").text());
+                    int population = Integer.parseInt(e.select("span[class=num]").text());
 
                     serverList.put(realm, population);
                 }
@@ -97,10 +92,9 @@ public class HttpReqHandler {
 
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            //headers.setContentType(MediaTypte.APPLICATION_FORM_URLENCODED);
-            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-            headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
             HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
 
             UriComponentsBuilder builder =
@@ -125,10 +119,8 @@ public class HttpReqHandler {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            //headers.setContentType(MediaTypte.APPLICATION_FORM_URLENCODED);
-            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
-            HttpEntity<String> requestEntity = new HttpEntity<String>("params", headers);
 
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(url).queryParam("access_token", token.getValue());
@@ -153,42 +145,10 @@ public class HttpReqHandler {
             resourceDetails.setClientId(clientId);
             resourceDetails.setAccessTokenUri(tokenUrl);
             resourceDetails.setGrantType("client_credentials");
-            //resourceDetails.setScope(Arrays.asList("client_credentials"));
-
-//        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-//        headers.setContentType( MediaType.APPLICATION_JSON );
-//        headers.add(HttpHeaders.AUTHORIZATION, Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes()));
 
             OAuth2RestTemplate oAuthRestTemplate = new OAuth2RestTemplate(resourceDetails);
-
-
             this.token = oAuthRestTemplate.getAccessToken();
         }
-
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "client_credentials");
-//        params.add("client_id", clientId);
-//        params.add("client_secret", clientSecret);
-//
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//        String enc = clientId+":"+clientSecret;
-//        String encoded = Base64.getEncoder().encodeToString(enc.getBytes());
-//        headers.add( HttpHeaders.AUTHORIZATION, "Basic " + encoded);
-//
-//        UriComponentsBuilder builder =
-//                UriComponentsBuilder.fromHttpUrl(checkTokenUrl);
-//
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-//
-//        return
-//                customRestTemplate.
-//                        exchange(builder.build().encode().toUri(),
-//                                HttpMethod.POST,
-//                                request,
-//                                String.class).getBody();
-        //params.add("password", password);
     }
 
     private String getToken() {

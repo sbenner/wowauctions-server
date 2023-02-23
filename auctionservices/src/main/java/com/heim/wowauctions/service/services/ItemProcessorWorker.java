@@ -51,15 +51,9 @@ public class ItemProcessorWorker implements Runnable {
         String url = getHttpReqHandler().getItemsUrl(getItemId());
 
         String itemReply = getHttpReqHandler().getData(url).getBody().toString();
-
         logger.info("got " + itemReply);
-        String context = null;
+
         if (!StringUtils.isEmpty(itemReply)) {
-//            JSONArray jsonArray = new JSONObject(itemReply).getJSONArray("availableContexts");
-//            context = jsonArray.getString(0);
-//            if (context != null && !context.isEmpty()) {
-//                itemReply = getHttpReqHandler().getData(String.format(url, context)).getBody().toString();
-//            }
             Item item = AuctionUtils.buildItemFromString(itemReply);
             if (item != null) {
                 Item foundItem = itemRepository.findByItemId(item.getItemId());

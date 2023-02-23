@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 public class AuctionsService {
 
 
-    private static ConcurrentHashMap<Long, String> cache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, String> cache = new ConcurrentHashMap<>();
     @Autowired
     HttpReqHandler httpReqHandler;
 
@@ -45,18 +47,15 @@ public class AuctionsService {
     private String tooltipUrl;
 
     public Page<Auction> getAuctions(String name, int pageSize, boolean exact, int page) {
-        //  AuctionUrl local = getAuctionsDao().getAuctionsUrl();
         List<Item> items;
         if (!exact)
             items = mongoService.findItemByName(name);
         else
             items = mongoService.findItemByExactName(name);
-
-
         Map<Long, Item> m =
                 items.stream().collect(Collectors.toMap(
                         Item::getItemId,
-                        Function.identity(), (a, b) -> a = b
+                        Function.identity(), (a, b) -> a
                 ));
 
 
@@ -68,10 +67,7 @@ public class AuctionsService {
         else
             pageRequest = PageRequest.of(page, pageSize, sort);
 
-        Page<Auction> auctions = mongoService.getAuctionsByItemIDs(m, pageRequest);
-
-        return auctions;
-//          return AuctionUtils.buildPagedAuctions(auctions, pageRequest, items);
+        return mongoService.getAuctionsByItemIDs(m, pageRequest);
     }
 
     public void saveFeedback(Feedback feedback){
@@ -92,11 +88,17 @@ public class AuctionsService {
     }
 
     public String getTooltip(long id) {
-        String localurl = String.format(tooltipUrl, id);
+        String localUrl = String.format(tooltipUrl, id);
         String out = cache.get(id);
         if (StringUtils.isEmpty(out)) {
-            out = httpReqHandler.getData(localurl).getBody().toString().replaceAll("[\n\t\r]", "");
-            cache.put(id, out.trim());
+            ResponseEntity<?> responseEntity = httpReqHandler.getData(localUrl);
+            if(responseEntity != null && responseEntity.hasBody()) {
+                HttpEntity body = (HttpEntity) responseEntity.getBody();
+                if (body.hasBody()) {
+                    out = body.toString().replaceAll("[\n\t\r]", "");
+                    cache.put(id, out.trim());
+                }
+            }
         }
         return out;
     }

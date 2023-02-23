@@ -48,15 +48,7 @@ public class MongoService {
 
 
     public Page<Auction> getAuctionsByItemIDs(Map<Long, Item> ids, Pageable pageable) {
-        Page<Auction> p = auctionRepository.findByItemIdIn(ids.keySet(), pageable);
-        List<Auction> auctions = p.getContent().
-                stream().map(o -> {
-            o.setItem(ids.get(o.getItemId()));
-            return o;
-        }).collect(Collectors.toList());
-
-        return p;
-        //return new PageImpl<Auction>(auctions, p.getPageable(), auctions.size());
+        return auctionRepository.findByItemIdIn(ids.keySet(), pageable);
 
     }
 

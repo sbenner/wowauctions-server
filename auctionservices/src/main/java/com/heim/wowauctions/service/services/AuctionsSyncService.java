@@ -88,9 +88,6 @@ public class AuctionsSyncService {
             AuctionUrl remote = AuctionUtils.parseAuctionFile(object, lastModified);
             AuctionUrl local = mongoTemplate.getAuctionsUrl();
 
-//            logger.info("local " + local.toString());
-//            logger.info("remote " + remote.toString());
-//
             if ((local == null || local.getLastModified() == null) ||
                     local.getLastModified() < remote.getLastModified() ||
                     mongoService.getAuctionsCount() == 0) {
@@ -100,11 +97,7 @@ public class AuctionsSyncService {
                     logger.info(format("local.getLastModified() < remote.getLastModified() %s", local.getLastModified() < remote.getLastModified()));
                 }
                 logger.info(format("remote.getLastModified() %s", remote.getLastModified()));
-
                 logger.info(format("auctionsDao.getAuctionsCount() %s", mongoService.getAuctionsCount()));
-
-                //get new auctions
-                //String auctionsString = httpReqHandler.getData(remote.getUrl());
 
                 if (out != null) {
                     List<Auction> auctions = AuctionUtils.

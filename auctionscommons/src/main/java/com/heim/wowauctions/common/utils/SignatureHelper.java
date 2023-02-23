@@ -96,12 +96,10 @@ public class SignatureHelper {
 
         for (String key : e) {
             if (SIGNATURE_KEYWORDS.contains(key)) {
-
                 if (request instanceof HttpServletRequest)
                     headersAndParams.put(key, ((HttpServletRequest) request).getHeader(key));
                 if (request instanceof ClientHttpRequest)
                     headersAndParams.put(key, ((ClientHttpRequest) request).getHeaders().getFirst(key));
-
             }
         }
         URLCodec code = new URLCodec();

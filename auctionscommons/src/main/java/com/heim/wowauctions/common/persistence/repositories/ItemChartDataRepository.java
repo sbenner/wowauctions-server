@@ -14,10 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ItemChartDataRepository extends PagingAndSortingRepository<ItemChartData, Long> {
 
-    // ItemChartData findByItemId(Long itemId, Pageable pageable);
-
     ItemChartData findByItemId(Long itemId);
 
-    // ItemChartData findByTimestampBetween(long from, long to, long itemId);
 
 }

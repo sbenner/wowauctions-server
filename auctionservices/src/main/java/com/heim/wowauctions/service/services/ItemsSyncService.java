@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by
@@ -61,8 +61,9 @@ public class ItemsSyncService {
                 logger.info("q size: " + context.getQueue().size());
                 semaphore.acquire();
                 itemSyncTaskExecutor.execute(
-                        new ItemProcessorWorker(this, context.getQueue().poll()));
-                Thread.sleep(100);
+                        new ItemProcessorWorker(this,
+                                context.getQueue()
+                                .poll(100, TimeUnit.MILLISECONDS)));
             }
 
 

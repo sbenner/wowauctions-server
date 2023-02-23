@@ -13,12 +13,9 @@ import com.heim.wowauctions.common.persistence.models.Auction;
 
 public class ArchiveSaver implements Runnable {
 
-//    private static final Logger logger = LoggerFactory.getLogger(ArchiveSaver.class);
-
-
-    private Auction auction;
-    private MongoAuctionsDao mongoAuctionsDao;
-    private AuctionsSyncService service;
+    private final Auction auction;
+    private final MongoAuctionsDao mongoAuctionsDao;
+    private final AuctionsSyncService service;
 
     public ArchiveSaver(AuctionsSyncService service, Auction auction, MongoAuctionsDao mongoAuctionsDao) {
         this.mongoAuctionsDao = mongoAuctionsDao;
@@ -28,7 +25,6 @@ public class ArchiveSaver implements Runnable {
 
     public void run() {
         processItem();
-
     }
 
     private void processItem() {
